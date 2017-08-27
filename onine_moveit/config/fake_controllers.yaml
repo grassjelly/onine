@@ -1,0 +1,12 @@
+controller_list:
+  - name: fake_onine_arm_controller
+    joints:
+      - torso_joint
+      - base_joint
+      - shoulder_joint
+      - elbow_joint
+      - wrist_pitch_joint
+      - wrist_roll_joint
+  - name: fake_onine_gripper_controller
+    joints:
+      - gripper_joint

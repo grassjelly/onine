@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: onine_urdf
+    relative_path: urdf/onine.urdf
+  SRDF:
+    relative_path: config/visual.srdf
+  CONFIG:
+    author_name: Juan Miguel Jimeno
+    author_email: jimenojmm@gmail.com
+    generated_timestamp: 1503848998
