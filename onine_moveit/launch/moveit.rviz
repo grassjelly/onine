@@ -4,8 +4,10 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /Global Options1
         - /MotionPlanning1
         - /MotionPlanning1/Planned Path1
+        - /TF1/Frames1
       Splitter Ratio: 0.74256
     Tree Height: 452
   - Class: rviz/Help
@@ -64,12 +66,21 @@ Visualization Manager:
           Expand Link Details: false
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
+          base_footprint:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
           braccio_base_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          camera_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -100,6 +111,26 @@ Visualization Manager:
             Show Trail: false
             Value: true
           vertical_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          wheel1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          wheel2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          wheel3:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          wheel4:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -159,12 +190,21 @@ Visualization Manager:
           Expand Link Details: false
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
+          base_footprint:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
           braccio_base_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          camera_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -199,6 +239,26 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          wheel1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          wheel2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          wheel3:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          wheel4:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           wrist_pitch_link:
             Alpha: 1
             Show Axes: false
@@ -213,10 +273,24 @@ Visualization Manager:
         Show Robot Collision: false
         Show Robot Visual: true
       Value: true
+    - Class: rviz/TF
+      Enabled: false
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        {}
+      Update Interval: 0
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: base_link
+    Fixed Frame: base_footprint
     Frame Rate: 30
   Name: root
   Tools:
@@ -228,7 +302,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 2.9965
+      Distance: 2.55523
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
@@ -240,10 +314,10 @@ Visualization Manager:
         Z: 2.23518e-07
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.509797
+      Pitch: 0.0447969
       Target Frame: base_link
       Value: XYOrbit (rviz)
-      Yaw: 5.65995
+      Yaw: 1.71176
     Saved: ~
 Window Geometry:
   Displays:
@@ -261,5 +335,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1828
-  X: 82
+  X: 55
   Y: 14

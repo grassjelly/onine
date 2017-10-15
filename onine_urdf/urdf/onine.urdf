@@ -1,32 +1,97 @@
 <?xml version="1.0"?>
 <robot name="visual">
+
+    <material name="orange">
+        <color rgba="0.57 0.17 0.0 1.0" />
+    </material>
+
+    <material name="white">
+        <color rgba="0.8 0.8 0.8 0.50" />
+    </material>
+
+    <material name="black">
+        <color rgba="0.0 0.0 0.0 0.95" />
+    </material>
+    
+    <link name="base_footprint" />
+
+    <link name="wheel1">
+        <visual>
+            <geometry>
+                <cylinder length="0.05" radius=".05" />
+            </geometry>
+            <material name="white" />
+            <origin rpy="1.5708 0 0" xyz="0 0 0" />
+        </visual>
+    </link>
+
+    <link name="wheel2">
+        <visual>
+            <geometry>
+                <cylinder length="0.05" radius=".05" />
+            </geometry>
+            <material name="white" />
+            <origin rpy="1.5708 0 0" xyz="0 0 0" />
+        </visual>
+    </link>
+
+    <link name="wheel3">
+        <visual>
+            <geometry>
+                <cylinder length="0.05" radius=".05" />
+            </geometry>
+            <material name="white" />
+            <origin rpy="1.5708 0 0" xyz="0 0 0" />
+        </visual>
+    </link>
+
+    <link name="wheel4">
+        <visual>
+            <geometry>
+                <cylinder length="0.05" radius=".05" />
+            </geometry>
+            <material name="white" />
+            <origin rpy="1.5708 0 0" xyz="0 0 0" />
+        </visual>
+    </link>
+
     <link name="base_link">
         <visual>
             <geometry>
-                <cylinder length="0.01" radius=".053" />
+                <box size="0.33 0.23 0.15" />
             </geometry>
             <material name="black" />
-            <origin rpy="0 0 0" xyz="0 0 0" />
+            <origin rpy="0 0 0" xyz="0 0 -0.075" />
         </visual>
     </link>
-            
+
+    <link name="camera_link">
+        <visual>
+            <geometry>
+                <box size="0.06 0.28 0.06" />
+            </geometry>
+            <material name="black" />
+            <origin rpy="0 0 0" xyz="-0.03 0 0" />
+        </visual>
+    </link>
+
     <link name="vertical_link">
         <visual>
             <geometry>
-                <box size="0.02 0.02 1.08" />
+                <box size="0.02 0.02 1.21" />
             </geometry>
             <material name="black" />
-            <origin rpy="0 0 0" xyz="0 0 0" />
+            <origin rpy="0 0 0" xyz="0 0 0.605" />
         </visual>
     </link>
 
     <link name="torso_link">
         <visual>
             <geometry>
-                <box size="0.13 0.125 0.005" />
+                <box size="0.134 0.125 0.005" />
             </geometry>
             <material name="black" />
-            <origin rpy="0 0 0" xyz="-0.015 0 0" />
+            <origin rpy="0 0 0" xyz="0 0 0" />
         </visual>
     </link>
 
@@ -100,26 +165,67 @@
         </visual>
     </link>
 
-   <joint name="vertical_joint" type="fixed">
+    <joint name="base_link_joint" type="fixed">
         <axis xyz="0 0 1" />
-        <!--<limit effort="1000.0" lower="0.18" upper="1.04" velocity="1.0" />-->
-        <origin rpy="0 0 0" xyz="0 0 0.54" />
+        <origin rpy="0 0 0" xyz="0 0 0.171" />
+        <parent link="base_footprint" />
+        <child link="base_link" />
+    </joint>
+
+    <joint name="camera_link_joint" type="fixed">
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0.5585 0" xyz="0 0 1.21" />
+        <parent link="vertical_link" />
+        <child link="camera_link" />
+    </joint>
+
+    <joint name="wheel1_joint" type="fixed">
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="0.11 0.17 0.05" />
+        <parent link="base_footprint" />
+        <child link="wheel1" />
+    </joint>
+
+    <joint name="wheel2_joint" type="fixed">
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="0.11 -0.17 0.05" />
+        <parent link="base_footprint" />
+        <child link="wheel2" />
+    </joint>
+
+    <joint name="wheel3_joint" type="fixed">
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="-0.11 0.17 0.05" />
+        <parent link="base_footprint" />
+        <child link="wheel3" />
+    </joint>
+
+    <joint name="wheel4_joint" type="fixed">
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="-0.11 -0.17 0.05" />
+        <parent link="base_footprint" />
+        <child link="wheel4" />
+    </joint>
+
+    <joint name="vertical_joint" type="fixed">
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="-0.013 0 0" />
         <parent link="base_link" />
         <child link="vertical_link" />
     </joint>
 
     <joint name="torso_joint" type="prismatic">
         <axis xyz="0 0 1" />
-        <limit effort="1000.0" lower="0.18" upper="1.04" velocity="1.0" />
-        <origin rpy="0 0 0" xyz="0.095 0 0" />
-        <parent link="base_link" />
+        <limit effort="1000.0" lower="0.185" upper="0.6" velocity="0.108" />
+        <origin rpy="0 0 0" xyz="0.078 0 0" />
+        <parent link="vertical_link" />
         <child link="torso_link" />
     </joint>
 
     <joint name="base_joint" type="revolute">
         <axis xyz="0 0 -1" />
         <limit effort="1000.0" lower="0.0" upper="3.1416" velocity="1.0" />
-        <origin rpy="0 0 0" xyz="0 0 0" />
+        <origin rpy="0 0 0" xyz="0.015 0 0" />
         <parent link="torso_link" />
         <child link="braccio_base_link" />
     </joint>
@@ -172,14 +278,4 @@
         <parent link="wrist_roll_link" />
         <child link="left_gripper_link" />
     </joint>
-
-    <material name="orange">
-        <color rgba="0.57 0.17 0.0 1" />
-    </material>
-    <material name="white">
-        <color rgba="0.8 0.8 0.8 1.0" />
-    </material>
-    <material name="black">
-        <color rgba="0 0 0 0.50" />
-    </material>
 </robot>
