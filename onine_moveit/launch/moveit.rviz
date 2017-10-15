@@ -1,15 +1,15 @@
 Panels:
   - Class: rviz/Displays
-    Help Height: 84
+    Help Height: 78
     Name: Displays
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /MotionPlanning1
+        - /Status1
         - /MotionPlanning1/Planned Path1
-        - /TF1/Frames1
+        - /TF1
       Splitter Ratio: 0.74256
-    Tree Height: 452
+    Tree Height: 167
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -17,13 +17,17 @@ Panels:
       - /Current View1
     Name: Views
     Splitter Ratio: 0.5
+  - Class: rviz/Tool Properties
+    Expanded: ~
+    Name: Tool Properties
+    Splitter Ratio: 0.5
 Visualization Manager:
   Class: ""
   Displays:
     - Alpha: 0.5
       Cell Size: 1
       Class: rviz/Grid
-      Color: 160; 160; 164
+      Color: 104; 115; 164
       Enabled: true
       Line Style:
         Line Width: 0.03
@@ -274,23 +278,195 @@ Visualization Manager:
         Show Robot Visual: true
       Value: true
     - Class: rviz/TF
-      Enabled: false
+      Enabled: true
       Frame Timeout: 15
       Frames:
         All Enabled: false
+        base_footprint:
+          Value: false
+        base_link:
+          Value: true
+        braccio_base_link:
+          Value: false
+        camera_depth_frame:
+          Value: false
+        camera_depth_optical_frame:
+          Value: false
+        camera_link:
+          Value: false
+        camera_rgb_frame:
+          Value: false
+        camera_rgb_optical_frame:
+          Value: false
+        elbow_link:
+          Value: false
+        laser:
+          Value: false
+        left_gripper_link:
+          Value: false
+        map:
+          Value: false
+        odom:
+          Value: false
+        right_gripper_link:
+          Value: false
+        shoulder_link:
+          Value: false
+        torso_link:
+          Value: false
+        vertical_link:
+          Value: false
+        wheel1:
+          Value: false
+        wheel2:
+          Value: false
+        wheel3:
+          Value: false
+        wheel4:
+          Value: false
+        wrist_pitch_link:
+          Value: false
+        wrist_roll_link:
+          Value: false
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
-      Show Names: true
+      Show Names: false
       Tree:
-        {}
+        map:
+          odom:
+            base_footprint:
+              base_link:
+                laser:
+                  {}
+                vertical_link:
+                  camera_link:
+                    camera_depth_frame:
+                      camera_depth_optical_frame:
+                        {}
+                    camera_rgb_frame:
+                      camera_rgb_optical_frame:
+                        {}
+                  torso_link:
+                    braccio_base_link:
+                      shoulder_link:
+                        elbow_link:
+                          wrist_pitch_link:
+                            wrist_roll_link:
+                              left_gripper_link:
+                                {}
+                              right_gripper_link:
+                                {}
+              wheel1:
+                {}
+              wheel2:
+                {}
+              wheel3:
+                {}
+              wheel4:
+                {}
       Update Interval: 0
-      Value: false
+      Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/LaserScan
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: LaserScan
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.05
+      Style: Boxes
+      Topic: /scan
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
+    - Alpha: 0.7
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Map
+      Topic: /map
+      Unreliable: false
+      Value: true
+    - Alpha: 0.7
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: true
+      Enabled: true
+      Name: GlobalCostMap
+      Topic: /move_base/global_costmap/costmap
+      Unreliable: false
+      Value: true
+    - Alpha: 1
+      Class: rviz/Map
+      Color Scheme: costmap
+      Draw Behind: false
+      Enabled: true
+      Name: LocalCostMap
+      Topic: /move_base/local_costmap/costmap
+      Unreliable: false
+      Value: true
+    - Alpha: 1
+      Buffer Length: 1
+      Class: rviz/Path
+      Color: 25; 255; 0
+      Enabled: true
+      Head Diameter: 0.3
+      Head Length: 0.2
+      Length: 0.3
+      Line Style: Lines
+      Line Width: 0.03
+      Name: Path
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Color: 255; 85; 255
+      Pose Style: None
+      Radius: 0.03
+      Shaft Diameter: 0.1
+      Shaft Length: 0.1
+      Topic: /move_base/NavfnROS/plan
+      Unreliable: false
+      Value: true
+    - Alpha: 1
+      Axes Length: 0.1
+      Axes Radius: 0.01
+      Class: rviz/Pose
+      Color: 255; 25; 0
+      Enabled: true
+      Head Length: 0.1
+      Head Radius: 0.1
+      Name: GoalPose
+      Shaft Length: 0.2
+      Shaft Radius: 0.05
+      Shape: Arrow
+      Topic: /move_base_simple/goal
+      Unreliable: false
+      Value: true
   Enabled: true
   Global Options:
-    Background Color: 48; 48; 48
-    Fixed Frame: base_footprint
+    Background Color: 231; 231; 231
+    Fixed Frame: map
     Frame Rate: 30
   Name: root
   Tools:
@@ -298,42 +474,48 @@ Visualization Manager:
       Hide Inactive Objects: true
     - Class: rviz/MoveCamera
     - Class: rviz/Select
+    - Class: rviz/SetGoal
+      Topic: /move_base_simple/goal
+    - Class: rviz/SetInitialPose
+      Topic: /initialpose
   Value: true
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 2.55523
+      Distance: 6.62038
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.113567
-        Y: 0.10592
-        Z: 2.23518e-07
+        X: 0
+        Y: 0
+        Z: 0
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.0447969
+      Pitch: 0.389797
       Target Frame: base_link
       Value: XYOrbit (rviz)
-      Yaw: 1.71176
+      Yaw: 2.42725
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1148
+  Height: 1176
   Help:
     collapsed: false
   Hide Left Dock: false
-  Hide Right Dock: false
+  Hide Right Dock: true
   MotionPlanning:
     collapsed: false
   MotionPlanning - Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000002a200000436fc0200000007fb000000100044006900730070006c006100790073010000002800000259000000dd00fffffffb0000000800480065006c00700000000342000000bb0000007600fffffffb0000000a0056006900650077007300000003b0000000b0000000b000fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb0000002e004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d00200053006c00690064006500720000000000ffffffff0000004a00fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000287000001d7000001cc00ffffff0000047c0000043600000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000100000000000002a200000452fc020000000afb000000100044006900730070006c006100790073010000002800000136000000dd00fffffffb0000000800480065006c00700000000342000000bb0000007600fffffffb0000000a0056006900650077007300000003b0000000b0000000b000fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb0000002e004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d00200053006c006900640065007200000001fa000000a30000004a00fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000016400000284000001cc00fffffffb0000000c00430061006d0065007200610000000418000000620000000000000000fb0000001e0054006f006f006c002000500072006f007000650072007400690065007301000003ee0000008c0000006400fffffffb0000000a0049006d0061006700650100000347000001330000000000000000000004970000045200000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Tool Properties:
+    collapsed: false
   Views:
     collapsed: false
-  Width: 1828
-  X: 55
-  Y: 14
+  Width: 1855
+  X: 1985
+  Y: 24

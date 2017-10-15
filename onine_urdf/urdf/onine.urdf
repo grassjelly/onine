@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="visual">
+<robot name="onine">
 
     <material name="orange">
         <color rgba="0.57 0.17 0.0 1.0" />
@@ -10,9 +10,13 @@
     </material>
 
     <material name="black">
-        <color rgba="0.0 0.0 0.0 0.95" />
+        <color rgba="0.0 0.0 0.0 1.0" />
     </material>
     
+    <material name="blue">
+        <color rgba="0.0 0.0 0.8 1.0"/>
+    </material>
+
     <link name="base_footprint" />
 
     <link name="wheel1">
@@ -20,7 +24,7 @@
             <geometry>
                 <cylinder length="0.05" radius=".05" />
             </geometry>
-            <material name="white" />
+            <material name="blue" />
             <origin rpy="1.5708 0 0" xyz="0 0 0" />
         </visual>
     </link>
@@ -30,7 +34,7 @@
             <geometry>
                 <cylinder length="0.05" radius=".05" />
             </geometry>
-            <material name="white" />
+            <material name="blue" />
             <origin rpy="1.5708 0 0" xyz="0 0 0" />
         </visual>
     </link>
@@ -40,7 +44,7 @@
             <geometry>
                 <cylinder length="0.05" radius=".05" />
             </geometry>
-            <material name="white" />
+            <material name="blue" />
             <origin rpy="1.5708 0 0" xyz="0 0 0" />
         </visual>
     </link>
@@ -50,7 +54,7 @@
             <geometry>
                 <cylinder length="0.05" radius=".05" />
             </geometry>
-            <material name="white" />
+            <material name="blue" />
             <origin rpy="1.5708 0 0" xyz="0 0 0" />
         </visual>
     </link>
