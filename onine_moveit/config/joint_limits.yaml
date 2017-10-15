@@ -27,9 +27,9 @@ joint_limits:
     max_velocity: 1
     has_acceleration_limits: false
     max_acceleration: 0
-  torso_joint:
     has_velocity_limits: true
-    max_velocity: 0.1
+  torso_joint:
+    max_velocity: 0.0108
     has_acceleration_limits: false
     max_acceleration: 0
   wrist_pitch_joint:
