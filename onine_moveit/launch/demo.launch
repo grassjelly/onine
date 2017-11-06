@@ -22,7 +22,7 @@
     <rosparam param="/source_list">[/move_group/fake_controller_joint_states]</rosparam>
     <rosparam>
         zeros:
-            torso_joint: 0.18
+            torso_joint: 0.21
             base_joint: 1.57
     </rosparam>
   </node>
@@ -49,11 +49,6 @@
     <arg name="moveit_warehouse_database_path" value="$(arg db_path)"/>
   </include>
 
-    <!-- Start ROS communication between the robot's computer and Linorobot base -->
-  <node pkg="rosserial_python" name="rosserial_lino" type="serial_node.py" output="screen">
-    <param name="port" value="/dev/ttyACM0" />
-    <param name="baud" value="57600" />
-  </node>
 
 
 </launch>
