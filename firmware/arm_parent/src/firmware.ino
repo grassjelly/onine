@@ -1,15 +1,15 @@
 #include <ros.h>
 #include <sensor_msgs/JointState.h>
 #include <std_msgs/Bool.h>
-#include "AccelStepper.h"
 
 #define LINEAR_ACTUATOR_SPEED 0.01
-#define TORSO_MIN_HEIGHT 0.18
+#define TORSO_MIN_HEIGHT 0.21
 
-#define STEPPER_DIR 2
-#define STEPPER_STEP 3
+#define MOTOR_IN_A 9
+#define MOTOR_IN_B 10
 
 float req_joint_state[7];
+float prev_linear_state;
 
 void jointstates_callback( const sensor_msgs::JointState& joint);
 void gripper_callback( const std_msgs::Bool& state);
@@ -21,10 +21,10 @@ ros::Subscriber<std_msgs::Bool> gripper_sub("braccio_gripper", gripper_callback)
 
 void setup() 
 {
-    pinMode(STEPPER_STEP, OUTPUT);
-    pinMode(STEPPER_DIR, OUTPUT);
-    digitalWrite(STEPPER_STEP, LOW);
-    digitalWrite(STEPPER_DIR, LOW);
+    pinMode(MOTOR_IN_A, OUTPUT);
+    pinMode(MOTOR_IN_B, OUTPUT);
+
+    init_arm();
 
     Serial1.begin(2400);
     nh.getHardware()->setBaud(57600);
@@ -42,28 +42,24 @@ void setup()
 
 void loop() 
 { 
-    nh.spinOnce();
     move_arm();
+    nh.spinOnce();
 }
 
 void move_arm()
 {
-    static float prev_linear_state = TORSO_MIN_HEIGHT;
-    
     if(prev_linear_state > req_joint_state[0]){
-        digitalWrite(STEPPER_DIR, LOW);
-        analogWrite(STEPPER_STEP, 255);
+        move_z(80);
         nh.loginfo("going down");
     }
 
     else if(prev_linear_state < req_joint_state[0]){
-        digitalWrite(STEPPER_DIR, HIGH);
-        analogWrite(STEPPER_STEP, 255);
+        move_z(-80);
         nh.loginfo("going up");
     }
 
     else{
-        analogWrite(STEPPER_STEP, 0);
+        move_z(0);
     }
 
     prev_linear_state = req_joint_state[0];
@@ -95,8 +91,7 @@ void move_arm()
 
 void jointstates_callback( const sensor_msgs::JointState& joint)
 {
-    for(int i = 0; i < 8; i++)
-    {
+    for(int i = 0; i < 7; i++){
         if(i == 0)
             req_joint_state[i] = joint.position[i]; 
         else
@@ -110,4 +105,33 @@ void gripper_callback( const std_msgs::Bool& state)
         req_joint_state[6] = 1.217;
     else
         req_joint_state[6] = 1.5708;
+}
+
+void move_z(int speed)
+{
+    if (speed > 0){
+        analogWrite(MOTOR_IN_A, 0);
+        analogWrite(MOTOR_IN_B, abs(speed));
+    }
+    else if (speed < 0){
+        analogWrite(MOTOR_IN_B, 0);
+        analogWrite(MOTOR_IN_A, abs(speed));
+    }
+    else{
+        analogWrite(MOTOR_IN_B, 0);
+        analogWrite(MOTOR_IN_A, 0);
+    }
+}
+
+void init_arm(){
+    prev_linear_state = TORSO_MIN_HEIGHT;
+
+    for(int i = 0; i < 7; i++){
+        if(i == 0)
+            req_joint_state[i] = TORSO_MIN_HEIGHT; 
+        else if(i == 1 || i == 2)
+            req_joint_state[i] = 90; 
+        else
+            req_joint_state[i] = 0;
+    }
 }
