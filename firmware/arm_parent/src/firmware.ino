@@ -32,7 +32,8 @@ void setup()
     nh.subscribe(joinstates_sub);
     nh.subscribe(gripper_sub);
 
-    while (!nh.connected()){
+    while (!nh.connected())
+    {
         nh.spinOnce();
     }
 
@@ -47,17 +48,20 @@ void loop()
 
 void move_arm()
 {
-    if(prev_linear_state > req_joint_state[0]){
+    if(prev_linear_state > req_joint_state[0])
+    {
         move_z(80);
         nh.loginfo("going down");
     }
 
-    else if(prev_linear_state < req_joint_state[0]){
+    else if(prev_linear_state < req_joint_state[0])
+    {
         move_z(-80);
         nh.loginfo("going up");
     }
 
-    else{
+    else
+    {
         move_z(0);
     }
 
@@ -90,7 +94,8 @@ void move_arm()
 
 void jointstates_callback( const sensor_msgs::JointState& joint)
 {
-    for(int i = 0; i < 7; i++){
+    for(int i = 0; i < 7; i++)
+    {
         if(i == 0)
             req_joint_state[i] = joint.position[i]; 
         else
@@ -108,15 +113,18 @@ void gripper_callback( const std_msgs::Bool& state)
 
 void move_z(int speed)
 {
-    if (speed > 0){
+    if (speed > 0)
+    {
         analogWrite(MOTOR_IN_A, 0);
         analogWrite(MOTOR_IN_B, abs(speed));
     }
-    else if (speed < 0){
+    else if (speed < 0)
+    {
         analogWrite(MOTOR_IN_B, 0);
         analogWrite(MOTOR_IN_A, abs(speed));
     }
-    else{
+    else
+    {
         analogWrite(MOTOR_IN_B, 0);
         analogWrite(MOTOR_IN_A, 0);
     }
@@ -126,7 +134,8 @@ void init_arm()
 {
     prev_linear_state = TORSO_MIN_HEIGHT;
 
-    for(int i = 0; i < 7; i++){
+    for(int i = 0; i < 7; i++)
+    {
         if(i == 0)
             req_joint_state[i] = TORSO_MIN_HEIGHT; 
         else if(i == 1 || i == 2)
