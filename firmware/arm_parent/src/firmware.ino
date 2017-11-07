@@ -32,8 +32,7 @@ void setup()
     nh.subscribe(joinstates_sub);
     nh.subscribe(gripper_sub);
 
-    while (!nh.connected())
-    {
+    while (!nh.connected()){
         nh.spinOnce();
     }
 
@@ -123,7 +122,8 @@ void move_z(int speed)
     }
 }
 
-void init_arm(){
+void init_arm()
+{
     prev_linear_state = TORSO_MIN_HEIGHT;
 
     for(int i = 0; i < 7; i++){

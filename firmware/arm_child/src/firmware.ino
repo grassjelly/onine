@@ -18,7 +18,8 @@ void setup()
     Braccio.begin();
 }
 
-void loop() {
+void loop() 
+{
     static String Data = "";
     //90b90s0e0r0p73g
     while (Serial.available()){
@@ -58,7 +59,8 @@ void loop() {
         }
 
     }
-  Braccio.ServoMovement(20, rec_base, rec_shoulder, rec_elbow, rec_wrist_roll, rec_wrist_pitch, rec_gripper);  
+    
+    Braccio.ServoMovement(20, rec_base, rec_shoulder, rec_elbow, rec_wrist_roll, rec_wrist_pitch, rec_gripper);  
 }
 
 void init_arm()
