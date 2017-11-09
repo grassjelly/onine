@@ -8,6 +8,12 @@
 #define MOTOR_IN_A 9
 #define MOTOR_IN_B 10
 
+// 1320456
+// name: ['base_joint', 'elbow_joint', 'shoulder_joint', 'torso_joint', 'wrist_pitch_joint', 'wrist_roll_joint']
+
+// 302145
+// name: ['torso_joint', 'base_joint', 'shoulder_joint', 'elbow_joint', 'wrist_pitch_joint', 'wrist_roll_joint', 'gripper_joint', 'sub_gripper_joint']
+
 float req_joint_state[7];
 float prev_linear_state;
 
@@ -16,7 +22,7 @@ void gripper_callback( const std_msgs::Bool& state);
 
 ros::NodeHandle  nh;
 
-ros::Subscriber<sensor_msgs::JointState> joinstates_sub("joint_states", jointstates_callback);
+ros::Subscriber<sensor_msgs::JointState> joinstates_sub("move_group/fake_controller_joint_states", jointstates_callback);
 ros::Subscriber<std_msgs::Bool> gripper_sub("braccio_gripper", gripper_callback);
 
 void setup() 
@@ -48,13 +54,13 @@ void loop()
 
 void move_arm()
 {
-    if(prev_linear_state > req_joint_state[0])
+    if(prev_linear_state > req_joint_state[3])
     {
         move_z(80);
         nh.loginfo("going down");
     }
 
-    else if(prev_linear_state < req_joint_state[0])
+    else if(prev_linear_state < req_joint_state[3])
     {
         move_z(-80);
         nh.loginfo("going up");
@@ -65,21 +71,21 @@ void move_arm()
         move_z(0);
     }
 
-    prev_linear_state = req_joint_state[0];
-   
+    prev_linear_state = req_joint_state[3];
+
     char log_msg[50];    
     char result[8];
-    dtostrf(req_joint_state[0], 6, 2, result);
+    dtostrf(req_joint_state[3], 6, 2, result);
     sprintf(log_msg,"Arm Height = %s", result);
     nh.loginfo(log_msg);
 
-    Serial1.print(req_joint_state[1]);
+    Serial1.print(req_joint_state[0]);
     Serial1.print('b');
 
     Serial1.print(req_joint_state[2]);
     Serial1.print('s');
 
-    Serial1.print(req_joint_state[3]);
+    Serial1.print(req_joint_state[1]);
     Serial1.print('e');
 
     Serial1.print(req_joint_state[4]);
@@ -94,9 +100,10 @@ void move_arm()
 
 void jointstates_callback( const sensor_msgs::JointState& joint)
 {
-    for(int i = 0; i < 7; i++)
+    for(int i = 0; i < 6; i++)
     {
-        if(i == 0)
+        //torso
+        if(i == 3)
             req_joint_state[i] = joint.position[i]; 
         else
             req_joint_state[i] = joint.position[i] * 57.2958;
@@ -136,9 +143,9 @@ void init_arm()
 
     for(int i = 0; i < 7; i++)
     {
-        if(i == 0)
+        if(i == 3)
             req_joint_state[i] = TORSO_MIN_HEIGHT; 
-        else if(i == 1 || i == 2)
+        else if(i == 0 || i == 2)
             req_joint_state[i] = 90; 
         else
             req_joint_state[i] = 0;
