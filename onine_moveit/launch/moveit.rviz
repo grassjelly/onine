@@ -104,6 +104,11 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          rod_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           shoulder_link:
             Alpha: 1
             Show Axes: false
@@ -228,6 +233,11 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          rod_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           shoulder_link:
             Alpha: 1
             Show Axes: false
@@ -288,28 +298,16 @@ Visualization Manager:
           Value: true
         braccio_base_link:
           Value: false
-        camera_depth_frame:
-          Value: false
-        camera_depth_optical_frame:
-          Value: false
         camera_link:
-          Value: false
-        camera_rgb_frame:
-          Value: false
-        camera_rgb_optical_frame:
           Value: false
         elbow_link:
           Value: false
-        laser:
-          Value: false
         left_gripper_link:
-          Value: false
-        map:
-          Value: false
-        odom:
           Value: false
         right_gripper_link:
           Value: false
+        rod_link:
+          Value: true
         shoulder_link:
           Value: false
         torso_link:
@@ -334,38 +332,30 @@ Visualization Manager:
       Show Axes: true
       Show Names: false
       Tree:
-        map:
-          odom:
-            base_footprint:
-              base_link:
-                laser:
-                  {}
-                vertical_link:
-                  camera_link:
-                    camera_depth_frame:
-                      camera_depth_optical_frame:
-                        {}
-                    camera_rgb_frame:
-                      camera_rgb_optical_frame:
-                        {}
-                  torso_link:
-                    braccio_base_link:
-                      shoulder_link:
-                        elbow_link:
-                          wrist_pitch_link:
-                            wrist_roll_link:
-                              left_gripper_link:
-                                {}
-                              right_gripper_link:
-                                {}
-              wheel1:
+        base_footprint:
+          base_link:
+            vertical_link:
+              camera_link:
                 {}
-              wheel2:
-                {}
-              wheel3:
-                {}
-              wheel4:
-                {}
+              rod_link:
+                torso_link:
+                  braccio_base_link:
+                    shoulder_link:
+                      elbow_link:
+                        wrist_pitch_link:
+                          wrist_roll_link:
+                            left_gripper_link:
+                              {}
+                            right_gripper_link:
+                              {}
+          wheel1:
+            {}
+          wheel2:
+            {}
+          wheel3:
+            {}
+          wheel4:
+            {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -466,7 +456,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 231; 231; 231
-    Fixed Frame: map
+    Fixed Frame: base_link
     Frame Rate: 30
   Name: root
   Tools:
