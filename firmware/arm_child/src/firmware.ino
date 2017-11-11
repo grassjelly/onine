@@ -20,49 +20,77 @@ void setup()
 
 void loop() 
 {
-    static String Data = "";
-    //90b90s0e0r0p73g
+    static String serial_string = "";
+    static unsigned long prev_height_time = 0;
+    static unsigned long prev_ul_time = 0;
+    static unsigned long prev_ll_time = 0;
+    
+
+    if((millis() -  prev_height_time) >= 200)
+    {   
+        Serial.print(get_arm_height());
+        Serial.print('h');
+        Serial.flush();
+        prev_height_time = millis();
+    }
+
+     if((millis() -  prev_ul_time) >= 200)
+    {   
+        Serial.print(get_upper_limit());
+        Serial.print('u');
+        Serial.flush();
+        prev_ul_time = millis();
+    }
+
+     if((millis() -  prev_ll_time) >= 200)
+    {   
+        Serial.print(get_lower_limit());
+        Serial.print('l');
+        Serial.flush();
+        prev_ll_time = millis();
+    }
+
     while (Serial.available())
     {
         char character = Serial.read(); 
-        Data.concat(character); 
+        serial_string.concat(character); 
 
         if (character == 'b')
         {
-            rec_base = Data.toInt();
-            Data = "";
+            rec_base = serial_string.toInt();
+            serial_string = "";
         }
 
         else if (character == 's')
         {
-            rec_shoulder = Data.toInt();
-            Data = "";
+            rec_shoulder = serial_string.toInt();
+            serial_string = "";
 
         }
 
         else if (character == 'e')
         {
-            rec_elbow = Data.toInt();
-            Data = "";
+            rec_elbow = serial_string.toInt();
+            serial_string = "";
         }
 
         else if (character == 'r')
         {
-            rec_wrist_roll = Data.toInt();
-            Data = "";
+            rec_wrist_roll = serial_string.toInt();
+            serial_string = "";
 
         }
 
         else if (character == 'p')
         {
-            rec_wrist_pitch = Data.toInt();
-            Data = "";
+            rec_wrist_pitch = serial_string.toInt();
+            serial_string = "";
         }
 
         else if (character == 'g')
         {
-            rec_gripper = Data.toInt();
-            Data = "";
+            rec_gripper = serial_string.toInt();
+            serial_string = "";
         }
 
     }
@@ -78,4 +106,19 @@ void init_arm()
     rec_wrist_roll = 0; 
     rec_wrist_pitch = 0;
     rec_gripper = 0;
+}
+
+int get_arm_height()
+{
+    return 23;
+}
+
+int get_upper_limit()
+{
+    return 1;
+}
+
+int get_lower_limit()
+{
+    return 0;
 }

@@ -9,7 +9,9 @@
 #define MOTOR_IN_B 10
 
 double req_joint_state[7];
-float prev_req_height;
+double arm_height;
+int lower_limit;
+int upper_limit;
 
 void jointstates_callback( const sensor_msgs::JointState& joint);
 void gripper_callback( const std_msgs::Bool& state);
@@ -45,7 +47,7 @@ void setup()
         nh.spinOnce();
     }
 
-    nh.loginfo("BRACCIO CONNECTED!");
+    nh.loginfo("ONINE CONNECTED!");
     delay(1);
 }
 
@@ -60,11 +62,16 @@ void loop()
     }
 
     move_arm();
+
+    get_height_state();
+  
     nh.spinOnce();
 }
 
 void move_arm()
 {
+    static double prev_req_height = TORSO_MIN_HEIGHT;
+
     if(prev_req_height > req_joint_state[3])
     {
         move_z(80);
@@ -86,9 +93,9 @@ void move_arm()
 
     char log_msg[50];    
     char result[8];
-    dtostrf(req_joint_state[3], 6, 2, result);
+    dtostrf(arm_height, 6, 2, result);
     sprintf(log_msg,"Arm Height = %s", result);
-    nh.loginfo(log_msg);
+    // nh.loginfo(log_msg);
 
     Serial1.print(rad_to_deg(req_joint_state[0]));
     Serial1.print('b');
@@ -146,7 +153,6 @@ void move_z(int speed)
 
 void init_arm()
 {
-    prev_req_height = TORSO_MIN_HEIGHT;
     req_joint_state[0] = 1.57;
     req_joint_state[1] = 0.00;
     req_joint_state[2] = 1.57;
@@ -166,7 +172,7 @@ void publish_joints()
     for(int i = 0; i < 8; i ++)
     {
         if(i == 3)
-            joints_position[i] = get_arm_height();
+            joints_position[i] = arm_height;
         else if(i == 7)
             joints_position[i] = joints_position[i-1];
         else
@@ -181,7 +187,37 @@ void publish_joints()
 
 double get_arm_height()
 {
-    return 0.22;
+    // return 0.22;
+    return req_joint_state[3];
+}
+
+void get_height_state()
+{
+    static String serial_string = "";
+
+    while (Serial1.available())
+    {
+        char character = Serial1.read(); 
+        serial_string.concat(character); 
+
+        if (character == 'h')
+        {
+            arm_height = serial_string.toInt() / 100.00 ;
+            serial_string = "";
+        }
+
+        else if (character == 'u')
+        {
+            upper_limit = serial_string.toInt();
+            serial_string = "";
+        }
+
+        else if (character == 'l')
+        {
+            lower_limit = serial_string.toInt();
+            serial_string = "";
+        }
+    }
 }
 
 double rad_to_deg(double angle)
