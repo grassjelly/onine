@@ -8,20 +8,16 @@
 #define MOTOR_IN_A 9
 #define MOTOR_IN_B 10
 
-// 1320456
-// name: ['base_joint', 'elbow_joint', 'shoulder_joint', 'torso_joint', 'wrist_pitch_joint', 'wrist_roll_joint']
-
-// 302145
-// name: ['torso_joint', 'base_joint', 'shoulder_joint', 'elbow_joint', 'wrist_pitch_joint', 'wrist_roll_joint', 'gripper_joint', 'sub_gripper_joint']
-
-float req_joint_state[7];
-float prev_linear_state;
+double req_joint_state[7];
+float prev_req_height;
 
 void jointstates_callback( const sensor_msgs::JointState& joint);
 void gripper_callback( const std_msgs::Bool& state);
 
 ros::NodeHandle  nh;
 
+sensor_msgs::JointState joints;
+ros::Publisher jointstates_pub("braccio/joint_states", &joints);
 ros::Subscriber<sensor_msgs::JointState> joinstates_sub("move_group/fake_controller_joint_states", jointstates_callback);
 ros::Subscriber<std_msgs::Bool> gripper_sub("braccio_gripper", gripper_callback);
 
@@ -32,11 +28,17 @@ void setup()
 
     init_arm();
 
+    joints.name_length = 8;
+    joints.velocity_length = 8;
+    joints.position_length = 8; 
+    joints.effort_length = 8; 
+
     Serial1.begin(2400);
-    nh.getHardware()->setBaud(57600);
+    nh.getHardware()->setBaud(115200);
     nh.initNode();
     nh.subscribe(joinstates_sub);
     nh.subscribe(gripper_sub);
+    nh.advertise(jointstates_pub);
 
     while (!nh.connected())
     {
@@ -44,23 +46,32 @@ void setup()
     }
 
     nh.loginfo("BRACCIO CONNECTED!");
+    delay(1);
 }
 
 void loop() 
 { 
+    static unsigned long prev_pub_time = 0;
+
+    if((millis() -  prev_pub_time) >= 100)
+    {
+        publish_joints();
+        prev_pub_time = millis();
+    }
+
     move_arm();
     nh.spinOnce();
 }
 
 void move_arm()
 {
-    if(prev_linear_state > req_joint_state[3])
+    if(prev_req_height > req_joint_state[3])
     {
         move_z(80);
         nh.loginfo("going down");
     }
 
-    else if(prev_linear_state < req_joint_state[3])
+    else if(prev_req_height < req_joint_state[3])
     {
         move_z(-80);
         nh.loginfo("going up");
@@ -71,7 +82,7 @@ void move_arm()
         move_z(0);
     }
 
-    prev_linear_state = req_joint_state[3];
+    prev_req_height = req_joint_state[3];
 
     char log_msg[50];    
     char result[8];
@@ -79,41 +90,37 @@ void move_arm()
     sprintf(log_msg,"Arm Height = %s", result);
     nh.loginfo(log_msg);
 
-    Serial1.print(req_joint_state[0]);
+    Serial1.print(rad_to_deg(req_joint_state[0]));
     Serial1.print('b');
 
-    Serial1.print(req_joint_state[2]);
+    Serial1.print(rad_to_deg(req_joint_state[2]));
     Serial1.print('s');
 
-    Serial1.print(req_joint_state[1]);
+    Serial1.print(rad_to_deg(req_joint_state[1]));
     Serial1.print('e');
 
-    Serial1.print(req_joint_state[4]);
+    Serial1.print(rad_to_deg(req_joint_state[4]));
     Serial1.print('r');
 
-    Serial1.print(req_joint_state[5]);
+    Serial1.print(rad_to_deg(req_joint_state[5]));
     Serial1.print('p');
 
-    Serial1.print(map(req_joint_state[6], 70, 90, 0, 70));
+    Serial1.print(map(rad_to_deg(req_joint_state[6]), 70, 90, 0, 70));
     Serial1.print('g');
 }
 
 void jointstates_callback( const sensor_msgs::JointState& joint)
 {
-    for(int i = 0; i < 6; i++)
+    for(int i = 0; i < 5; i++)
     {
-        //torso
-        if(i == 3)
-            req_joint_state[i] = joint.position[i]; 
-        else
-            req_joint_state[i] = joint.position[i] * 57.2958;
+        req_joint_state[i] = joint.position[i]; 
     }
 }
 
 void gripper_callback( const std_msgs::Bool& state)
 {
     if(state.data)
-        req_joint_state[6] = 1.217;
+        req_joint_state[6] = 1.217;        
     else
         req_joint_state[6] = 1.5708;
 }
@@ -139,15 +146,45 @@ void move_z(int speed)
 
 void init_arm()
 {
-    prev_linear_state = TORSO_MIN_HEIGHT;
+    prev_req_height = TORSO_MIN_HEIGHT;
+    req_joint_state[0] = 1.57;
+    req_joint_state[1] = 0.00;
+    req_joint_state[2] = 1.57;
+    req_joint_state[3] = TORSO_MIN_HEIGHT;
+    req_joint_state[4] = 0.00;
+    req_joint_state[5] = 0.00;
+    req_joint_state[6] = 1.39;
+}
 
-    for(int i = 0; i < 7; i++)
+void publish_joints()
+{
+    joints.header.frame_id = "";
+
+    char * joints_name[8] = {"base_joint", "elbow_joint", "shoulder_joint", "torso_joint", "wrist_pitch_joint", "wrist_roll_joint", "gripper_joint", "sub_gripper_joint"};
+    double joints_position[8];
+    
+    for(int i = 0; i < 8; i ++)
     {
         if(i == 3)
-            req_joint_state[i] = TORSO_MIN_HEIGHT; 
-        else if(i == 0 || i == 2)
-            req_joint_state[i] = 90; 
+            joints_position[i] = get_arm_height();
+        else if(i == 7)
+            joints_position[i] = joints_position[i-1];
         else
-            req_joint_state[i] = 0;
+            joints_position[i] = req_joint_state[i];
     }
+
+    joints.position = joints_position;
+    joints.name = joints_name;
+
+    jointstates_pub.publish(&joints);
+}
+
+double get_arm_height()
+{
+    return 0.22;
+}
+
+double rad_to_deg(double angle)
+{
+    return angle * 57.2958;
 }
