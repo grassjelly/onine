@@ -16,15 +16,17 @@
   <!-- If needed, broadcast static tf for robot root -->
   
 
-  <!-- We do not have a robot connected, so publish fake joint states -->
+   <!--We do not have a robot connected, so publish fake joint states -->
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
     <param name="/use_gui" value="true"/>
-    <rosparam param="/source_list">[/move_group/fake_controller_joint_states]</rosparam>
-    <rosparam>
+    <!--<rosparam param="/source_list">[move_group/fake_controller_joint_states]</rosparam>-->
+    <rosparam param="/source_list">[braccio/joint_states]</rosparam>
+
+    <!--<rosparam>
         zeros:
             torso_joint: 0.21
             base_joint: 1.57
-    </rosparam>
+    </rosparam>-->
   </node>
 
   <!-- Given the published joint states, publish tf for the robot links -->
