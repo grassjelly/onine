@@ -35,7 +35,7 @@ void setup()
     joints.position_length = 8; 
     joints.effort_length = 8; 
 
-    Serial1.begin(2400);
+    Serial1.begin(2000);
     nh.getHardware()->setBaud(115200);
     nh.initNode();
     nh.subscribe(joinstates_sub);
@@ -70,15 +70,13 @@ void loop()
 
 void move_arm()
 {
-    static double prev_req_height = TORSO_MIN_HEIGHT;
-
-    if(prev_req_height > req_joint_state[3])
+    if((arm_height - req_joint_state[3]) > 0.005)
     {
         move_z(80);
         nh.loginfo("going down");
     }
 
-    else if(prev_req_height < req_joint_state[3])
+    else if((arm_height - req_joint_state[3]) < -0.005)
     {
         move_z(-80);
         nh.loginfo("going up");
@@ -89,13 +87,11 @@ void move_arm()
         move_z(0);
     }
 
-    prev_req_height = req_joint_state[3];
-
     char log_msg[50];    
     char result[8];
     dtostrf(arm_height, 6, 2, result);
     sprintf(log_msg,"Arm Height = %s", result);
-    // nh.loginfo(log_msg);
+    nh.loginfo(log_msg);
 
     Serial1.print(rad_to_deg(req_joint_state[0]));
     Serial1.print('b');
@@ -187,7 +183,6 @@ void publish_joints()
 
 double get_arm_height()
 {
-    // return 0.22;
     return req_joint_state[3];
 }
 
@@ -202,7 +197,17 @@ void get_height_state()
 
         if (character == 'h')
         {
-            arm_height = serial_string.toInt() / 100.00 ;
+            arm_height = ((serial_string.toInt()) / 1000.00);
+
+            float offset;
+
+            if(arm_height < 0.5)
+                offset = 0.01;
+            else
+                offset = 0.035;
+
+            arm_height = arm_height + offset;
+            
             serial_string = "";
         }
 
