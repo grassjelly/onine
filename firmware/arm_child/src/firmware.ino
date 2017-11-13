@@ -1,6 +1,10 @@
 #include <Braccio.h>
-
 #include <Servo.h>
+
+#include <Wire.h>
+#include <VL53L0X.h>
+
+VL53L0X tof_sensor;
 
 Servo base;
 Servo shoulder;
@@ -9,13 +13,28 @@ Servo wrist_roll;
 Servo wrist_pitch;
 Servo gripper;
 
+
 int rec_base, rec_shoulder, rec_elbow, rec_wrist_roll, rec_wrist_pitch, rec_gripper;
 
 void setup() 
-{  
-    init_arm();
-    Serial.begin(2400);
+{    
+    Serial.begin(2000);
     Braccio.begin();
+
+    Wire.begin();
+
+    tof_sensor.init();
+    tof_sensor.setTimeout(500);
+
+    // tof_sensor.setSignalRateLimit(0.1);
+    // tof_sensor.setVcselPulsePeriod(VL53L0X::VcselPeriodPreRange, 18);
+    // tof_sensor.setVcselPulsePeriod(VL53L0X::VcselPeriodFinalRange, 14);
+    
+    tof_sensor.setMeasurementTimingBudget(200000);
+
+    // tof_sensor.startContinuous();
+
+    init_arm();
 }
 
 void loop() 
@@ -30,25 +49,24 @@ void loop()
     {   
         Serial.print(get_arm_height());
         Serial.print('h');
-        Serial.flush();
         prev_height_time = millis();
     }
 
-     if((millis() -  prev_ul_time) >= 200)
-    {   
-        Serial.print(get_upper_limit());
-        Serial.print('u');
-        Serial.flush();
-        prev_ul_time = millis();
-    }
+    //  if((millis() -  prev_ul_time) >= 200)
+    // {   
+    //     Serial.print(get_upper_limit());
+    //     Serial.print('u');
+    //     Serial.flush();
+    //     prev_ul_time = millis();
+    // }
 
-     if((millis() -  prev_ll_time) >= 200)
-    {   
-        Serial.print(get_lower_limit());
-        Serial.print('l');
-        Serial.flush();
-        prev_ll_time = millis();
-    }
+    //  if((millis() -  prev_ll_time) >= 200)
+    // {   
+    //     Serial.print(get_lower_limit());
+    //     Serial.print('l');
+    //     Serial.flush();
+    //     prev_ll_time = millis();
+    // }
 
     while (Serial.available())
     {
@@ -96,6 +114,7 @@ void loop()
     }
 
     Braccio.ServoMovement(20, rec_base, rec_shoulder, rec_elbow, rec_wrist_roll, rec_wrist_pitch, rec_gripper);  
+
 }
 
 void init_arm()
@@ -108,9 +127,15 @@ void init_arm()
     rec_gripper = 0;
 }
 
-int get_arm_height()
+double get_arm_height()
 {
-    return 23;
+    // return tof_sensor.readRangeContinuousMillimeters();
+    double height;
+    int measured_val;
+
+    measured_val = tof_sensor.readRangeSingleMillimeters();
+    height = (0.0003 * pow((double)measured_val, 2)) + ((0.4082 * (double) measured_val) + 125.9);
+    return height;
 }
 
 int get_upper_limit()
@@ -121,4 +146,9 @@ int get_upper_limit()
 int get_lower_limit()
 {
     return 0;
+}
+
+float map_float(long x, long in_min, long in_max, long out_min, long out_max)
+{
+    return (float)(x - in_min) * (out_max - out_min) / (float)(in_max - in_min) + out_min;
 }
