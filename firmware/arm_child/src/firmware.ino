@@ -4,6 +4,9 @@
 #include <Wire.h>
 #include <VL53L0X.h>
 
+#define UL_PIN A3
+#define LL_PIN A2
+
 VL53L0X tof_sensor;
 
 Servo base;
@@ -52,21 +55,19 @@ void loop()
         prev_height_time = millis();
     }
 
-    //  if((millis() -  prev_ul_time) >= 200)
-    // {   
-    //     Serial.print(get_upper_limit());
-    //     Serial.print('u');
-    //     Serial.flush();
-    //     prev_ul_time = millis();
-    // }
+     if((millis() -  prev_ul_time) >= 200)
+    {   
+        Serial.print(get_upper_limit());
+        Serial.print('u');
+        prev_ul_time = millis();
+    }
 
-    //  if((millis() -  prev_ll_time) >= 200)
-    // {   
-    //     Serial.print(get_lower_limit());
-    //     Serial.print('l');
-    //     Serial.flush();
-    //     prev_ll_time = millis();
-    // }
+     if((millis() -  prev_ll_time) >= 200)
+    {   
+        Serial.print(get_lower_limit());
+        Serial.print('l');
+        prev_ll_time = millis();
+    }
 
     while (Serial.available())
     {
@@ -140,15 +141,24 @@ double get_arm_height()
 
 int get_upper_limit()
 {
-    return 1;
+    return is_triggered(analogRead(UL_PIN));
 }
 
 int get_lower_limit()
 {
-    return 0;
+    return is_triggered(analogRead(LL_PIN));
 }
 
 float map_float(long x, long in_min, long in_max, long out_min, long out_max)
 {
     return (float)(x - in_min) * (out_max - out_min) / (float)(in_max - in_min) + out_min;
 }
+
+int is_triggered(int val)
+{
+    if(val > 1000)
+        return 1;
+    else
+        return 0;
+}
+

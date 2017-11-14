@@ -4,19 +4,21 @@
 
 #define LINEAR_ACTUATOR_SPEED 0.01
 #define TORSO_MIN_HEIGHT 0.21
+#define TORSO_MAX_HEIGHT 0.90
 
-#define MOTOR_IN_A 9
-#define MOTOR_IN_B 10
+#define MOTOR_IN_A 10
+#define MOTOR_IN_B 9
 
 double req_joint_state[7];
 double arm_height;
+
 int lower_limit;
 int upper_limit;
 
 void jointstates_callback( const sensor_msgs::JointState& joint);
 void gripper_callback( const std_msgs::Bool& state);
 
-ros::NodeHandle  nh;
+ros::NodeHandle nh;
 
 sensor_msgs::JointState joints;
 ros::Publisher jointstates_pub("braccio/joint_states", &joints);
@@ -72,13 +74,13 @@ void move_arm()
 {
     if((arm_height - req_joint_state[3]) > 0.005)
     {
-        move_z(80);
+        move_z(-80);
         nh.loginfo("going down");
     }
 
     else if((arm_height - req_joint_state[3]) < -0.005)
     {
-        move_z(-80);
+        move_z(80);
         nh.loginfo("going up");
     }
 
@@ -130,6 +132,9 @@ void gripper_callback( const std_msgs::Bool& state)
 
 void move_z(int speed)
 {
+    //check if the safety switches are triggered before moving
+    speed = speed * !upper_limit * !lower_limit;
+
     if (speed > 0)
     {
         analogWrite(MOTOR_IN_A, 0);
@@ -200,14 +205,22 @@ void get_height_state()
             arm_height = ((serial_string.toInt()) / 1000.00);
 
             float offset;
-
-            if(arm_height < 0.5)
-                offset = 0.01;
-            else
-                offset = 0.035;
-
-            arm_height = arm_height + offset;
+            if(upper_limit)
+                arm_height = TORSO_MAX_HEIGHT;
             
+            else if(lower_limit)
+                arm_height = TORSO_MIN_HEIGHT;
+            
+            else
+            {
+                if(arm_height < 0.5)
+                    offset = 0.01;
+                else
+                    offset = 0.035;
+
+                arm_height = arm_height + offset;
+            }
+
             serial_string = "";
         }
 
