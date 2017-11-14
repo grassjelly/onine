@@ -133,15 +133,16 @@ void gripper_callback( const std_msgs::Bool& state)
 void move_z(int speed)
 {
     //check if the safety switches are triggered before moving
-    speed = speed * !upper_limit * !lower_limit;
 
     if (speed > 0)
     {
+        speed = speed * !upper_limit;
         analogWrite(MOTOR_IN_A, 0);
         analogWrite(MOTOR_IN_B, abs(speed));
     }
     else if (speed < 0)
     {
+        speed = speed * !lower_limit;
         analogWrite(MOTOR_IN_B, 0);
         analogWrite(MOTOR_IN_A, abs(speed));
     }
