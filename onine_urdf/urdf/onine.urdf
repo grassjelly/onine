@@ -9,12 +9,16 @@
         <color rgba="0.8 0.8 0.8 0.50" />
     </material>
 
+    <material name="steel">
+        <color rgba="0.75 0.75 0.75 0.30" />
+    </material>
+
+    <material name="gray">
+        <color rgba="1 1 1 0.7" />
+    </material>
+
     <material name="black">
         <color rgba="0.0 0.0 0.0 1.0" />
-    </material>
-    
-    <material name="blue">
-        <color rgba="0.0 0.0 0.8 1.0"/>
     </material>
 
     <link name="base_footprint" />
@@ -24,7 +28,7 @@
             <geometry>
                 <cylinder length="0.05" radius=".05" />
             </geometry>
-            <material name="blue" />
+            <material name="gray" />
             <origin rpy="1.5708 0 0" xyz="0 0 0" />
         </visual>
     </link>
@@ -34,7 +38,7 @@
             <geometry>
                 <cylinder length="0.05" radius=".05" />
             </geometry>
-            <material name="blue" />
+            <material name="gray" />
             <origin rpy="1.5708 0 0" xyz="0 0 0" />
         </visual>
     </link>
@@ -44,7 +48,7 @@
             <geometry>
                 <cylinder length="0.05" radius=".05" />
             </geometry>
-            <material name="blue" />
+            <material name="gray" />
             <origin rpy="1.5708 0 0" xyz="0 0 0" />
         </visual>
     </link>
@@ -54,7 +58,7 @@
             <geometry>
                 <cylinder length="0.05" radius=".05" />
             </geometry>
-            <material name="blue" />
+            <material name="gray" />
             <origin rpy="1.5708 0 0" xyz="0 0 0" />
         </visual>
     </link>
@@ -94,7 +98,7 @@
             <geometry>
                 <cylinder length=".985" radius=".004" />
             </geometry>
-            <material name="black" />
+            <material name="steel" />
             <origin rpy="0 0 0" xyz="0 0 0.4925" />
         </visual>
     </link>
@@ -114,7 +118,7 @@
             <geometry>
                 <mesh filename="package://ros_braccio_urdf/stl/braccio_base.stl" scale="0.001 0.001 0.001" />
             </geometry>
-            <material name="orange" />
+            <material name="black" />
             <origin rpy="0 0 3.1416" xyz="0 0.004 0.0025" />
         </visual>
     </link>
@@ -230,7 +234,7 @@
 
     <joint name="rod_joint" type="fixed">
         <axis xyz="0 0 1" />
-        <origin rpy="0 0 0" xyz="0.045 0 0" />
+        <origin rpy="0 0 0" xyz="0.045 0 0.0000000001" />
         <parent link="vertical_link" />
         <child link="rod_link" />
     </joint>
