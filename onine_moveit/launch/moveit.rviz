@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /Grid1
         - /MotionPlanning1/Planned Path1
         - /TF1
       Splitter Ratio: 0.74256
@@ -24,10 +25,10 @@ Panels:
 Visualization Manager:
   Class: ""
   Displays:
-    - Alpha: 0.5
-      Cell Size: 1
+    - Alpha: 0.3
+      Cell Size: 0.4
       Class: rviz/Grid
-      Color: 104; 115; 164
+      Color: 164; 164; 164
       Enabled: true
       Line Style:
         Line Width: 0.03
@@ -298,8 +299,16 @@ Visualization Manager:
           Value: true
         braccio_base_link:
           Value: false
+        camera_depth_frame:
+          Value: true
+        camera_depth_optical_frame:
+          Value: true
         camera_link:
           Value: false
+        camera_rgb_frame:
+          Value: true
+        camera_rgb_optical_frame:
+          Value: true
         elbow_link:
           Value: false
         left_gripper_link:
@@ -326,7 +335,7 @@ Visualization Manager:
           Value: false
         wrist_roll_link:
           Value: false
-      Marker Scale: 1
+      Marker Scale: 0.4
       Name: TF
       Show Arrows: true
       Show Axes: true
@@ -336,7 +345,12 @@ Visualization Manager:
           base_link:
             vertical_link:
               camera_link:
-                {}
+                camera_depth_frame:
+                  camera_depth_optical_frame:
+                    {}
+                camera_rgb_frame:
+                  camera_rgb_optical_frame:
+                    {}
               rod_link:
                 torso_link:
                   braccio_base_link:
@@ -392,29 +406,29 @@ Visualization Manager:
       Class: rviz/Map
       Color Scheme: map
       Draw Behind: false
-      Enabled: true
+      Enabled: false
       Name: Map
       Topic: /map
       Unreliable: false
-      Value: true
+      Value: false
     - Alpha: 0.7
       Class: rviz/Map
       Color Scheme: map
       Draw Behind: true
-      Enabled: true
+      Enabled: false
       Name: GlobalCostMap
       Topic: /move_base/global_costmap/costmap
       Unreliable: false
-      Value: true
+      Value: false
     - Alpha: 1
       Class: rviz/Map
       Color Scheme: costmap
       Draw Behind: false
-      Enabled: true
+      Enabled: false
       Name: LocalCostMap
       Topic: /move_base/local_costmap/costmap
       Unreliable: false
-      Value: true
+      Value: false
     - Alpha: 1
       Buffer Length: 1
       Class: rviz/Path
@@ -455,8 +469,8 @@ Visualization Manager:
       Value: true
   Enabled: true
   Global Options:
-    Background Color: 231; 231; 231
-    Fixed Frame: base_link
+    Background Color: 43; 43; 43
+    Fixed Frame: base_footprint
     Frame Rate: 30
   Name: root
   Tools:
@@ -472,7 +486,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 6.62038
+      Distance: 3.70605
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
@@ -484,10 +498,10 @@ Visualization Manager:
         Z: 0
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.389797
+      Pitch: 0.514797
       Target Frame: base_link
       Value: XYOrbit (rviz)
-      Yaw: 2.42725
+      Yaw: 2.37046
     Saved: ~
 Window Geometry:
   Displays:
