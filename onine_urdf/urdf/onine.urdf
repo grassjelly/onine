@@ -14,7 +14,7 @@
     </material>
 
     <material name="gray">
-        <color rgba="1 1 1 0.7" />
+        <color rgba="0.2 0.2 0.2 0.9" />
     </material>
 
     <material name="black">
