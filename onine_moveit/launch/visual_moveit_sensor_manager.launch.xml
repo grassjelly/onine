@@ -1,3 +1,4 @@
 <launch>
+    <rosparam command="load" file="$(find onine_moveit)/config/depth_sensor.yaml" />
 
 </launch>
