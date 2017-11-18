@@ -37,7 +37,7 @@ void setup()
     joints.position_length = 8; 
     joints.effort_length = 8; 
 
-    Serial1.begin(2000);
+    Serial3.begin(2000);
     nh.getHardware()->setBaud(115200);
     nh.initNode();
     nh.subscribe(joinstates_sub);
@@ -89,29 +89,29 @@ void move_arm()
         move_z(0);
     }
 
-    char log_msg[50];    
-    char result[8];
-    dtostrf(arm_height, 6, 2, result);
-    sprintf(log_msg,"Arm Height = %s", result);
-    nh.loginfo(log_msg);
+    // char log_msg[50];    
+    // char result[8];
+    // dtostrf(arm_height, 6, 2, result);
+    // sprintf(log_msg,"Arm Height = %s", result);
+    // nh.loginfo(log_msg);
 
-    Serial1.print(rad_to_deg(req_joint_state[0]));
-    Serial1.print('b');
+    Serial3.print(rad_to_deg(req_joint_state[0]));
+    Serial3.print('b');
 
-    Serial1.print(rad_to_deg(req_joint_state[2]));
-    Serial1.print('s');
+    Serial3.print(rad_to_deg(req_joint_state[2]));
+    Serial3.print('s');
 
-    Serial1.print(rad_to_deg(req_joint_state[1]));
-    Serial1.print('e');
+    Serial3.print(rad_to_deg(req_joint_state[1]));
+    Serial3.print('e');
 
-    Serial1.print(rad_to_deg(req_joint_state[4]));
-    Serial1.print('r');
+    Serial3.print(rad_to_deg(req_joint_state[4]));
+    Serial3.print('r');
 
-    Serial1.print(rad_to_deg(req_joint_state[5]));
-    Serial1.print('p');
+    Serial3.print(rad_to_deg(req_joint_state[5]));
+    Serial3.print('p');
 
-    Serial1.print(map(rad_to_deg(req_joint_state[6]), 70, 90, 0, 70));
-    Serial1.print('g');
+    Serial3.print(map(rad_to_deg(req_joint_state[6]), 70, 90, 0, 70));
+    Serial3.print('g');
 }
 
 void jointstates_callback( const sensor_msgs::JointState& joint)
@@ -155,6 +155,7 @@ void move_z(int speed)
 
 void init_arm()
 {
+    arm_height = TORSO_MIN_HEIGHT;
     req_joint_state[0] = 1.57;
     req_joint_state[1] = 0.00;
     req_joint_state[2] = 1.57;
@@ -196,9 +197,9 @@ void get_height_state()
 {
     static String serial_string = "";
 
-    while (Serial1.available())
+    while (Serial3.available())
     {
-        char character = Serial1.read(); 
+        char character = Serial3.read(); 
         serial_string.concat(character); 
 
         if (character == 'h')
@@ -214,10 +215,10 @@ void get_height_state()
             
             else
             {
-                if(arm_height < 0.5)
-                    offset = 0.01;
+                if(arm_height <= 0.57)
+                    offset = 0.03;
                 else
-                    offset = 0.035;
+                    offset = 0.065;
 
                 arm_height = arm_height + offset;
             }
