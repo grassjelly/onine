@@ -1,15 +1,13 @@
 Panels:
   - Class: rviz/Displays
-    Help Height: 78
+    Help Height: 0
     Name: Displays
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Status1
-        - /Grid1
         - /MotionPlanning1/Planned Path1
       Splitter Ratio: 0.74256
-    Tree Height: 167
+    Tree Height: 430
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -310,8 +308,16 @@ Visualization Manager:
           Value: true
         elbow_link:
           Value: false
+        imu_link:
+          Value: true
+        laser:
+          Value: true
         left_gripper_link:
           Value: false
+        map:
+          Value: true
+        odom:
+          Value: true
         right_gripper_link:
           Value: false
         rod_link:
@@ -340,35 +346,41 @@ Visualization Manager:
       Show Axes: true
       Show Names: false
       Tree:
-        base_footprint:
-          base_link:
-            vertical_link:
-              camera_link:
-                camera_depth_frame:
-                  camera_depth_optical_frame:
-                    {}
-                camera_rgb_frame:
-                  camera_rgb_optical_frame:
-                    {}
-              rod_link:
-                torso_link:
-                  braccio_base_link:
-                    shoulder_link:
-                      elbow_link:
-                        wrist_pitch_link:
-                          wrist_roll_link:
-                            left_gripper_link:
-                              {}
-                            right_gripper_link:
-                              {}
-          wheel1:
-            {}
-          wheel2:
-            {}
-          wheel3:
-            {}
-          wheel4:
-            {}
+        map:
+          odom:
+            base_footprint:
+              base_link:
+                laser:
+                  {}
+                vertical_link:
+                  camera_link:
+                    camera_depth_frame:
+                      camera_depth_optical_frame:
+                        {}
+                    camera_rgb_frame:
+                      camera_rgb_optical_frame:
+                        {}
+                  rod_link:
+                    torso_link:
+                      braccio_base_link:
+                        shoulder_link:
+                          elbow_link:
+                            wrist_pitch_link:
+                              wrist_roll_link:
+                                left_gripper_link:
+                                  {}
+                                right_gripper_link:
+                                  {}
+              wheel1:
+                {}
+              wheel2:
+                {}
+              wheel3:
+                {}
+              wheel4:
+                {}
+            imu_link:
+              {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -401,15 +413,15 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
-    - Alpha: 0.7
+    - Alpha: 0.2
       Class: rviz/Map
-      Color Scheme: map
+      Color Scheme: raw
       Draw Behind: false
-      Enabled: false
+      Enabled: true
       Name: Map
       Topic: /map
       Unreliable: false
-      Value: false
+      Value: true
     - Alpha: 0.7
       Class: rviz/Map
       Color Scheme: map
@@ -422,12 +434,12 @@ Visualization Manager:
     - Alpha: 1
       Class: rviz/Map
       Color Scheme: costmap
-      Draw Behind: false
-      Enabled: false
+      Draw Behind: true
+      Enabled: true
       Name: LocalCostMap
       Topic: /move_base/local_costmap/costmap
       Unreliable: false
-      Value: false
+      Value: true
     - Alpha: 1
       Buffer Length: 1
       Class: rviz/Path
@@ -468,8 +480,8 @@ Visualization Manager:
       Value: true
   Enabled: true
   Global Options:
-    Background Color: 29; 29; 29
-    Fixed Frame: base_footprint
+    Background Color: 43; 43; 43
+    Fixed Frame: map
     Frame Rate: 30
   Name: root
   Tools:
@@ -485,7 +497,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 4.02119
+      Distance: 7.23945
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
@@ -497,15 +509,15 @@ Visualization Manager:
         Z: 0
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.359797
+      Pitch: 0.899797
       Target Frame: base_link
       Value: XYOrbit (rviz)
-      Yaw: 4.08545
+      Yaw: 4.09549
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1176
+  Height: 1148
   Help:
     collapsed: false
   Hide Left Dock: false
@@ -514,11 +526,11 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000002a900000452fc020000000afb000000100044006900730070006c006100790073010000002800000136000000dd00fffffffb0000000800480065006c00700000000342000000bb0000007600fffffffb0000000a0056006900650077007300000003b0000000b0000000b000fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb0000002e004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d00200053006c006900640065007200000001fa000000a30000004a00fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000016400000284000001cc00fffffffb0000000c00430061006d0065007200610000000418000000620000000000000000fb0000001e0054006f006f006c002000500072006f007000650072007400690065007301000003ee0000008c0000006400fffffffb0000000a0049006d0061006700650100000347000001330000000000000000000004900000045200000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000100000000000002a200000436fc020000000afb000000100044006900730070006c0061007900730100000028000001ef000000dd00fffffffb0000000800480065006c00700000000342000000bb0000007600fffffffb0000000a0056006900650077007300000003b0000000b0000000b000fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb0000002e004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d00200053006c006900640065007200000001fa000000a30000001600000016fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000021d000001d7000001d700fffffffb0000000c00430061006d0065007200610000000418000000620000000000000000fb0000001e0054006f006f006c002000500072006f007000650072007400690065007301000003fa000000640000006400fffffffb0000000a0049006d0061006700650100000347000001330000000000000000000004970000043600000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Tool Properties:
     collapsed: false
   Views:
     collapsed: false
   Width: 1855
-  X: 1985
-  Y: 24
+  X: 1975
+  Y: 14
