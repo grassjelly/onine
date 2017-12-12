@@ -1,6 +1,10 @@
 #include <ros.h>
 #include <sensor_msgs/JointState.h>
 #include <std_msgs/Bool.h>
+#include <StepControl.h>
+
+#define STEP_PIN 3
+#define DIR_PIN 2
 
 #define LINEAR_ACTUATOR_SPEED 0.01
 #define TORSO_MIN_HEIGHT 0.21
@@ -8,6 +12,14 @@
 
 #define MOTOR_IN_A 10
 #define MOTOR_IN_B 9
+
+#define STEP_PER_SEC 3000
+#define STEPS_PER_REV 1600
+#define DIST_PER_REV 0.008 //m
+
+
+Stepper motor(STEP_PIN, DIR_PIN);         
+StepControl<> controller; 
 
 double req_joint_state[7];
 double arm_height;
@@ -27,6 +39,8 @@ ros::Subscriber<std_msgs::Bool> gripper_sub("braccio_gripper", gripper_callback)
 
 void setup() 
 {
+    motor.setAcceleration(abs(STEP_PER_SEC*4));
+
     pinMode(MOTOR_IN_A, OUTPUT);
     pinMode(MOTOR_IN_B, OUTPUT);
 
@@ -50,50 +64,85 @@ void setup()
     }
 
     nh.loginfo("ONINE CONNECTED!");
+
+    move_z(-1);
+
     delay(1);
 }
 
 void loop() 
 { 
     static unsigned long prev_pub_time = 0;
-
+    static unsigned long prev_torso_time = 0;
     if((millis() -  prev_pub_time) >= 100)
     {
         publish_joints();
         prev_pub_time = millis();
     }
 
-    move_arm();
+    if((millis() -  prev_torso_time) >= 200)
+    {
+        move_torso();
+        prev_torso_time = millis();
+    }
 
-    get_height_state();
+    move_arm();
   
     nh.spinOnce();
 }
 
-void move_arm()
+void move_torso()
 {
+    static bool is_done = true;
+    static long int pos = 0;
+    float est_distance = 0;
+
+
     if((arm_height - req_joint_state[3]) > 0.005)
     {
-        move_z(-80);
+        if(is_done)
+        {
+            move_z(-1);
+            is_done = false;
+        }
+
+        pos = pos - (motor.getPosition() - pos);
+        est_distance =  (float) ( (abs(pos) / STEPS_PER_REV) * DIST_PER_REV) + TORSO_MIN_HEIGHT;
+        arm_height = arm_height - (arm_height - est_distance);
+        motor.setPosition(pos);
         nh.loginfo("going down");
     }
 
     else if((arm_height - req_joint_state[3]) < -0.005)
     {
-        move_z(80);
+        if(is_done)
+        {
+            move_z(1);
+            is_done = false;
+        }
+        pos = motor.getPosition();
+        arm_height = (float) ( (abs(pos) / STEPS_PER_REV) * DIST_PER_REV) + TORSO_MIN_HEIGHT;
+
         nh.loginfo("going up");
     }
 
     else
-    {
-        move_z(0);
-    }
+    {   if(!is_done)
+        {
+            is_done = true;
+            controller.stopAsync();  
+            nh.loginfo("stopped");
 
-    // char log_msg[50];    
-    // char result[8];
-    // dtostrf(arm_height, 6, 2, result);
-    // sprintf(log_msg,"Arm Height = %s", result);
-    // nh.loginfo(log_msg);
+        }
+  
+    }
+}
+
+void move_arm()
+{
+  
+    get_height_state();
+
 
     Serial3.print(rad_to_deg(req_joint_state[0]));
     Serial3.print('b');
@@ -130,27 +179,10 @@ void gripper_callback( const std_msgs::Bool& state)
         req_joint_state[6] = 1.5708;
 }
 
-void move_z(int speed)
+void move_z(int dir)
 {
-    //check if the safety switches are triggered before moving
-
-    if (speed > 0)
-    {
-        speed = speed * !upper_limit;
-        analogWrite(MOTOR_IN_A, 0);
-        analogWrite(MOTOR_IN_B, abs(speed));
-    }
-    else if (speed < 0)
-    {
-        speed = speed * !lower_limit;
-        analogWrite(MOTOR_IN_B, 0);
-        analogWrite(MOTOR_IN_A, abs(speed));
-    }
-    else
-    {
-        analogWrite(MOTOR_IN_B, 0);
-        analogWrite(MOTOR_IN_A, 0);
-    }
+    motor.setMaxSpeed(-dir * STEP_PER_SEC);        
+    controller.rotateAsync(motor); 
 }
 
 void init_arm()
@@ -202,40 +234,25 @@ void get_height_state()
         char character = Serial3.read(); 
         serial_string.concat(character); 
 
-        if (character == 'h')
-        {
-            arm_height = ((serial_string.toInt()) / 1000.00);
-
-            float offset;
-            if(upper_limit)
-                arm_height = TORSO_MAX_HEIGHT;
-            
-            else if(lower_limit)
-                arm_height = TORSO_MIN_HEIGHT;
-            
-            else
-            {
-                if(arm_height <= 0.57)
-                    offset = 0.03;
-                else
-                    offset = 0.065;
-
-                arm_height = arm_height + offset;
-            }
-
-            serial_string = "";
-        }
-
-        else if (character == 'u')
-        {
-            upper_limit = serial_string.toInt();
-            serial_string = "";
-        }
-
-        else if (character == 'l')
+        if (character == 'l')
         {
             lower_limit = serial_string.toInt();
             serial_string = "";
+
+            if(lower_limit > 0)
+            {
+                arm_height = TORSO_MAX_HEIGHT;
+                controller.stopAsync();    
+            }
+            else if(lower_limit < 0)
+            {
+                arm_height = TORSO_MIN_HEIGHT;
+                controller.stopAsync();
+                motor.setPosition(0);
+                motor.setTargetAbs(-800);
+                controller.move(motor);
+            }
+
         }
     }
 }
