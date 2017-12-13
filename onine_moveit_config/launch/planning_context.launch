@@ -9,7 +9,7 @@
   <!--<param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find onine_urdf)/urdf/onine.urdf"/>-->
 
   <!-- The semantic description that corresponds to the URDF -->
-  <param name="$(arg robot_description)_semantic" textfile="$(find onine_moveit)/config/visual.srdf" />
+  <param name="$(arg robot_description)_semantic" textfile="$(find onine_moveit)/config/onine.srdf" />
   
   <!-- Load updated joint limits (override information from URDF) -->
   <group ns="$(arg robot_description)_planning">
