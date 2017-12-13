@@ -13,9 +13,9 @@
 #define MOTOR_IN_A 10
 #define MOTOR_IN_B 9
 
-#define STEP_PER_SEC 3000
+#define STEP_PER_SEC 5000
 #define STEPS_PER_REV 1600
-#define DIST_PER_REV 0.008 //m
+#define DIST_PER_REV 0.00815 //m
 
 
 Stepper motor(STEP_PIN, DIR_PIN);         
@@ -39,7 +39,7 @@ ros::Subscriber<std_msgs::Bool> gripper_sub("braccio_gripper", gripper_callback)
 
 void setup() 
 {
-    motor.setAcceleration(abs(STEP_PER_SEC*4));
+    motor.setAcceleration(abs(STEP_PER_SEC*10));
 
     pinMode(MOTOR_IN_A, OUTPUT);
     pinMode(MOTOR_IN_B, OUTPUT);
@@ -80,14 +80,9 @@ void loop()
         prev_pub_time = millis();
     }
 
-    if((millis() -  prev_torso_time) >= 200)
-    {
-        move_torso();
-        prev_torso_time = millis();
-    }
-
     move_arm();
-  
+    move_torso();
+
     nh.spinOnce();
 }
 
@@ -96,7 +91,8 @@ void move_torso()
     static bool is_done = true;
     static long int pos = 0;
     float est_distance = 0;
-
+    static float ref_height = 0.00;
+    static float height_diff = 0.00;
 
     if((arm_height - req_joint_state[3]) > 0.005)
     {
@@ -104,12 +100,13 @@ void move_torso()
         {
             move_z(-1);
             is_done = false;
+            ref_height = arm_height;
         }
-
-        pos = pos - (motor.getPosition() - pos);
-        est_distance =  (float) ( (abs(pos) / STEPS_PER_REV) * DIST_PER_REV) + TORSO_MIN_HEIGHT;
-        arm_height = arm_height - (arm_height - est_distance);
-        motor.setPosition(pos);
+        else
+        {
+            height_diff =  (float) ( (motor.getPosition() / STEPS_PER_REV) * DIST_PER_REV);
+            arm_height = ref_height - height_diff;
+        }
         nh.loginfo("going down");
     }
 
@@ -119,30 +116,32 @@ void move_torso()
         {
             move_z(1);
             is_done = false;
+            ref_height = arm_height;
         }
-        pos = motor.getPosition();
-        arm_height = (float) ( (abs(pos) / STEPS_PER_REV) * DIST_PER_REV) + TORSO_MIN_HEIGHT;
-
+        else
+        {
+            height_diff =  (float) ( (motor.getPosition() / STEPS_PER_REV) * DIST_PER_REV);
+            arm_height = ref_height - height_diff;
+        }
         nh.loginfo("going up");
     }
 
     else
-    {   if(!is_done)
+    {   
+        if(!is_done)
         {
             is_done = true;
-            controller.stopAsync();  
+            controller.stop();  
+            height_diff =  (float) ( (motor.getPosition() / STEPS_PER_REV) * DIST_PER_REV);
+            arm_height = ref_height - height_diff;
             nh.loginfo("stopped");
-
         }
-  
     }
 }
 
 void move_arm()
 {
-  
     get_height_state();
-
 
     Serial3.print(rad_to_deg(req_joint_state[0]));
     Serial3.print('b');
@@ -181,6 +180,8 @@ void gripper_callback( const std_msgs::Bool& state)
 
 void move_z(int dir)
 {
+          
+    motor.setPosition(0); 
     motor.setMaxSpeed(-dir * STEP_PER_SEC);        
     controller.rotateAsync(motor); 
 }
@@ -242,15 +243,15 @@ void get_height_state()
             if(lower_limit > 0)
             {
                 arm_height = TORSO_MAX_HEIGHT;
-                controller.stopAsync();    
+                controller.stop();    
             }
             else if(lower_limit < 0)
             {
                 arm_height = TORSO_MIN_HEIGHT;
-                controller.stopAsync();
+                controller.stop();
                 motor.setPosition(0);
-                motor.setTargetAbs(-800);
-                controller.move(motor);
+                motor.setTargetAbs(-400);
+                controller.moveAsync(motor);
             }
 
         }
