@@ -180,7 +180,6 @@ void gripper_callback( const std_msgs::Bool& state)
 
 void move_z(int dir)
 {
-          
     motor.setPosition(0); 
     motor.setMaxSpeed(-dir * STEP_PER_SEC);        
     controller.rotateAsync(motor); 
