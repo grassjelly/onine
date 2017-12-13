@@ -1,3 +1,0 @@
-[submodule "firmware/arm_child/lib/vl53l0x-arduino"]
-	path = firmware/arm_child/lib/vl53l0x-arduino
-	url = https://github.com/pololu/vl53l0x-arduino
