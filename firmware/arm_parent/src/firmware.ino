@@ -15,7 +15,7 @@
 
 #define STEP_PER_SEC 5000
 #define STEPS_PER_REV 1600
-#define DIST_PER_REV 0.00815 //m
+#define DIST_PER_REV 0.00812 //m
 
 
 Stepper motor(STEP_PIN, DIR_PIN);         
