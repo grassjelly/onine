@@ -21,6 +21,12 @@
         <joint name="gripper_joint" />
         <joint name="sub_gripper_joint" />
     </group>
+    <group_state name="gripper_open" group="onine_gripper">
+        <joint name="gripper_joint" value="1.5708" />
+    </group_state>
+    <group_state name="gripper_closed" group="onine_gripper">
+        <joint name="gripper_joint" value="1.217" />
+    </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
     <end_effector name="onine_eef" parent_link="wrist_roll_link" group="onine_gripper" parent_group="onine_arm" />
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
