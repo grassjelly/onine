@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package>
+  <name>onine_apps</name>
+  <version>0.0.1</version>
+  <description>Onine robot apps</description>
+
+  <maintainer email="jimenojmm@gmail.com">Juan Jimeno</maintainer>
+  <license>BSD</license>
+  <author email="jimenojmm@gmail.com">Juan jimeno</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>moveit_core</build_depend>
+  <build_depend>moveit_ros_planning_interface</build_depend>
+  <build_depend>moveit_ros_perception</build_depend>
+  <build_depend>interactive_markers</build_depend>
+  <build_depend>cmake_modules</build_depend>
+
+  <run_depend>moveit_core</run_depend>
+  <run_depend>moveit_fake_controller_manager</run_depend>
+  <run_depend>moveit_ros_planning_interface</run_depend>
+  <run_depend>moveit_ros_perception</run_depend>
+  <run_depend>interactive_markers</run_depend>
+
+</package>
