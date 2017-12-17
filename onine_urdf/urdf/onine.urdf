@@ -63,16 +63,6 @@
         </visual>
     </link>
 
-    <link name="base_link">
-        <visual>
-            <geometry>
-                <box size="0.33 0.23 0.15" />
-            </geometry>
-            <material name="black" />
-            <origin rpy="0 0 0" xyz="0 0 -0.075" />
-        </visual>
-    </link>
-
     <link name="camera_link">
         <visual>
             <geometry>
@@ -83,23 +73,34 @@
         </visual>
     </link>
 
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="0.33 0.23 0.15" />
+            </geometry>
+            <material name="black" />
+            <origin rpy="0 0 0" xyz="0 0 -0.075" />
+        </visual>
+    </link>
+
     <link name="vertical_link">
         <visual>
             <geometry>
                 <box size="0.02 0.02 1.025" />
             </geometry>
             <material name="black" />
-            <origin rpy="0 0 0" xyz="0 0 0.5125" />
+            <!--<origin rpy="0 0 0" xyz="0 0 0.5125" />-->
+            <origin rpy="0 0 0" xyz="0 0 0" />
         </visual>
     </link>
 
     <link name="rod_link">
         <visual>
             <geometry>
-                <cylinder length=".985" radius=".004" />
+                <cylinder length="0.825" radius=".004" />
             </geometry>
             <material name="steel" />
-            <origin rpy="0 0 0" xyz="0 0 0.4925" />
+            <origin rpy="0 0 0" xyz="0 0 0" />
         </visual>
     </link>
 
@@ -192,7 +193,7 @@
 
     <joint name="camera_link_joint" type="fixed">
         <axis xyz="0 0 1" />
-        <origin rpy="0 0.593412 0" xyz="0 0 1.08" />
+        <origin rpy="0 0.593412 0" xyz="-0.001 0 0.5675" />
         <parent link="vertical_link" />
         <child link="camera_link" />
     </joint>
@@ -227,14 +228,14 @@
 
     <joint name="vertical_joint" type="fixed">
         <axis xyz="0 0 1" />
-        <origin rpy="0 0 0" xyz="-0.035 0 0" />
+        <origin rpy="0 0 0" xyz="-0.035 0 0.5125" />
         <parent link="base_link" />
         <child link="vertical_link" />
     </joint>
 
     <joint name="rod_joint" type="fixed">
         <axis xyz="0 0 1" />
-        <origin rpy="0 0 0" xyz="0.045 0 0.0000000001" />
+        <origin rpy="0 0 0" xyz="0.045 0 0" />
         <parent link="vertical_link" />
         <child link="rod_link" />
     </joint>
@@ -242,7 +243,7 @@
     <joint name="torso_joint" type="prismatic">
         <axis xyz="0 0 1" />
         <limit effort="1000.0" lower="0.21" upper="0.9" velocity="0.108" />
-        <origin rpy="0 0 0" xyz="0.08 0 0" />
+        <origin rpy="0 0 0" xyz="0.08 0 -0.5125" />
         <parent link="rod_link" />
         <child link="torso_link" />
     </joint>
