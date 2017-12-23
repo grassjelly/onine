@@ -117,7 +117,7 @@
     <link name="braccio_base_link">
         <visual>
             <geometry>
-                <mesh filename="package://ros_braccio_urdf/stl/braccio_base.stl" scale="0.001 0.001 0.001" />
+                <mesh filename="package://onine_urdf/stl/braccio_base.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="black" />
             <origin rpy="0 0 3.1416" xyz="0 0.004 0.0025" />
@@ -127,7 +127,7 @@
     <link name="shoulder_link">
         <visual>
             <geometry>
-                <mesh filename="package://ros_braccio_urdf/stl/braccio_shoulder.stl" scale="0.001 0.001 0.001" />
+                <mesh filename="package://onine_urdf/stl/braccio_shoulder.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="orange" />
             <origin rpy="0 0 0" xyz="-0.0045 0.0055 -0.026" />
@@ -137,7 +137,7 @@
     <link name="elbow_link">
         <visual>
             <geometry>
-                <mesh filename="package://ros_braccio_urdf/stl/braccio_elbow.stl" scale="0.001 0.001 0.001" />
+                <mesh filename="package://onine_urdf/stl/braccio_elbow.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="orange" />
             <origin rpy="0 0 0" xyz="-0.0045 0.005 -0.025" />
@@ -147,7 +147,7 @@
     <link name="wrist_pitch_link">
         <visual>
             <geometry>
-                <mesh filename="package://ros_braccio_urdf/stl/braccio_wrist_pitch.stl" scale="0.001 0.001 0.001" />
+                <mesh filename="package://onine_urdf/stl/braccio_wrist_pitch.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="orange" />
             <origin rpy="0 0 0" xyz="0.003 -0.0004 -0.024" />
@@ -157,7 +157,7 @@
     <link name="wrist_roll_link">
         <visual>
             <geometry>
-                <mesh filename="package://ros_braccio_urdf/stl/braccio_wrist_roll.stl" scale="0.001 0.001 0.001" />
+                <mesh filename="package://onine_urdf/stl/braccio_wrist_roll.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="white" />
             <origin rpy="0 0 0" xyz="0.006 0 0.0" />
@@ -167,7 +167,7 @@
     <link name="left_gripper_link">
         <visual>
             <geometry>
-                <mesh filename="package://ros_braccio_urdf/stl/braccio_left_gripper.stl" scale="0.001 0.001 0.001" />
+                <mesh filename="package://onine_urdf/stl/braccio_left_gripper.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="white" />
             <origin rpy="0 1.5708 0" xyz="0 -0.012 0" />
@@ -177,7 +177,7 @@
     <link name="right_gripper_link">
         <visual>
             <geometry>
-                <mesh filename="package://ros_braccio_urdf/stl/braccio_right_gripper.stl" scale="0.001 0.001 0.001" />
+                <mesh filename="package://onine_urdf/stl/braccio_right_gripper.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="white" />
             <origin rpy="0 1.5708 0" xyz="0 -0.012 0.010" />
