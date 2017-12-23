@@ -6,8 +6,9 @@ Panels:
       Expanded:
         - /Global Options1
         - /MotionPlanning1/Planned Path1
+        - /Camera1
       Splitter Ratio: 0.74256
-    Tree Height: 430
+    Tree Height: 156
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -296,8 +297,16 @@ Visualization Manager:
           Value: true
         braccio_base_link:
           Value: false
+        camera_depth_frame:
+          Value: true
+        camera_depth_optical_frame:
+          Value: true
         camera_link:
           Value: false
+        camera_rgb_frame:
+          Value: true
+        camera_rgb_optical_frame:
+          Value: true
         elbow_link:
           Value: false
         left_gripper_link:
@@ -334,7 +343,12 @@ Visualization Manager:
           base_link:
             vertical_link:
               camera_link:
-                {}
+                camera_depth_frame:
+                  camera_depth_optical_frame:
+                    {}
+                camera_rgb_frame:
+                  camera_rgb_optical_frame:
+                    {}
               rod_link:
                 torso_link:
                   braccio_base_link:
@@ -390,11 +404,11 @@ Visualization Manager:
       Class: rviz/Map
       Color Scheme: raw
       Draw Behind: false
-      Enabled: true
+      Enabled: false
       Name: Map
       Topic: /map
       Unreliable: false
-      Value: true
+      Value: false
     - Alpha: 0.7
       Class: rviz/Map
       Color Scheme: map
@@ -408,16 +422,16 @@ Visualization Manager:
       Class: rviz/Map
       Color Scheme: costmap
       Draw Behind: true
-      Enabled: true
+      Enabled: false
       Name: LocalCostMap
       Topic: /move_base/local_costmap/costmap
       Unreliable: false
-      Value: true
+      Value: false
     - Alpha: 1
       Buffer Length: 1
       Class: rviz/Path
       Color: 25; 255; 0
-      Enabled: true
+      Enabled: false
       Head Diameter: 0.3
       Head Length: 0.2
       Length: 0.3
@@ -435,7 +449,7 @@ Visualization Manager:
       Shaft Length: 0.1
       Topic: /move_base/NavfnROS/plan
       Unreliable: false
-      Value: true
+      Value: false
     - Alpha: 1
       Axes Length: 0.1
       Axes Radius: 0.01
@@ -451,10 +465,32 @@ Visualization Manager:
       Topic: /move_base_simple/goal
       Unreliable: false
       Value: true
+    - Class: rviz/Camera
+      Enabled: true
+      Image Rendering: background and overlay
+      Image Topic: /camera/rgb/image_color
+      Name: Camera
+      Overlay Alpha: 0.5
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: true
+      Visibility:
+        GlobalCostMap: true
+        GoalPose: true
+        Grid: true
+        LaserScan: true
+        LocalCostMap: true
+        Map: true
+        MotionPlanning: true
+        Path: true
+        TF: true
+        Value: true
+      Zoom Factor: 1
   Enabled: true
   Global Options:
     Background Color: 43; 43; 43
-    Fixed Frame: base_link
+    Fixed Frame: base_footprint
     Frame Rate: 30
   Name: root
   Tools:
@@ -470,24 +506,26 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 4.09675
+      Distance: 2.31067
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0
-        Y: 0
+        X: -0.0140502
+        Y: -0.0117823
         Z: 0
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.899797
+      Pitch: 0.739797
       Target Frame: base_link
       Value: XYOrbit (rviz)
-      Yaw: 4.09549
+      Yaw: 1.88731
     Saved: ~
 Window Geometry:
+  Camera:
+    collapsed: false
   Displays:
     collapsed: false
   Height: 1148
@@ -499,7 +537,7 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000002a200000436fc020000000afb000000100044006900730070006c0061007900730100000028000001ef000000dd00fffffffb0000000800480065006c00700000000342000000bb0000007600fffffffb0000000a0056006900650077007300000003b0000000b0000000b000fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb0000002e004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d00200053006c006900640065007200000001fa000000a30000004a00fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000021d000001d7000001cc00fffffffb0000000c00430061006d0065007200610000000418000000620000000000000000fb0000001e0054006f006f006c002000500072006f007000650072007400690065007301000003fa000000640000006400fffffffb0000000a0049006d0061006700650100000347000001330000000000000000000004970000043600000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000100000000000002b100000436fc020000000bfb000000100044006900730070006c0061007900730100000028000000dd000000dd00fffffffb0000000800480065006c00700000000342000000bb0000007600fffffffb0000000a0056006900650077007300000003b0000000b0000000b000fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb0000002e004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d00200053006c006900640065007200000001fa000000a30000004a00fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000010b000001d7000001cc00fffffffb0000000c00430061006d0065007200610000000418000000620000000000000000fb0000001e0054006f006f006c002000500072006f007000650072007400690065007301000002e8000000640000006400fffffffb0000000a0049006d0061006700650100000347000001330000000000000000fb0000000c00430061006d00650072006101000003520000010c0000001600ffffff000004880000043600000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Tool Properties:
     collapsed: false
   Views:
