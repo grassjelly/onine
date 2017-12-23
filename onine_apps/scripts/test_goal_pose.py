@@ -107,25 +107,14 @@ def move_group_python_interface_tutorial():
   print robot.get_current_state()
   print "============"
 
-
   ## Planning to a Pose goal
   ## ^^^^^^^^^^^^^^^^^^^^^^^
   ## We can plan a motion for this group to a desired pose for the 
   ## end-effector
   print "============ Generating plan 1"
   pose_target = geometry_msgs.msg.Pose()
-#   pose_target.orientation.x = 0.899190604687
-  pose_target.orientation.x = 0.875729886778
 
-  pose_target.orientation.y = -0.29945915203
-  pose_target.orientation.z = 0.376774676959
-  pose_target.orientation.w = -0.0382390438089
-
-  pose_target.position.x = 0.332275746184
-  pose_target.position.y = -0.0545613957044
-  pose_target.position.z = 0.690853214033
-  group.set_pose_target(pose_target)
-
+  group.set_random_target()
 
   plan1 = group.plan()
   

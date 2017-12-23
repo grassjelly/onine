@@ -8,9 +8,9 @@ if __name__ == '__main__':
   moveit_commander.roscpp_initialize(sys.argv)
   rospy.init_node('pick_up_item')
 
-  arm = moveit_commander.MoveGroupCommander("onine_arm") # <2>
+  arm = moveit_commander.MoveGroupCommander("onine_arm") 
   arm.allow_replanning(True)
-  tf_listener = tf.TransformListener() # <3>
+  tf_listener = tf.TransformListener() 
   rate = rospy.Rate(10)
 
   p = Pose()
@@ -18,12 +18,12 @@ if __name__ == '__main__':
   while not rospy.is_shutdown():
     rate.sleep()
     # try:
-    #   t = tf_listener.getLatestCommonTime('/torso_link', '/ar_marker_3') # <7>
+    #   t = tf_listener.getLatestCommonTime('/torso_link', '/ar_marker_3') 
     #   if (rospy.Time.now() - t).to_sec() > 0.2:
     #     rospy.sleep(0.1)
     #     continue
 
-    #   (item_translation, item_orientation) = tf_listener.lookupTransform('/torso_link', "ar_marker_3", t) # <8>
+    #   (item_translation, item_orientation) = tf_listener.lookupTransform('/torso_link', "ar_marker_3", t) 
     # except(tf.Exception, tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
     #     continue
     
@@ -37,7 +37,7 @@ if __name__ == '__main__':
     #     rospy.sleep(0.1)
     #     continue
 
-    #   (item_translation, item_orientation) = tf_listener.lookupTransform('/base_footprint', "ar_marker_3", t) # <8>
+    #   (item_translation, item_orientation) = tf_listener.lookupTransform('/base_footprint', "ar_marker_3", t) 
     # except(tf.Exception, tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
     #     continue
 
@@ -64,4 +64,4 @@ if __name__ == '__main__':
 
     arm.execute(plan1)
 
-    break # <13>
+    break 
