@@ -49,11 +49,11 @@ if __name__ == '__main__':
     #   (item_translation, item_orientation) = tf_listener.lookupTransform('/braccio_base_link', "ar_marker_3", t) # <8>
     # except(tf.Exception, tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
     #     continue
-
+    
     
     # (roll,pitch,yaw) = euler_from_quaternion(item_orientation)
-    # print yaw
-    
+    # yaw = -3.141592 + yaw
+
     # try:
     #   t = tf_listener.getLatestCommonTime('/base_footprint', '/ar_marker_3') # <7>
     #   if (rospy.Time.now() - t).to_sec() > 0.2:
@@ -63,36 +63,24 @@ if __name__ == '__main__':
     #   (item_translation, item_orientation) = tf_listener.lookupTransform('/base_footprint', "ar_marker_3", t) # <8>
     # except(tf.Exception, tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
     #     continue
-    # print item_translation
 
-    try:
-      t = tf_listener.getLatestCommonTime('/base_footprint', '/wrist_roll_link') # <7>
-      if (rospy.Time.now() - t).to_sec() > 0.2:
-        rospy.sleep(0.1)
-        continue
+    # yaw = -1.21679674296
+    # item_translation = [0.37942059050958177, 0.10418873227088433, 0.5613435416047319]
 
-      (item_translation, item_orientation) = tf_listener.lookupTransform('/base_footprint', "/wrist_roll_link", t) # <8>
-    except(tf.Exception, tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-        continue
-    print item_translation
-    (roll,pitch,yaw) = euler_from_quaternion(item_orientation)
-    print "converted"
-    print roll
-    print pitch
+    # yaw = -1.65216273115
+    # item_translation = [0.33285862844663805, 0.06247227395203582, 0.8913249534672698]
+
+    yaw =  -1.60068950662
+    item_translation =  [0.31059617021484176, -0.023524150490556985, 0.8289307286089161]
+
+
+    # yaw = -1.67922115693
+    # item_translation = [0.39568175951513196, -0.032457596310244946, 0.6319669783583116]
     print yaw
     print item_translation
+    p.position.x = item_translation[0] - 0.05
+    # p.position.x = item_translation[0] - 0.015
 
-    yaw = -1.67922115693
-    item_translation = [0.39568175951513196, -0.032457596310244946, 0.6319669783583116]
-
-
-
-
-    # yaw = 1.73645785256 - 3.1416
-    # item_translation = [0.3227387180770045, -0.04783483011548259, 0.7819707036138221]
-
-    print("item: " + str(item_translation))
-    p.position.x = item_translation[0] - 0.01
     p.position.y = item_translation[1] 
     p.position.z = item_translation[2] 
     p.orientation = Quaternion(*quaternion_from_euler(-1.55961170956, 0.00000, yaw))
@@ -100,14 +88,14 @@ if __name__ == '__main__':
     # print(arm.get_random_pose())
 
     arm.set_pose_target(p)
-    arm.set_goal_tolerance(0.005)
-    # # arm.set_goal_position_tolerance(0.05)
-    # arm.set_goal_orientation_tolerance(0.1)
+    # arm.set_goal_tolerance(0.05)
+    # arm.set_goal_position_tolerance(0.05)
+    arm.set_goal_orientation_tolerance(0.2)
     arm.set_num_planning_attempts(100)
     arm.set_planning_time(10)
     arm.set_planner_id("RRTkConfigDefault")
     # arm.go(True) # <10>
-
+    # os.system("rosservice call clear_octomap") # <11>
     plan1 = arm.plan()
 
     arm.execute(plan1)
