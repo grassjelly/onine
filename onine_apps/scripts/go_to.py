@@ -52,9 +52,7 @@ if __name__ == '__main__':
 
     
     # (roll,pitch,yaw) = euler_from_quaternion(item_orientation)
-    yaw = 1.7299215079
-
-    print yaw
+    # print yaw
     
     # try:
     #   t = tf_listener.getLatestCommonTime('/base_footprint', '/ar_marker_3') # <7>
@@ -62,30 +60,48 @@ if __name__ == '__main__':
     #     rospy.sleep(0.1)
     #     continue
 
-    #   (item_translation, item_orientation) = tf_listener.lookupTransform('/braccio_base_link', "ar_marker_3", t) # <8>
+    #   (item_translation, item_orientation) = tf_listener.lookupTransform('/base_footprint', "ar_marker_3", t) # <8>
     # except(tf.Exception, tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
     #     continue
-    item_translation = [0.507533234163447561, 0.2361223818537537, 0.46681790857795324]
+    # print item_translation
+
+    try:
+      t = tf_listener.getLatestCommonTime('/base_footprint', '/wrist_roll_link') # <7>
+      if (rospy.Time.now() - t).to_sec() > 0.2:
+        rospy.sleep(0.1)
+        continue
+
+      (item_translation, item_orientation) = tf_listener.lookupTransform('/base_footprint', "/wrist_roll_link", t) # <8>
+    except(tf.Exception, tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+        continue
+    print item_translation
+    (roll,pitch,yaw) = euler_from_quaternion(item_orientation)
+    print "converted"
+    print roll
+    print pitch
+    print yaw
     print item_translation
 
-    # pose =[-0.689963382037 ,0.263770859166 ,-0.416146471323 ,0.530280661262]
-    # (roll,pitch,yaw) = euler_from_quaternion(pose)
-    # print roll
-    # print pitch
+    yaw = -1.67922115693
+    item_translation = [0.39568175951513196, -0.032457596310244946, 0.6319669783583116]
 
-    # gripper_goal.command.position = 0.15
-    # gripper.send_goal(gripper_goal) # <9>
-    # gripper.wait_for_result(rospy.Duration(1.0))
 
+
+
+    # yaw = 1.73645785256 - 3.1416
+    # item_translation = [0.3227387180770045, -0.04783483011548259, 0.7819707036138221]
 
     print("item: " + str(item_translation))
-    p.position.x = item_translation[0] - 0.02
-    p.position.y = item_translation[1]
-    p.position.z = item_translation[2] + 0.04
-    p.orientation = Quaternion(*quaternion_from_euler(-1.66642584214, -0.298939056311, yaw))
+    p.position.x = item_translation[0] - 0.01
+    p.position.y = item_translation[1] 
+    p.position.z = item_translation[2] 
+    p.orientation = Quaternion(*quaternion_from_euler(-1.55961170956, 0.00000, yaw))
+    # print("RANDOM")
+    # print(arm.get_random_pose())
+
     arm.set_pose_target(p)
     arm.set_goal_tolerance(0.005)
-    # arm.set_goal_position_tolerance(0.05)
+    # # arm.set_goal_position_tolerance(0.05)
     # arm.set_goal_orientation_tolerance(0.1)
     arm.set_num_planning_attempts(100)
     arm.set_planning_time(10)
@@ -94,7 +110,7 @@ if __name__ == '__main__':
 
     plan1 = arm.plan()
 
-    # arm.execute(plan1)
+    arm.execute(plan1)
 
    
     # gripper_goal.command.position = 0
