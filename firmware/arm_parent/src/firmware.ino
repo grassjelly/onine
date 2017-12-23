@@ -188,7 +188,7 @@ void move_z(int dir)
 void init_arm()
 {
     arm_height = TORSO_MIN_HEIGHT;
-    req_joint_state[0] = 1.57;
+    req_joint_state[0] = 0.00;
     req_joint_state[1] = 0.00;
     req_joint_state[2] = 1.57;
     req_joint_state[3] = TORSO_MIN_HEIGHT;

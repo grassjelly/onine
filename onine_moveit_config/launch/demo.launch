@@ -22,11 +22,11 @@
     <!--<rosparam param="/source_list">[move_group/fake_controller_joint_states]</rosparam>-->
     <rosparam param="/source_list">[onine/joint_states]</rosparam>
 
-    <!--<rosparam>
+    <rosparam>
         zeros:
             torso_joint: 0.21
-            base_joint: 1.57
-    </rosparam>-->
+            base_joint: 0.0
+    </rosparam>
   </node>
 
   <!-- Given the published joint states, publish tf for the robot links -->

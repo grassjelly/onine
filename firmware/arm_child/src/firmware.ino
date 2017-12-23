@@ -84,7 +84,7 @@ void loop()
 
 void init_arm()
 {
-    rec_base = 90;
+    rec_base = 0;
     rec_shoulder = 90; 
     rec_elbow = 0;
     rec_wrist_roll = 0; 
