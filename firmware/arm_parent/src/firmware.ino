@@ -33,9 +33,9 @@ void gripper_callback( const std_msgs::Bool& state);
 ros::NodeHandle nh;
 
 sensor_msgs::JointState joints;
-ros::Publisher jointstates_pub("braccio/joint_states", &joints);
+ros::Publisher jointstates_pub("onine/joint_states", &joints);
 ros::Subscriber<sensor_msgs::JointState> joinstates_sub("move_group/fake_controller_joint_states", jointstates_callback);
-ros::Subscriber<std_msgs::Bool> gripper_sub("braccio_gripper", gripper_callback);
+ros::Subscriber<std_msgs::Bool> gripper_sub("onine_gripper", gripper_callback);
 
 void setup() 
 {
