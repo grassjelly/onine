@@ -13,7 +13,7 @@
 #define MOTOR_IN_A 10
 #define MOTOR_IN_B 9
 
-#define STEP_PER_SEC 4500
+#define STEP_PER_SEC 4800
 #define STEPS_PER_REV 1600
 #define DIST_PER_REV 0.00812 //m
 
