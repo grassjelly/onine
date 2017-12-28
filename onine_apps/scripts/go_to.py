@@ -44,7 +44,7 @@ if __name__ == '__main__':
     # yaw =  -1.70223872081
     # item_translation =  [0.3263662327879304, -0.030257178712262592, 0.8940227682404134]
     yaw =  -0.964827218361
-    item_translation =  [0.3451770476444722, 0.1716242817246255, 0.7986642342494648]
+    item_translation =  [0.3451770476444722, 0.1716242817246255, 0.7486642342494648]
 
 
 
@@ -60,12 +60,13 @@ if __name__ == '__main__':
     p.orientation = Quaternion(*quaternion_from_euler(-1.55961170956, 0.00000, yaw))
 
     arm.set_pose_target(p)
-    arm.set_goal_tolerance(0.005)
+    arm.set_goal_tolerance(0.001)
     # arm.set_goal_position_tolerance(0.05)
     # arm.set_goal_orientation_tolerance(0.1)
     arm.set_num_planning_attempts(10)
     arm.set_planning_time(10)
     arm.set_planner_id("RRTkConfigDefault")
+    os.system("rosservice call clear_octomap") # <11>
 
     plan1 = arm.plan()
 
