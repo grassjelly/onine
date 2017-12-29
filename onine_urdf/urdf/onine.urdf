@@ -250,7 +250,7 @@
 
     <joint name="base_joint" type="revolute">
         <axis xyz="0 0 -1" />
-        <limit effort="1000.0" lower="0.0" upper="3.1416" velocity="1.0" />
+        <limit effort="1000.0" lower="0.0872665" upper="3.1416" velocity="1.0" />
         <origin rpy="0 0 0" xyz="0.0075 0 0" />
         <parent link="torso_link" />
         <child link="braccio_base_link" />
@@ -274,7 +274,7 @@
 
     <joint name="wrist_pitch_joint" type="revolute">
         <axis xyz="1 0 0" />
-        <limit effort="1000.0" lower="0" upper="3.1416" velocity="1.0" />
+        <limit effort="1000.0" lower="0.0872665" upper="3.1416" velocity="1.0" />
         <origin rpy="-1.5708 0 0" xyz="0 0 0.125" />
         <parent link="elbow_link" />
         <child link="wrist_pitch_link" />

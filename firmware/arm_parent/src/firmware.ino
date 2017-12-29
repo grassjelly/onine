@@ -89,13 +89,12 @@ void loop()
         move_arm();
     }
     
-    if((millis()) - prev_torso_time >= 100)
+    if((millis()) - prev_torso_time >= 200)
     {
-        get_height_state();
         move_torso();
         prev_torso_time = millis();
     }
-    
+    get_height_state();
     nh.spinOnce();
 }
 
@@ -163,10 +162,10 @@ void move_arm()
     Serial3.print(rad_to_deg(req_joint_state[1]));
     Serial3.print('e');
 
-    Serial3.print(rad_to_deg(req_joint_state[4]));
+    Serial3.print(rad_to_deg(req_joint_state[5]));
     Serial3.print('r');
 
-    Serial3.print(rad_to_deg(req_joint_state[5]));
+    Serial3.print(rad_to_deg(req_joint_state[4]));
     Serial3.print('p');
 }
 
@@ -208,11 +207,11 @@ void move_z(int dir)
 void init_arm()
 {
     arm_height = TORSO_MIN_HEIGHT;
-    req_joint_state[0] = 0.00;
+    req_joint_state[0] = 0.0872665;
     req_joint_state[1] = 0.00;
     req_joint_state[2] = 1.57;
     req_joint_state[3] = TORSO_MIN_HEIGHT;
-    req_joint_state[4] = 0.00;
+    req_joint_state[4] = 0.0872665;
     req_joint_state[5] = 0.00;
     req_joint_state[6] = 1.39;
     

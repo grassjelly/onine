@@ -58,7 +58,7 @@ class Onine():
     def pickup(self, x, y, z):
         self.ready()
         self.open_gripper()
-        (aim_x, aim_y, aim_z, aim_yaw) = self.get_grasp_pose(x, y, z, -0.1)
+        (aim_x, aim_y, aim_z, aim_yaw) = self.get_grasp_pose(x, y, z, -0.10)
         self.goto(aim_x, aim_y, aim_z, aim_yaw)
         self.goto(x, y, z, aim_yaw)
         self.close_gripper()
@@ -72,7 +72,6 @@ if __name__ == '__main__':
   rate = rospy.Rate(10)
 
   tf_listener = tf.TransformListener() 
-
 
   while not rospy.is_shutdown():
     rate.sleep()
@@ -105,7 +104,6 @@ if __name__ == '__main__':
     arm_group.set_planner_id("RRTkConfigDefault")
 
     onine_arm = Onine(arm_group)
-
 
     onine_arm.pickup(item_translation[0], item_translation[1], item_translation[2])
     break 

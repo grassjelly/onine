@@ -25,7 +25,7 @@
     <rosparam>
         zeros:
             torso_joint: 0.21
-            base_joint: 0.0
+            base_joint: 0.0872665
     </rosparam>
   </node>
 

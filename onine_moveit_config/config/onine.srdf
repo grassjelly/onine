@@ -25,19 +25,19 @@
     </group>
 
     <group_state name="onine_ready" group="onine_arm">
-        <joint name="base_joint" value="0.0" />
+        <joint name="base_joint" value="0.0872665" />
         <joint name="elbow_joint" value="0" />
         <joint name="shoulder_joint" value="1.5708" />
-        <joint name="wrist_pitch_joint" value="0" />
+        <joint name="wrist_pitch_joint" value="0.0872665" />
         <joint name="wrist_roll_joint" value="0" />
         <joint name="torso_joint" value="0.65" />
     </group_state>
 
     <group_state name="onine_home" group="onine_arm">
-        <joint name="base_joint" value="0.0" />
+        <joint name="base_joint" value="0.0872665" />
         <joint name="elbow_joint" value="0" />
         <joint name="shoulder_joint" value="1.5708" />
-        <joint name="wrist_pitch_joint" value="0" />
+        <joint name="wrist_pitch_joint" value="0.0872665" />
         <joint name="wrist_roll_joint" value="0" />
         <joint name="torso_joint" value="0.21" />
     </group_state>
