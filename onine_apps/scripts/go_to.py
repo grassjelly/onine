@@ -40,7 +40,7 @@ class Onine():
             theta = math.atan(delta_x / delta_y)
             grasp_yaw = -1.00 * ((math.pi / 2.00) - theta)
             grasp_x = x - (distance * math.sin(theta))
-            grasp_y = y + (distance * math.cos(theta))
+            grasp_y = y - (distance * math.cos(theta))
 
         return (grasp_x, grasp_y, z, grasp_yaw)
 
