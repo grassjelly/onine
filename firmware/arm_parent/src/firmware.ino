@@ -96,7 +96,6 @@ void loop()
         prev_torso_time = millis();
     }
     
-
     nh.spinOnce();
 }
 
@@ -173,7 +172,6 @@ void move_arm()
 
 void move_gripper()
 {
-
     Serial3.print(map(rad_to_deg(req_joint_state[6]), 70, 90, 0, 70));
     Serial3.print('g');
 
