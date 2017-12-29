@@ -21,6 +21,9 @@
 Stepper motor(STEP_PIN, DIR_PIN);         
 StepControl<> controller; 
 
+
+unsigned long prev_rec_time = 0;
+
 double req_joint_state[7];
 double arm_height;
 
@@ -74,14 +77,25 @@ void loop()
 { 
     static unsigned long prev_pub_time = 0;
     static unsigned long prev_torso_time = 0;
+
     if((millis() -  prev_pub_time) >= 100)
     {
         publish_joints();
         prev_pub_time = millis();
     }
 
-    move_arm();
-    move_torso();
+    if((millis() -  prev_rec_time) < 1000)
+    {
+        move_arm();
+    }
+    
+    if((millis()) - prev_torso_time >= 100)
+    {
+        get_height_state();
+        move_torso();
+        prev_torso_time = millis();
+    }
+    
 
     nh.spinOnce();
 }
@@ -141,8 +155,6 @@ void move_torso()
 
 void move_arm()
 {
-    get_height_state();
-
     Serial3.print(rad_to_deg(req_joint_state[0]));
     Serial3.print('b');
 
@@ -157,9 +169,15 @@ void move_arm()
 
     Serial3.print(rad_to_deg(req_joint_state[5]));
     Serial3.print('p');
+}
+
+void move_gripper()
+{
 
     Serial3.print(map(rad_to_deg(req_joint_state[6]), 70, 90, 0, 70));
     Serial3.print('g');
+
+    nh.loginfo("Moving gripper");
 }
 
 void jointstates_callback( const sensor_msgs::JointState& joint)
@@ -168,6 +186,8 @@ void jointstates_callback( const sensor_msgs::JointState& joint)
     {
         req_joint_state[i] = joint.position[i]; 
     }
+    
+    prev_rec_time = millis();
 }
 
 void gripper_callback( const std_msgs::Bool& state)
@@ -176,6 +196,8 @@ void gripper_callback( const std_msgs::Bool& state)
         req_joint_state[6] = 1.217;        
     else
         req_joint_state[6] = 1.5708;
+
+    move_gripper();
 }
 
 void move_z(int dir)
@@ -195,6 +217,8 @@ void init_arm()
     req_joint_state[4] = 0.00;
     req_joint_state[5] = 0.00;
     req_joint_state[6] = 1.39;
+    
+    move_arm();
 }
 
 void publish_joints()
