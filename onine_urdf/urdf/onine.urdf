@@ -69,7 +69,7 @@
                 <box size="0.06 0.28 0.035" />
             </geometry>
             <material name="black" />
-            <origin rpy="0 0 0" xyz="0 0 0" />
+            <origin rpy="0 0 0" xyz="0 -0.03 0" />
         </visual>
     </link>
 
@@ -210,7 +210,7 @@
 
     <joint name="camera_link_joint" type="fixed">
         <axis xyz="0 0 1" />
-        <origin rpy="0 0.593412 0" xyz="-0.001 0 0.5675" />
+        <origin rpy="0 0.593412 0" xyz="-0.001 0.03 0.5675" />
         <parent link="vertical_link" />
         <child link="camera_link" />
     </joint>
