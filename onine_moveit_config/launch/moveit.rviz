@@ -6,6 +6,8 @@ Panels:
       Expanded:
         - /Global Options1
         - /MotionPlanning1/Planned Path1
+        - /TF1
+        - /TF1/Frames1
         - /Camera1
       Splitter Ratio: 0.74256
     Tree Height: 157
@@ -74,6 +76,11 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
           base_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          beam_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -207,6 +214,11 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          beam_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           braccio_base_link:
             Alpha: 1
             Show Axes: false
@@ -295,18 +307,12 @@ Visualization Manager:
           Value: false
         base_link:
           Value: true
+        beam_link:
+          Value: false
         braccio_base_link:
           Value: false
-        camera_depth_frame:
-          Value: true
-        camera_depth_optical_frame:
-          Value: true
         camera_link:
           Value: false
-        camera_rgb_frame:
-          Value: true
-        camera_rgb_optical_frame:
-          Value: true
         elbow_link:
           Value: false
         left_gripper_link:
@@ -314,7 +320,7 @@ Visualization Manager:
         right_gripper_link:
           Value: false
         rod_link:
-          Value: true
+          Value: false
         shoulder_link:
           Value: false
         torso_link:
@@ -342,13 +348,10 @@ Visualization Manager:
         base_footprint:
           base_link:
             vertical_link:
+              beam_link:
+                {}
               camera_link:
-                camera_depth_frame:
-                  camera_depth_optical_frame:
-                    {}
-                camera_rgb_frame:
-                  camera_rgb_optical_frame:
-                    {}
+                {}
               rod_link:
                 torso_link:
                   braccio_base_link:
@@ -506,7 +509,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 2.03339
+      Distance: 2.08193
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
@@ -518,10 +521,10 @@ Visualization Manager:
         Z: 0
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.629797
+      Pitch: -0.0152034
       Target Frame: base_link
       Value: XYOrbit (rviz)
-      Yaw: 4.14231
+      Yaw: 3.58412
     Saved: ~
 Window Geometry:
   Camera:

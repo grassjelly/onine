@@ -73,6 +73,16 @@
         </visual>
     </link>
 
+    <link name="beam_link">
+        <visual>
+            <geometry>
+                <box size="0.02 0.07 0.025" />
+            </geometry>
+            <material name="black" />
+            <origin rpy="0 0 0" xyz="0 0 0" />
+        </visual>
+    </link>
+
     <link name="base_link">
         <visual>
             <geometry>
@@ -183,6 +193,13 @@
             <origin rpy="0 1.5708 0" xyz="0 -0.012 0.010" />
         </visual>
     </link>
+
+    <joint name="beam_link_joint" type="fixed">
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="0.021 0 0.3975" />
+        <parent link="vertical_link" />
+        <child link="beam_link" />
+    </joint>
 
     <joint name="base_link_joint" type="fixed">
         <axis xyz="0 0 1" />
