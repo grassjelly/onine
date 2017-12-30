@@ -15,7 +15,8 @@
 
 #define STEP_PER_SEC 4800
 #define STEPS_PER_REV 1600
-#define DIST_PER_REV 0.00812 //m
+// #define DIST_PER_REV 0.00812 //m
+#define DIST_PER_REV 0.008 //m
 
 
 Stepper motor(STEP_PIN, DIR_PIN);         
@@ -42,19 +43,19 @@ ros::Subscriber<std_msgs::Bool> gripper_sub("onine_gripper", gripper_callback);
 
 void setup() 
 {
-    motor.setAcceleration(abs(STEP_PER_SEC*10));
+    motor.setAcceleration(abs(STEP_PER_SEC * 10));
 
     pinMode(MOTOR_IN_A, OUTPUT);
     pinMode(MOTOR_IN_B, OUTPUT);
-
-    init_arm();
 
     joints.name_length = 8;
     joints.velocity_length = 8;
     joints.position_length = 8; 
     joints.effort_length = 8; 
 
-    Serial3.begin(2000);
+    Serial3.begin(9600);
+    init_arm();
+
     nh.getHardware()->setBaud(115200);
     nh.initNode();
     nh.subscribe(joinstates_sub);
@@ -89,12 +90,14 @@ void loop()
         move_arm();
     }
     
-    if((millis()) - prev_torso_time >= 200)
+    if((millis()) - prev_torso_time >= 100)
     {
         move_torso();
         prev_torso_time = millis();
     }
+
     get_height_state();
+
     nh.spinOnce();
 }
 
@@ -106,7 +109,7 @@ void move_torso()
     static float ref_height = 0.00;
     static float height_diff = 0.00;
 
-    if((arm_height - req_joint_state[3]) > 0.005)
+    if((arm_height - req_joint_state[3]) > 0.01)
     {
         if(is_done)
         {
@@ -122,7 +125,7 @@ void move_torso()
         nh.loginfo("going down");
     }
 
-    else if((arm_height - req_joint_state[3]) < -0.005)
+    else if((arm_height - req_joint_state[3]) < -0.01)
     {
         if(is_done)
         {
