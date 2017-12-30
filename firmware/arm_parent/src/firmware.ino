@@ -53,7 +53,7 @@ void setup()
     joints.position_length = 8; 
     joints.effort_length = 8; 
 
-    Serial3.begin(9600);
+    Serial3.begin(4800);
     init_arm();
 
     nh.getHardware()->setBaud(115200);
@@ -85,7 +85,7 @@ void loop()
         prev_pub_time = millis();
     }
 
-    if((millis() -  prev_rec_time) < 1000)
+    if((millis() -  prev_rec_time) < 3000)
     {
         move_arm();
     }

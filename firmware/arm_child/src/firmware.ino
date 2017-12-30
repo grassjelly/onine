@@ -15,7 +15,7 @@ int rec_base, rec_shoulder, rec_elbow, rec_wrist_roll, rec_wrist_pitch, rec_grip
 
 void setup() 
 {    
-    Serial.begin(9600);
+    Serial.begin(4800);
     Braccio.begin();
 
     init_arm();
