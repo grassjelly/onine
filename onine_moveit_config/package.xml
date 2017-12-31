@@ -3,7 +3,7 @@
   <name>onine_moveit_config</name>
   <version>0.3.0</version>
   <description>
-     An automatically generated package with all the configuration and launch files for using the visual with the MoveIt! Motion Planning Framework
+     An automatically generated package with all the configuration and launch files for using the onine with the MoveIt! Motion Planning Framework
   </description>
   <author email="jimenojmm@gmail.com">Juan Miguel Jimeno</author>
   <maintainer email="jimenojmm@gmail.com">Juan Miguel Jimeno</maintainer>

@@ -61,7 +61,16 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
+        base_footprint:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        beam_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -71,22 +80,62 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        camera_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         elbow_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        left_gripper:
+        left_gripper_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_gripper:
+        right_gripper_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rod_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
         shoulder_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        torso_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        vertical_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel4:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -112,38 +161,74 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
+        base_footprint:
+          Value: false
         base_link:
+          Value: false
+        beam_link:
           Value: false
         braccio_base_link:
           Value: false
+        camera_link:
+          Value: false
         elbow_link:
           Value: false
-        left_gripper:
+        left_gripper_link:
           Value: false
-        right_gripper:
+        right_gripper_link:
+          Value: false
+        rod_link:
           Value: false
         shoulder_link:
-          Value: true
+          Value: false
+        torso_link:
+          Value: false
+        vertical_link:
+          Value: false
+        wheel1:
+          Value: false
+        wheel2:
+          Value: false
+        wheel3:
+          Value: false
+        wheel4:
+          Value: false
         wrist_pitch_link:
           Value: false
         wrist_roll_link:
-          Value: false
-      Marker Scale: 0.25
+          Value: true
+      Marker Scale: 0.1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        base_link:
-          braccio_base_link:
-            shoulder_link:
-              elbow_link:
-                wrist_pitch_link:
-                  wrist_roll_link:
-                    left_gripper:
-                      {}
-                    right_gripper:
-                      {}
+        base_footprint:
+          base_link:
+            vertical_link:
+              beam_link:
+                {}
+              camera_link:
+                {}
+              rod_link:
+                torso_link:
+                  braccio_base_link:
+                    shoulder_link:
+                      elbow_link:
+                        wrist_pitch_link:
+                          wrist_roll_link:
+                            left_gripper_link:
+                              {}
+                            right_gripper_link:
+                              {}
+          wheel1:
+            {}
+          wheel2:
+            {}
+          wheel3:
+            {}
+          wheel4:
+            {}
       Update Interval: 0
       Value: true
     - Class: rviz/Axes
@@ -177,22 +262,22 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.20657
+      Distance: 1.07902
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
+        X: -0.113554
+        Y: -0.268042
+        Z: 0.227257
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.6502
+      Pitch: 1.1348
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.76326
+      Yaw: 0.893696
     Saved: ~
 Window Geometry:
   Displays:
@@ -210,5 +295,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1637
-  X: 2157
+  X: 1975
   Y: 14

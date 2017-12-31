@@ -33,6 +33,13 @@
         </visual>
     </link>
 
+    <joint name="wheel1_joint" type="fixed">
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="0.11 0.17 0.05" />
+        <parent link="base_footprint" />
+        <child link="wheel1" />
+    </joint>
+
     <link name="wheel2">
         <visual>
             <geometry>
@@ -42,6 +49,13 @@
             <origin rpy="1.5708 0 0" xyz="0 0 0" />
         </visual>
     </link>
+
+    <joint name="wheel2_joint" type="fixed">
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="0.11 -0.17 0.05" />
+        <parent link="base_footprint" />
+        <child link="wheel2" />
+    </joint>
 
     <link name="wheel3">
         <visual>
@@ -53,6 +67,13 @@
         </visual>
     </link>
 
+    <joint name="wheel3_joint" type="fixed">
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="-0.11 0.17 0.05" />
+        <parent link="base_footprint" />
+        <child link="wheel3" />
+    </joint>
+
     <link name="wheel4">
         <visual>
             <geometry>
@@ -62,6 +83,13 @@
             <origin rpy="1.5708 0 0" xyz="0 0 0" />
         </visual>
     </link>
+
+    <joint name="wheel4_joint" type="fixed">
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="-0.11 -0.17 0.05" />
+        <parent link="base_footprint" />
+        <child link="wheel4" />
+    </joint>
 
     <link name="camera_link">
         <visual>
@@ -73,6 +101,13 @@
         </visual>
     </link>
 
+    <joint name="camera_link_joint" type="fixed">
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0.593412 0" xyz="-0.001 0.03 0.5675" />
+        <parent link="vertical_link" />
+        <child link="camera_link" />
+    </joint>
+
     <link name="beam_link">
         <visual>
             <geometry>
@@ -83,6 +118,13 @@
         </visual>
     </link>
 
+    <joint name="beam_link_joint" type="fixed">
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="0.021 0 0.3975" />
+        <parent link="vertical_link" />
+        <child link="beam_link" />
+    </joint>
+
     <link name="base_link">
         <visual>
             <geometry>
@@ -92,6 +134,13 @@
             <origin rpy="0 0 0" xyz="0 0 -0.075" />
         </visual>
     </link>
+
+    <joint name="base_link_joint" type="fixed">
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="0 0 0.171" />
+        <parent link="base_footprint" />
+        <child link="base_link" />
+    </joint>
 
     <link name="vertical_link">
         <visual>
@@ -104,6 +153,13 @@
         </visual>
     </link>
 
+    <joint name="vertical_joint" type="fixed">
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="-0.035 0 0.5125" />
+        <parent link="base_link" />
+        <child link="vertical_link" />
+    </joint>
+
     <link name="rod_link">
         <visual>
             <geometry>
@@ -113,6 +169,13 @@
             <origin rpy="0 0 0" xyz="0 0 0" />
         </visual>
     </link>
+
+    <joint name="rod_joint" type="fixed">
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="0.045 0 0" />
+        <parent link="vertical_link" />
+        <child link="rod_link" />
+    </joint>
 
     <link name="torso_link">
         <visual>
@@ -124,15 +187,31 @@
         </visual>
     </link>
 
+    <joint name="torso_joint" type="prismatic">
+        <axis xyz="0 0 1" />
+        <limit effort="1000.0" lower="0.21" upper="0.9" velocity="0.0303875" />
+        <origin rpy="0 0 0" xyz="0.08 0 -0.5125" />
+        <parent link="rod_link" />
+        <child link="torso_link" />
+    </joint>
+
     <link name="braccio_base_link">
         <visual>
             <geometry>
                 <mesh filename="package://onine_urdf/stl/braccio_base.stl" scale="0.001 0.001 0.001" />
             </geometry>
-            <material name="black" />
-            <origin rpy="0 0 3.1416" xyz="0 0.004 0.0025" />
+            <material name="orange" />
+            <origin rpy="0 0 1.570796" xyz="0.003 0 -0.075" />
         </visual>
     </link>
+
+    <joint name="base_joint" type="revolute">
+        <axis xyz="0 0 1" />
+        <limit effort="1000.0" lower="-1.570796" upper="1.570796" velocity="1.0" />
+        <origin rpy="0 0 0" xyz="0 0 0.0756" />
+        <parent link="torso_link" />
+        <child link="braccio_base_link" />
+    </joint>
 
     <link name="shoulder_link">
         <visual>
@@ -140,9 +219,17 @@
                 <mesh filename="package://onine_urdf/stl/braccio_shoulder.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="orange" />
-            <origin rpy="0 0 0" xyz="-0.0045 0.0055 -0.026" />
+            <origin rpy="0 0 1.570796" xyz="-0.0055 -0.004 -0.026" />
         </visual>
     </link>
+
+    <joint name="shoulder_joint" type="revolute">
+        <axis xyz="0 1 0" />
+        <limit effort="1000.0" lower="-1.308997" upper="1.308997" velocity="1.0" />
+        <origin rpy="0 0 0" xyz="0 0 0" />
+        <parent link="braccio_base_link" />
+        <child link="shoulder_link" />
+    </joint>
 
     <link name="elbow_link">
         <visual>
@@ -150,9 +237,17 @@
                 <mesh filename="package://onine_urdf/stl/braccio_elbow.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="orange" />
-            <origin rpy="0 0 0" xyz="-0.0045 0.005 -0.025" />
+            <origin rpy="0 0 1.570796" xyz="-0.0055 -0.004 -0.026" />
         </visual>
     </link>
+
+    <joint name="elbow_joint" type="revolute">
+        <axis xyz="0 1 0" />
+        <limit effort="1000.0" lower="-1.570796" upper="1.570796" velocity="1.0" />
+        <origin rpy="0 0 0" xyz="0 0 0.13" />
+        <parent link="shoulder_link" />
+        <child link="elbow_link" />
+    </joint>
 
     <link name="wrist_pitch_link">
         <visual>
@@ -160,9 +255,17 @@
                 <mesh filename="package://onine_urdf/stl/braccio_wrist_pitch.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="orange" />
-            <origin rpy="0 0 0" xyz="0.003 -0.0004 -0.024" />
+            <origin rpy="0 0 -1.570796" xyz="0 -0.004 -0.024" />
         </visual>
     </link>
+
+    <joint name="wrist_pitch_joint" type="revolute">
+        <axis xyz="0 1 0" />
+        <limit effort="1000.0" lower="-1.570796" upper="1.570796" velocity="1.0" />
+        <origin rpy="0 0 0" xyz="0 0 0.125" />
+        <parent link="elbow_link" />
+        <child link="wrist_pitch_link" />
+    </joint>
 
     <link name="wrist_roll_link">
         <visual>
@@ -170,155 +273,53 @@
                 <mesh filename="package://onine_urdf/stl/braccio_wrist_roll.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="white" />
-            <origin rpy="0 0 0" xyz="0.006 0 0.0" />
+            <origin rpy="0 0 -1.570796" xyz="-0.001 -0.0061 0" />
         </visual>
     </link>
-
-    <link name="left_gripper_link">
-        <visual>
-            <geometry>
-                <mesh filename="package://onine_urdf/stl/braccio_left_gripper.stl" scale="0.001 0.001 0.001" />
-            </geometry>
-            <material name="white" />
-            <origin rpy="0 1.5708 0" xyz="0 -0.012 0" />
-        </visual>
-    </link>
-
-    <link name="right_gripper_link">
-        <visual>
-            <geometry>
-                <mesh filename="package://onine_urdf/stl/braccio_right_gripper.stl" scale="0.001 0.001 0.001" />
-            </geometry>
-            <material name="white" />
-            <origin rpy="0 1.5708 0" xyz="0 -0.012 0.010" />
-        </visual>
-    </link>
-
-    <joint name="beam_link_joint" type="fixed">
-        <axis xyz="0 0 1" />
-        <origin rpy="0 0 0" xyz="0.021 0 0.3975" />
-        <parent link="vertical_link" />
-        <child link="beam_link" />
-    </joint>
-
-    <joint name="base_link_joint" type="fixed">
-        <axis xyz="0 0 1" />
-        <origin rpy="0 0 0" xyz="0 0 0.171" />
-        <parent link="base_footprint" />
-        <child link="base_link" />
-    </joint>
-
-    <joint name="camera_link_joint" type="fixed">
-        <axis xyz="0 0 1" />
-        <origin rpy="0 0.593412 0" xyz="-0.001 0.03 0.5675" />
-        <parent link="vertical_link" />
-        <child link="camera_link" />
-    </joint>
-
-    <joint name="wheel1_joint" type="fixed">
-        <axis xyz="0 0 1" />
-        <origin rpy="0 0 0" xyz="0.11 0.17 0.05" />
-        <parent link="base_footprint" />
-        <child link="wheel1" />
-    </joint>
-
-    <joint name="wheel2_joint" type="fixed">
-        <axis xyz="0 0 1" />
-        <origin rpy="0 0 0" xyz="0.11 -0.17 0.05" />
-        <parent link="base_footprint" />
-        <child link="wheel2" />
-    </joint>
-
-    <joint name="wheel3_joint" type="fixed">
-        <axis xyz="0 0 1" />
-        <origin rpy="0 0 0" xyz="-0.11 0.17 0.05" />
-        <parent link="base_footprint" />
-        <child link="wheel3" />
-    </joint>
-
-    <joint name="wheel4_joint" type="fixed">
-        <axis xyz="0 0 1" />
-        <origin rpy="0 0 0" xyz="-0.11 -0.17 0.05" />
-        <parent link="base_footprint" />
-        <child link="wheel4" />
-    </joint>
-
-    <joint name="vertical_joint" type="fixed">
-        <axis xyz="0 0 1" />
-        <origin rpy="0 0 0" xyz="-0.035 0 0.5125" />
-        <parent link="base_link" />
-        <child link="vertical_link" />
-    </joint>
-
-    <joint name="rod_joint" type="fixed">
-        <axis xyz="0 0 1" />
-        <origin rpy="0 0 0" xyz="0.045 0 0" />
-        <parent link="vertical_link" />
-        <child link="rod_link" />
-    </joint>
-
-    <joint name="torso_joint" type="prismatic">
-        <axis xyz="0 0 1" />
-        <limit effort="1000.0" lower="0.21" upper="0.9" velocity="0.108" />
-        <origin rpy="0 0 0" xyz="0.08 0 -0.5125" />
-        <parent link="rod_link" />
-        <child link="torso_link" />
-    </joint>
-
-    <joint name="base_joint" type="revolute">
-        <axis xyz="0 0 -1" />
-        <limit effort="1000.0" lower="0.0872665" upper="3.1416" velocity="1.0" />
-        <origin rpy="0 0 0" xyz="0.0075 0 0" />
-        <parent link="torso_link" />
-        <child link="braccio_base_link" />
-    </joint>
-
-    <joint name="shoulder_joint" type="revolute">
-        <axis xyz="1 0 0" />
-        <limit effort="1000.0" lower="0.2618" upper="2.8798" velocity="1.0" />
-        <origin rpy="-1.5708 0 0" xyz="0 -.002 0.072" />
-        <parent link="braccio_base_link" />
-        <child link="shoulder_link" />
-    </joint>
-
-    <joint name="elbow_joint" type="revolute">
-        <axis xyz="1 0 0" />
-        <limit effort="1000.0" lower="0" upper="3.1416" velocity="1.0" />
-        <origin rpy="-1.5708 0 0" xyz="0 0 0.125" />
-        <parent link="shoulder_link" />
-        <child link="elbow_link" />
-    </joint>
-
-    <joint name="wrist_pitch_joint" type="revolute">
-        <axis xyz="1 0 0" />
-        <limit effort="1000.0" lower="0.0872665" upper="3.1416" velocity="1.0" />
-        <origin rpy="-1.5708 0 0" xyz="0 0 0.125" />
-        <parent link="elbow_link" />
-        <child link="wrist_pitch_link" />
-    </joint>
 
     <joint name="wrist_roll_joint" type="revolute">
-        <axis xyz="0 0 -1" />
-        <limit effort="1000.0" lower="0.0" upper="3.1416" velocity="1.0" />
-        <origin rpy="0 0 0" xyz="0 0.0 0.06" />
+        <axis xyz="0 0 1" />
+        <limit effort="1000.0" lower="0.000" upper="3.141592" velocity="1.0" />
+        <origin rpy="0 0 0" xyz="0 0 0.06" />
         <parent link="wrist_pitch_link" />
         <child link="wrist_roll_link" />
     </joint>
 
-    <joint name="gripper_joint" type="revolute">
+    <link name="left_gripper_link" >
+        <visual>
+            <geometry>
+                <box size="0.006 0.002 0.075" />
+            </geometry>
+            <material name="white" />
+            <origin rpy="0 3.141592 0" xyz="0 0 0" />
+        </visual>
+    </link>
+
+    <joint name="gripper_joint" type="prismatic">
+        <axis xyz="0 1 0" />
+        <limit effort="1000.0" lower="0.002" upper="0.04" velocity="1.0" />
+        <origin rpy="0 0 0" xyz="-0.0035 0 0.078" />
+        <parent link="wrist_roll_link" />
+        <child link="left_gripper_link" />
+    </joint>
+
+    <link name="right_gripper_link">
+        <visual>
+            <geometry>
+                <box size="0.006 0.002 0.075" />
+            </geometry>
+            <material name="white" />
+            <origin rpy="0 3.141592 0" xyz="0 0 0" />
+        </visual>
+    </link>
+
+    <joint name="sub_gripper_joint" type="prismatic">
         <axis xyz="0 -1 0" />
-        <limit effort="1000.0" lower="1.217" upper="1.5708" velocity="1.0" />
-        <origin rpy="0 0 0" xyz="0.010 0 0.03" />
+        <mimic joint="gripper_joint" />
+        <limit effort="1000.0" lower="-0.002" upper="-0.04" velocity="1.0" />
+        <origin rpy="0 0 0" xyz="-0.0035 0 0.078" />
         <parent link="wrist_roll_link" />
         <child link="right_gripper_link" />
     </joint>
 
-    <joint name="sub_gripper_joint" type="revolute">
-        <axis xyz="0 1 0" />
-        <mimic joint="gripper_joint" />
-        <limit effort="1000.0" lower="1.5708" upper="2.7876" velocity="1.0" />
-        <origin rpy="0 3.1416 0" xyz="-0.010 0 0.03" />
-        <parent link="wrist_roll_link" />
-        <child link="left_gripper_link" />
-    </joint>
 </robot>

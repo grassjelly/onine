@@ -156,25 +156,25 @@ void move_torso()
 
 void move_arm()
 {
-    Serial3.print(rad_to_deg(req_joint_state[0]));
+    Serial3.print(rad_to_deg(map_float((req_joint_state[0]), -1.570796, 1.570796, 3.141592, 0.00)));
     Serial3.print('b');
 
-    Serial3.print(rad_to_deg(req_joint_state[2]));
+    Serial3.print(rad_to_deg(map_float((req_joint_state[2]), -1.570796, 1.570796, 3.141592, 0.00)));
     Serial3.print('s');
 
-    Serial3.print(rad_to_deg(req_joint_state[1]));
+    Serial3.print(rad_to_deg(map_float((req_joint_state[1]), -1.570796, 1.570796, 3.141592, 0.00)));
     Serial3.print('e');
 
     Serial3.print(rad_to_deg(req_joint_state[5]));
     Serial3.print('r');
 
-    Serial3.print(rad_to_deg(req_joint_state[4]));
+    Serial3.print(rad_to_deg(map_float((req_joint_state[4]), -1.570796, 1.570796, 3.141592, 0.00)));
     Serial3.print('p');
 }
 
 void move_gripper()
 {
-    Serial3.print(map(rad_to_deg(req_joint_state[6]), 70, 90, 0, 70));
+    Serial3.print(map(req_joint_state[6], 0.002, 0.04, 0, 70));
     Serial3.print('g');
 
     nh.loginfo("Moving gripper");
@@ -193,9 +193,9 @@ void jointstates_callback( const sensor_msgs::JointState& joint)
 void gripper_callback( const std_msgs::Bool& state)
 {
     if(state.data)
-        req_joint_state[6] = 1.217;        
+        req_joint_state[6] = 0.04;        
     else
-        req_joint_state[6] = 1.5708;
+        req_joint_state[6] = 0.002;
 
     move_gripper();
 }
@@ -210,13 +210,13 @@ void move_z(int dir)
 void init_arm()
 {
     arm_height = TORSO_MIN_HEIGHT;
-    req_joint_state[0] = 0.0872665;
-    req_joint_state[1] = 0.00;
-    req_joint_state[2] = 1.57;
+    req_joint_state[0] = 1.570796;
+    req_joint_state[1] = 1.570796;
+    req_joint_state[2] = 0.00;
     req_joint_state[3] = TORSO_MIN_HEIGHT;
-    req_joint_state[4] = 0.0872665;
+    req_joint_state[4] = 1.570796;
     req_joint_state[5] = 0.00;
-    req_joint_state[6] = 1.39;
+    req_joint_state[6] = 0.04;
     
     move_arm();
 }
@@ -284,4 +284,9 @@ void get_height_state()
 double rad_to_deg(double angle)
 {
     return angle * 57.2958;
+}
+
+double map_float(double x, double in_min, double in_max, double out_min, double out_max)
+{
+    return (double)(x - in_min) * (out_max - out_min) / (double)(in_max - in_min) + out_min;
 }
