@@ -1,29 +1,10 @@
 #!/usr/bin/env python
-
-# import sys
-# import rospy
-# from moveit_commander import RobotCommander, MoveGroupCommander
-# from moveit_commander import PlanningSceneInterface, roscpp_initialize, roscpp_shutdown
-# from geometry_msgs.msg import PoseStamped
-# from moveit_msgs.msg import Grasp, GripperTranslation, PlaceLocation
-# from trajectory_msgs.msg import JointTrajectoryPoint
-# from tf.transformations import quaternion_from_euler, euler_from_quaternion
-# from geometry_msgs.msg import *
-
-# from moveit_msgs.msg import Grasp, GripperTranslation, PlaceLocation
-# from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
-# from moveit_utils.grasping_interface import GraspingInterface
-
-# import tf
-# import math
-# import copy
 import os, sys, rospy, tf, math
 from control_msgs.msg import (GripperCommandAction, GripperCommandGoal)
 from geometry_msgs.msg import *
 from tf.transformations import quaternion_from_euler, euler_from_quaternion
 from moveit_commander import RobotCommander, PlanningSceneInterface, MoveGroupCommander
 
-from geometry_msgs.msg import PoseStamped
 from moveit_msgs.msg import Grasp, GripperTranslation, PlaceLocation
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 import copy
@@ -152,7 +133,8 @@ if __name__=='__main__':
 
     #bring the arm near the object
     (aim_x, aim_y, aim_z, aim_yaw) = onine_arm.get_valid_pose(item_translation[0], item_translation[1], item_translation[2], -0.20)
-    onine_arm.home()
+    onine_arm.ready()
+    onine_arm.open_gripper()
     onine_arm.go(aim_x, aim_y, aim_z, aim_yaw)
 
 
