@@ -174,7 +174,7 @@ void move_arm()
 
 void move_gripper()
 {
-    Serial3.print(map(req_joint_state[6], 0.002, 0.04, 0, 70));
+    Serial3.print(map_float(req_joint_state[6], 0.0, 0.04, 70, 0));
     Serial3.print('g');
 
     nh.loginfo("Moving gripper");
@@ -195,7 +195,7 @@ void gripper_callback( const std_msgs::Bool& state)
     if(state.data)
         req_joint_state[6] = 0.04;        
     else
-        req_joint_state[6] = 0.002;
+        req_joint_state[6] = 0.0;
 
     move_gripper();
 }
@@ -210,11 +210,11 @@ void move_z(int dir)
 void init_arm()
 {
     arm_height = TORSO_MIN_HEIGHT;
-    req_joint_state[0] = 1.570796;
+    req_joint_state[0] = 1.4835295;
     req_joint_state[1] = 1.570796;
     req_joint_state[2] = 0.00;
     req_joint_state[3] = TORSO_MIN_HEIGHT;
-    req_joint_state[4] = 1.570796;
+    req_joint_state[4] = 1.4835295;
     req_joint_state[5] = 0.00;
     req_joint_state[6] = 0.04;
     

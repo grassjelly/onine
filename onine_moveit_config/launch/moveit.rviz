@@ -5,6 +5,8 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /MotionPlanning1
+        - /MotionPlanning1/Planning Request1
         - /MotionPlanning1/Planned Path1
         - /TF1
         - /TF1/Frames1
@@ -180,7 +182,7 @@ Visualization Manager:
         Colliding Link Color: 255; 0; 0
         Goal State Alpha: 1
         Goal State Color: 250; 128; 0
-        Interactive Marker Size: 0
+        Interactive Marker Size: 0.25
         Joint Violation Color: 255; 0; 255
         Planning Group: onine_arm
         Query Goal State: true
@@ -509,7 +511,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 2.08193
+      Distance: 2.32545
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
@@ -521,10 +523,10 @@ Visualization Manager:
         Z: 0
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: -0.0152034
+      Pitch: 0.0197963
       Target Frame: base_link
       Value: XYOrbit (rviz)
-      Yaw: 3.58412
+      Yaw: 0.165948
     Saved: ~
 Window Geometry:
   Camera:

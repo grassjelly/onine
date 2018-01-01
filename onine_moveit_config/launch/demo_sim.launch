@@ -25,7 +25,9 @@
     <rosparam>
         zeros:
             torso_joint: 0.21
-            base_joint: 0.0872665
+            base_joint: 1.4835295
+            elbow_joint: 1.570796
+            wrist_pitch_joint: 1.570796
     </rosparam>
   </node>
 
