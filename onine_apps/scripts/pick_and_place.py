@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 import os, sys, rospy, tf, math
+import moveit_commander
 from control_msgs.msg import (GripperCommandAction, GripperCommandGoal)
 from geometry_msgs.msg import *
 from tf.transformations import quaternion_from_euler, euler_from_quaternion
 from moveit_commander import RobotCommander, PlanningSceneInterface, MoveGroupCommander
 
-from moveit_msgs.msg import Grasp, GripperTranslation, PlaceLocation
+from moveit_msgs.msg import Grasp, GripperTranslation, PlaceLocation, MoveItErrorCodes
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 import copy
 
@@ -36,6 +37,7 @@ class Onine():
         # self.arm.execute(plan1)
         os.system("rosservice call clear_octomap")
         self.arm.go(wait=True)
+        rospy.sleep(2)
 
 
     def get_valid_pose(self, x, y, z, distance):
@@ -49,36 +51,36 @@ class Onine():
         grasp_x = x + (distance * math.cos(theta))
         grasp_y = y + (distance * math.sin(theta))
 
-        # print grasp_x
-        # print grasp_y
-        # print z
-        # print grasp_yaw
         return (grasp_x, grasp_y, z, grasp_yaw)
 
     def ready(self):
         self.arm.set_named_target("onine_ready")
         self.arm.go(wait=True)
-        os.system("rosservice call clear_octomap")
 
     def home(self):
         self.arm.set_named_target("onine_home")
         self.arm.go(wait=True)
-        os.system("rosservice call clear_octomap")
 
     def open_gripper(self):
         self.gripper.set_named_target("gripper_open")
+        os.system("rosservice call clear_octomap")
         self.gripper.go()
+        rospy.sleep(2)
 
     def close_gripper(self):
         self.gripper.set_named_target("gripper_closed")
+        os.system("rosservice call clear_octomap")
         self.gripper.go()
+        rospy.sleep(2)
 
     def pickup_sim(self, x, y, z):
         self.ready()
         self.open_gripper()
-        (aim_x, aim_y, aim_z, aim_yaw) = self.get_valid_pose(x, y, z, -0.10)
+        (aim_x, aim_y, aim_z, aim_yaw) = self.get_valid_pose(x, y, z, -0.20)
         self.go(aim_x, aim_y, aim_z, aim_yaw)
-        self.go(x, y, z, aim_yaw)
+
+        (aim_x, aim_y, aim_z, aim_yaw) = self.get_valid_pose(x, y, z, -0.08)
+        self.go(aim_x, aim_y, aim_z, aim_yaw)
         self.close_gripper()
 
     def make_gripper_posture(self, pose):
@@ -102,8 +104,9 @@ class Onine():
         return g
 
 if __name__=='__main__':
+    moveit_commander.roscpp_initialize(sys.argv)
 
-    rospy.init_node('moveit_py_demo', anonymous=True)
+    rospy.init_node('pick_and_place', anonymous=True)
     debugging_pose_pub = rospy.Publisher('onine_debugging_pose', PoseArray, queue_size=1, latch=True)
 
     scene = PlanningSceneInterface()
@@ -124,16 +127,17 @@ if __name__=='__main__':
     rospy.sleep(1)
 
     # item_translation = [0.33292386367734217, 0.1685605027519197, 0.8]
+    # item_translation = [0.3155979994864394, -0.21095350748804098, 0.8829674860024487]
     item_translation = [0.3155979994864394, -0.21095350748804098, 0.8829674860024487]
 
-    #bring the arm near the object
-    # (aim_x, aim_y, aim_z, aim_yaw) = onine_arm.get_valid_pose(item_translation[0], item_translation[1], item_translation[2], -0.20)
-    # onine_arm.ready()
-    # onine_arm.open_gripper()
-    # onine_arm.go(aim_x, aim_y, aim_z, aim_yaw)
+    # bring the arm near the object
+    (aim_x, aim_y, aim_z, aim_yaw) = onine_arm.get_valid_pose(item_translation[0], item_translation[1], item_translation[2], -0.20)
+    onine_arm.ready()
+    onine_arm.open_gripper()
+    onine_arm.go(aim_x, aim_y, aim_z, aim_yaw)
 
     # rospy.sleep(20)
-    (aim_x, aim_y, aim_z, aim_yaw) = onine_arm.get_valid_pose(item_translation[0], item_translation[1], item_translation[2], - 0.080)
+    # (aim_x, aim_y, aim_z, aim_yaw) = onine_arm.get_valid_pose(item_translation[0], item_translation[1], item_translation[2],0)
 
     # publish a demo scene
     p = PoseStamped()
@@ -142,8 +146,7 @@ if __name__=='__main__':
     p.pose.position.y = item_translation[1]
     p.pose.position.z = item_translation[2]
     p.pose.orientation = Quaternion(*quaternion_from_euler(0.0, 0, aim_yaw))
-
-    scene.add_box("target", p, (0.01, 0.01, 0.08))
+    scene.add_box("target", p, (0.045, 0.045, 0.08))
 
     # add a table
     # p.pose.position.x = 0.52
@@ -152,7 +155,7 @@ if __name__=='__main__':
     # scene.add_box("table", p, (0.5, 1.5, 0.7))
 
     grasp_pose = PoseStamped()
-    grasp_pose.header.frame_id = "left_gripper_link"
+    grasp_pose.header.frame_id = "base_footprint"
     grasp_pose.header.stamp = rospy.Time.now()
     grasp_pose.pose.position.x = aim_x
     grasp_pose.pose.position.y = aim_y
@@ -161,9 +164,9 @@ if __name__=='__main__':
 
     g = Grasp()
     g.pre_grasp_posture = onine_arm.make_gripper_posture(0.09)
-    g.grasp_posture = onine_arm.make_gripper_posture(0.01)
-    g.pre_grasp_approach = onine_arm.make_gripper_translation(0.08, 0.10)
-    g.post_grasp_retreat = onine_arm.make_gripper_translation(0.08, 0.10, -1.0)
+    g.grasp_posture = onine_arm.make_gripper_posture(0.04)
+    g.pre_grasp_approach = onine_arm.make_gripper_translation(0.05, 0.10)
+    g.post_grasp_retreat = onine_arm.make_gripper_translation(0.05, 0.10, -0.10)
     g.grasp_pose = grasp_pose
 
     #2 degrees resolution
@@ -176,10 +179,10 @@ if __name__=='__main__':
         for h in height_vals:
             for p in pitch_vals:
 
-                pos_x = aim_x - pos
-                pos_y = aim_y - pos
+                pos_x = item_translation[0] - pos
+                pos_y = item_translation[1] - pos
 
-                (dx, dy, dz, dyaw) = onine_arm.get_valid_pose(pos_x, pos_y, aim_z, -0.080)
+                (dx, dy, dz, dyaw) = onine_arm.get_valid_pose(pos_x, pos_y, aim_z, -0.08)
 
                 g.grasp_pose.pose.position.x =  dx
                 g.grasp_pose.pose.position.y =  dy
@@ -192,7 +195,7 @@ if __name__=='__main__':
                 g.grasp_pose.pose.orientation.w = q[3]
                 g.id = str(len(grasps))
                 print g.id
-                g.grasp_quality = 1.0 - abs(p/2.0)
+                # g.grasp_quality = 1.0 - abs(p/2.0)
                 g.allowed_touch_objects = ["target"]
                 grasps.append(copy.deepcopy(g))
                 debugging_pose.poses.append(copy.deepcopy(Pose(g.grasp_pose.pose.position, g.grasp_pose.pose.orientation)))
@@ -201,8 +204,19 @@ if __name__=='__main__':
     debugging_pose.header.frame_id = robot.get_planning_frame()
     debugging_pose.header.stamp = rospy.Time.now()
     debugging_pose_pub.publish(debugging_pose)
-    robot.onine_arm.pick("target", grasps)
- 
+
+    result = None
+    n_attempts = 0
+    max_pick_attempts = 10;
+    # repeat until will succeed
+    while result != MoveItErrorCodes.SUCCESS and n_attempts < max_pick_attempts:
+        result = robot.onine_arm.pick("target", grasps)       
+        n_attempts += 1
+        print "Attempts: ", n_attempts
+        rospy.sleep(0.2)
+
+    moveit_commander.roscpp_shutdown()
+    moveit_commander.os._exit(0)
 #https://groups.google.com/forum/#!topic/moveit-users/7hzzICsfLOQ
 #https://groups.google.com/forum/#!msg/moveit-users/_M0mf-R7AvI/CGdh10TrAxMJ
 #https://github.com/mikeferguson/chessbox/blob/hydro-devel/chess_player/src/chess_player/chess_utilities.py

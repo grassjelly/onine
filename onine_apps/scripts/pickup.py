@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 import os, sys, rospy, tf, math
+import moveit_commander
 from control_msgs.msg import (GripperCommandAction, GripperCommandGoal)
 from geometry_msgs.msg import *
 from tf.transformations import quaternion_from_euler, euler_from_quaternion
 from moveit_commander import RobotCommander, PlanningSceneInterface, MoveGroupCommander
+
 
 class Onine():
 
@@ -32,6 +34,7 @@ class Onine():
         # self.arm.execute(plan1)
         os.system("rosservice call clear_octomap")
         self.arm.go(wait=True)
+        rospy.sleep(2)
 
 
     def get_valid_pose(self, x, y, z, distance):
@@ -50,31 +53,38 @@ class Onine():
     def ready(self):
         self.arm.set_named_target("onine_ready")
         self.arm.go(wait=True)
-        os.system("rosservice call clear_octomap")
 
     def home(self):
         self.arm.set_named_target("onine_home")
         self.arm.go(wait=True)
-        os.system("rosservice call clear_octomap")
 
     def open_gripper(self):
         self.gripper.set_named_target("gripper_open")
+        os.system("rosservice call clear_octomap")
         self.gripper.go()
+        rospy.sleep(2)
 
     def close_gripper(self):
         self.gripper.set_named_target("gripper_closed")
+        os.system("rosservice call clear_octomap")
         self.gripper.go()
+        rospy.sleep(2)
 
     def pickup_sim(self, x, y, z):
         self.ready()
         self.open_gripper()
-        (aim_x, aim_y, aim_z, aim_yaw) = self.get_valid_pose(x, y, z, -0.10)
+        (aim_x, aim_y, aim_z, aim_yaw) = self.get_valid_pose(x, y, z, -0.20)
         self.go(aim_x, aim_y, aim_z, aim_yaw)
-        self.go(x, y, z, aim_yaw)
+
+        (aim_x, aim_y, aim_z, aim_yaw) = self.get_valid_pose(x, y, z, -0.08)
+        self.go(aim_x, aim_y, aim_z, aim_yaw)
+        
         self.close_gripper()
 
 if __name__ == '__main__':
-    rospy.init_node('pick_up_item')
+    moveit_commander.roscpp_initialize(sys.argv)
+
+    rospy.init_node('pickup', anonymous=True)
 
     tf_listener = tf.TransformListener() 
     scene = PlanningSceneInterface()
@@ -109,14 +119,20 @@ if __name__ == '__main__':
 
         item_translation = [0.3155979994864394, -0.21095350748804098, 0.8829674860024487]
 
-        onine_arm = Onine(arm, gripper)
-        onine_arm.pickup_sim(item_translation[0], item_translation[1], item_translation[2])
-
         p = PoseStamped()
         p.header.frame_id = robot.get_planning_frame()
         p.pose.position.x = item_translation[0]
         p.pose.position.y = item_translation[1]
         p.pose.position.z = item_translation[2]
-        scene.add_box("target", p, (0.02, 0.02, 0.09))
+        scene.add_box("target", p, (0.045, 0.045, 0.08))
+
+        # scene.add_box("target", p, (0.02, 0.02, 0.09))
+        rospy.sleep(2)
+
+        onine_arm = Onine(arm, gripper)
+        onine_arm.pickup_sim(item_translation[0], item_translation[1], item_translation[2])
+
+        moveit_commander.roscpp_shutdown()
+        moveit_commander.os._exit(0)
 
         break 
