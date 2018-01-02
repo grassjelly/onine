@@ -96,7 +96,7 @@ class Onine():
     def make_gripper_translation(self, min_dist, desired, axis=1.0):
         g = GripperTranslation()
         g.direction.vector.x = axis
-        g.direction.header.frame_id = "left_gripper_link"
+        g.direction.header.frame_id = "wrist_roll_link"
         g.min_distance = min_dist
         g.desired_distance = desired
         return g
@@ -104,11 +104,14 @@ class Onine():
 if __name__=='__main__':
 
     rospy.init_node('moveit_py_demo', anonymous=True)
-    
+    debugging_pose_pub = rospy.Publisher('onine_debugging_pose', PoseArray, queue_size=1, latch=True)
+
     scene = PlanningSceneInterface()
     robot = RobotCommander()
     arm = MoveGroupCommander("onine_arm")
     gripper = MoveGroupCommander("onine_gripper")
+
+    debugging_pose = PoseArray()
 
     rospy.sleep(1)
 
@@ -116,27 +119,21 @@ if __name__=='__main__':
 
     # clean the scene
     # scene.remove_world_object("table")
-    scene.remove_world_object("part")
+    scene.remove_world_object("target")
     
     rospy.sleep(1)
 
     # item_translation = [0.33292386367734217, 0.1685605027519197, 0.8]
     item_translation = [0.3155979994864394, -0.21095350748804098, 0.8829674860024487]
 
-    # add a table
-    # p.pose.position.x = 0.52
-    # p.pose.position.y = -0.2
-    # p.pose.position.z = 0.35
-    # scene.add_box("table", p, (0.5, 1.5, 0.7))
-
-    rospy.sleep(1)
-
     #bring the arm near the object
-    (aim_x, aim_y, aim_z, aim_yaw) = onine_arm.get_valid_pose(item_translation[0], item_translation[1], item_translation[2], -0.20)
-    onine_arm.ready()
-    onine_arm.open_gripper()
-    onine_arm.go(aim_x, aim_y, aim_z, aim_yaw)
+    # (aim_x, aim_y, aim_z, aim_yaw) = onine_arm.get_valid_pose(item_translation[0], item_translation[1], item_translation[2], -0.20)
+    # onine_arm.ready()
+    # onine_arm.open_gripper()
+    # onine_arm.go(aim_x, aim_y, aim_z, aim_yaw)
 
+    # rospy.sleep(20)
+    (aim_x, aim_y, aim_z, aim_yaw) = onine_arm.get_valid_pose(item_translation[0], item_translation[1], item_translation[2], - 0.080)
 
     # publish a demo scene
     p = PoseStamped()
@@ -144,18 +141,23 @@ if __name__=='__main__':
     p.pose.position.x = item_translation[0]
     p.pose.position.y = item_translation[1]
     p.pose.position.z = item_translation[2]
-    scene.add_box("part", p, (0.01, 0.01, 0.08))
+    p.pose.orientation = Quaternion(*quaternion_from_euler(0.0, 0, aim_yaw))
 
-    # rospy.sleep(20)
-    (aim_x, aim_y, aim_z, aim_yaw) = onine_arm.get_valid_pose(item_translation[0], item_translation[1], item_translation[2], - 0.080)
+    scene.add_box("target", p, (0.01, 0.01, 0.08))
+
+    # add a table
+    # p.pose.position.x = 0.52
+    # p.pose.position.y = -0.2
+    # p.pose.position.z = 0.35
+    # scene.add_box("table", p, (0.5, 1.5, 0.7))
 
     grasp_pose = PoseStamped()
-    grasp_pose.header.frame_id = "wrist_roll_link"
+    grasp_pose.header.frame_id = "left_gripper_link"
     grasp_pose.header.stamp = rospy.Time.now()
     grasp_pose.pose.position.x = aim_x
     grasp_pose.pose.position.y = aim_y
     grasp_pose.pose.position.z = aim_z
-    grasp_pose.pose.orientation = Quaternion(*quaternion_from_euler(0.0, 1.570796, aim_yaw))
+    grasp_pose.pose.orientation = Quaternion(*quaternion_from_euler(0.0, 0, aim_yaw))
 
     g = Grasp()
     g.pre_grasp_posture = onine_arm.make_gripper_posture(0.09)
@@ -167,25 +169,39 @@ if __name__=='__main__':
     #2 degrees resolution
     pitch_vals = [-0.10472, -0.0698132, -0.0349066, 0, 0.0349066, 0.0698132, 0.10472]
     height_vals = [-0.005, -0.004, -0.003, -0.002, -0.001, 0, 0.001, 0.002, 0.003, 0.004, 0.005]
+    pos_vals = [-0.005, -0.004, -0.003, -0.002, -0.001, 0, 0.001, 0.002, 0.003, 0.004, 0.005]
     # generate list of grasps
     grasps = []
-    for h in height_vals:
-        for p in pitch_vals:
-            q = quaternion_from_euler(0.0, 0 - p, aim_yaw)
-            g.grasp_pose.pose.position.x =  aim_x
-            g.grasp_pose.pose.position.y =  aim_y
-            g.grasp_pose.pose.position.z =  aim_z - h      
-            g.grasp_pose.pose.orientation.x = q[0]
-            g.grasp_pose.pose.orientation.y = q[1]
-            g.grasp_pose.pose.orientation.z = q[2]
-            g.grasp_pose.pose.orientation.w = q[3]
-            g.id = str(len(grasps))
-            print g.id
-            #g.grasp_quality = 1.0 - abs(p/2.0)
-            g.allowed_touch_objects = ["part"]
-            grasps.append(copy.deepcopy(g))
+    for pos in pos_vals:
+        for h in height_vals:
+            for p in pitch_vals:
 
-    robot.onine_arm.pick("part", grasps)
+                pos_x = aim_x - pos
+                pos_y = aim_y - pos
+
+                (dx, dy, dz, dyaw) = onine_arm.get_valid_pose(pos_x, pos_y, aim_z, -0.080)
+
+                g.grasp_pose.pose.position.x =  dx
+                g.grasp_pose.pose.position.y =  dy
+                g.grasp_pose.pose.position.z =  dz - h
+                q = quaternion_from_euler(0.0, - p, dyaw)
+                
+                g.grasp_pose.pose.orientation.x = q[0]
+                g.grasp_pose.pose.orientation.y = q[1]
+                g.grasp_pose.pose.orientation.z = q[2]
+                g.grasp_pose.pose.orientation.w = q[3]
+                g.id = str(len(grasps))
+                print g.id
+                g.grasp_quality = 1.0 - abs(p/2.0)
+                g.allowed_touch_objects = ["target"]
+                grasps.append(copy.deepcopy(g))
+                debugging_pose.poses.append(copy.deepcopy(Pose(g.grasp_pose.pose.position, g.grasp_pose.pose.orientation)))
+
+
+    debugging_pose.header.frame_id = robot.get_planning_frame()
+    debugging_pose.header.stamp = rospy.Time.now()
+    debugging_pose_pub.publish(debugging_pose)
+    robot.onine_arm.pick("target", grasps)
  
 #https://groups.google.com/forum/#!topic/moveit-users/7hzzICsfLOQ
 #https://groups.google.com/forum/#!msg/moveit-users/_M0mf-R7AvI/CGdh10TrAxMJ

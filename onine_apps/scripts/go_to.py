@@ -26,7 +26,7 @@ class Onine():
         self.p.position.x = x
         self.p.position.y = y
         self.p.position.z = z
-        self.p.orientation = Quaternion(*quaternion_from_euler(0.0, 1.570796, yaw))
+        self.p.orientation = Quaternion(*quaternion_from_euler(0.0, 0, yaw))
         self.arm.set_pose_target(self.p)
         # plan1 = self.arm.plan()
         # self.arm.execute(plan1)
@@ -93,7 +93,7 @@ if __name__ == '__main__':
     while not rospy.is_shutdown():
         rate.sleep()
         
-        pose_pub = rospy.Publisher('onine_debugging_pose', PoseArray, queue_size=1, latch=True)
+        debugging_pose_pub = rospy.Publisher('onine_debugging_pose', PoseArray, queue_size=1, latch=True)
         pose_msg = PoseArray()
 
         scene.remove_world_object("target")
@@ -116,14 +116,14 @@ if __name__ == '__main__':
         debugging_pose.pose.position.x = aim_x
         debugging_pose.pose.position.y = aim_y
         debugging_pose.pose.position.z = aim_z
-        debugging_pose.pose.orientation = Quaternion(*quaternion_from_euler(0.0, 1.570796, aim_yaw))
+        debugging_pose.pose.orientation = Quaternion(*quaternion_from_euler(0.0, 0, aim_yaw))
 
         pose_msg.poses.append(Pose(debugging_pose.pose.position, debugging_pose.pose.orientation))
         pose_msg.header.frame_id = robot.get_planning_frame()
         pose_msg.header.stamp = rospy.Time.now()
-        pose_pub.publish(pose_msg)
+        debugging_pose_pub.publish(pose_msg)
 
-        # onine_arm.go(aim_x, aim_y, aim_z, aim_yaw)
+        onine_arm.go(aim_x, aim_y, aim_z, aim_yaw)
 
         p = PoseStamped()
         p.header.frame_id = "base_footprint"

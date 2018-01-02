@@ -174,9 +174,9 @@ Visualization Manager:
         elbow_link:
           Value: false
         left_gripper_link:
-          Value: false
+          Value: true
         right_gripper_link:
-          Value: false
+          Value: true
         rod_link:
           Value: false
         shoulder_link:
@@ -262,7 +262,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.07902
+      Distance: 1.60369
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
@@ -274,10 +274,10 @@ Visualization Manager:
         Z: 0.227257
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 1.1348
+      Pitch: 0.8648
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.893696
+      Yaw: 0.89051
     Saved: ~
 Window Geometry:
   Displays:
@@ -295,5 +295,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1637
-  X: 1975
+  X: 863
   Y: 14

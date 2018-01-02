@@ -26,7 +26,7 @@ class Onine():
         self.p.position.x = x
         self.p.position.y = y
         self.p.position.z = z
-        self.p.orientation = Quaternion(*quaternion_from_euler(0.0, 1.570796, yaw))
+        self.p.orientation = Quaternion(*quaternion_from_euler(0.0, 0, yaw))
         self.arm.set_pose_target(self.p)
         # plan1 = self.arm.plan()
         # self.arm.execute(plan1)

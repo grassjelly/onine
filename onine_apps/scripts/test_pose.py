@@ -30,7 +30,7 @@ class Onine():
         self.p.position.x = x
         self.p.position.y = y
         self.p.position.z = z
-        self.p.orientation = Quaternion(*quaternion_from_euler(0.0, 1.570796, yaw))
+        self.p.orientation = Quaternion(*quaternion_from_euler(0.0, 0, yaw))
         self.arm.set_pose_target(self.p)
         # plan1 = self.arm.plan()
         # self.arm.execute(plan1)
@@ -105,8 +105,8 @@ if __name__=='__main__':
 
     rospy.init_node('moveit_py_demo', anonymous=True)
 
-    pose_pub = rospy.Publisher('onine_debugging_pose', PoseArray, queue_size=1, latch=True)
-    pose_msg = PoseArray()
+    debugging_pose_pub = rospy.Publisher('onine_debugging_pose', PoseArray, queue_size=1, latch=True)
+    debugging_pose = PoseArray()
     
     scene = PlanningSceneInterface()
     robot = RobotCommander()
@@ -119,7 +119,7 @@ if __name__=='__main__':
 
     # clean the scene
     # scene.remove_world_object("table")
-    scene.remove_world_object("part")
+    scene.remove_world_object("target")
     
     rospy.sleep(1)
 
@@ -147,7 +147,7 @@ if __name__=='__main__':
     p.pose.position.x = item_translation[0]
     p.pose.position.y = item_translation[1]
     p.pose.position.z = item_translation[2]
-    scene.add_box("part", p, (0.01, 0.01, 0.08))
+    scene.add_box("target", p, (0.01, 0.01, 0.08))
 
     # rospy.sleep(20)
     # (aim_x, aim_y, aim_z, aim_yaw) = onine_arm.get_valid_pose(item_translation[0], item_translation[1], item_translation[2], - 0.080)
@@ -158,7 +158,7 @@ if __name__=='__main__':
     grasp_pose.pose.position.x = aim_x
     grasp_pose.pose.position.y = aim_y
     grasp_pose.pose.position.z = aim_z
-    grasp_pose.pose.orientation = Quaternion(*quaternion_from_euler(0.0, 1.570796, aim_yaw))
+    grasp_pose.pose.orientation = Quaternion(*quaternion_from_euler(0.0, 0, aim_yaw))
 
     g = Grasp()
     g.pre_grasp_posture = onine_arm.make_gripper_posture(0.09)
@@ -185,16 +185,16 @@ if __name__=='__main__':
             g.id = str(len(grasps))
             print g.id
             #g.grasp_quality = 1.0 - abs(p/2.0)
-            g.allowed_touch_objects = ["part"]
+            g.allowed_touch_objects = ["target"]
             grasps.append(copy.deepcopy(g))
 
-            pose_msg.poses.append(copy.deepcopy(Pose(g.grasp_pose.pose.position, g.grasp_pose.pose.orientation)))
+            debugging_pose.poses.append(copy.deepcopy(Pose(g.grasp_pose.pose.position, g.grasp_pose.pose.orientation)))
 
-    pose_msg.header.frame_id = robot.get_planning_frame()
-    pose_msg.header.stamp = rospy.Time.now()
-    pose_pub.publish(pose_msg)
+    debugging_pose.header.frame_id = robot.get_planning_frame()
+    debugging_pose.header.stamp = rospy.Time.now()
+    debugging_pose_pub.publish(debugging_pose)
 
-    # robot.onine_arm.pick("part", grasps)
+    # robot.onine_arm.pick("target", grasps)
  
 #https://groups.google.com/forum/#!topic/moveit-users/7hzzICsfLOQ
 #https://groups.google.com/forum/#!msg/moveit-users/_M0mf-R7AvI/CGdh10TrAxMJ
