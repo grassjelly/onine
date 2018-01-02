@@ -273,14 +273,14 @@
                 <mesh filename="package://onine_urdf/stl/braccio_wrist_roll.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="white" />
-            <origin rpy="0 0 -1.570796" xyz="-0.001 -0.0061 0" />
+            <origin rpy="-1.570796 0 -1.570796" xyz="0 -0.0063 0.001" />
         </visual>
     </link>
 
     <joint name="wrist_roll_joint" type="revolute">
-        <axis xyz="0 0 1" />
+        <axis xyz="1 0 0" />
         <limit effort="1000.0" lower="0.000" upper="3.141592" velocity="1.0" />
-        <origin rpy="0 0 0" xyz="0 0 0.06" />
+        <origin rpy="0 -1.570796 0" xyz="0 0 0.06" />
         <parent link="wrist_pitch_link" />
         <child link="wrist_roll_link" />
     </joint>
@@ -288,28 +288,28 @@
     <link name="left_gripper_link" >
         <visual>
             <geometry>
-                <box size="0.006 0.002 0.075" />
+                <box size="0.075 0.002 0.006" />
             </geometry>
             <material name="white" />
-            <origin rpy="0 3.141592 0" xyz="0 0 0" />
+            <origin rpy="0 0 0" xyz="0 0 0" />
         </visual>
     </link>
 
     <joint name="gripper_joint" type="prismatic">
         <axis xyz="0 1 0" />
         <limit effort="1000.0" lower="0.002" upper="0.04" velocity="1.0" />
-        <origin rpy="0 0 0" xyz="-0.0035 0 0.078" />
         <parent link="wrist_roll_link" />
+        <origin rpy="0 0 0" xyz=".0776 0 0.005" />
         <child link="left_gripper_link" />
     </joint>
 
     <link name="right_gripper_link">
         <visual>
             <geometry>
-                <box size="0.006 0.002 0.075" />
+                <box size="0.075 0.002 0.006" />
             </geometry>
             <material name="white" />
-            <origin rpy="0 3.141592 0" xyz="0 0 0" />
+            <origin rpy="0 0 0" xyz="0 0 0" />
         </visual>
     </link>
 
@@ -317,7 +317,7 @@
         <axis xyz="0 -1 0" />
         <mimic joint="gripper_joint" />
         <limit effort="1000.0" lower="0.002" upper="0.04" velocity="1.0" />
-        <origin rpy="0 0 0" xyz="-0.0035 0 0.078" />
+        <origin rpy="0 0 0" xyz="0.0776 0 0.005" />
         <parent link="wrist_roll_link" />
         <child link="right_gripper_link" />
     </joint>

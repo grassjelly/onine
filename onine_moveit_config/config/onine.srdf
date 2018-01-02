@@ -127,6 +127,7 @@
     <disable_collisions link1="elbow_link" link2="wrist_roll_link" reason="Never" />
     <disable_collisions link1="left_gripper_link" link2="right_gripper_link" reason="Never" />
     <disable_collisions link1="left_gripper_link" link2="shoulder_link" reason="Never" />
+    <disable_collisions link1="left_gripper_link" link2="torso_link" reason="Never" />
     <disable_collisions link1="left_gripper_link" link2="wheel1" reason="Never" />
     <disable_collisions link1="left_gripper_link" link2="wheel2" reason="Never" />
     <disable_collisions link1="left_gripper_link" link2="wheel3" reason="Never" />
@@ -159,8 +160,6 @@
     <disable_collisions link1="torso_link" link2="wheel2" reason="Never" />
     <disable_collisions link1="torso_link" link2="wheel3" reason="Never" />
     <disable_collisions link1="torso_link" link2="wheel4" reason="Never" />
-    <disable_collisions link1="torso_link" link2="wrist_pitch_link" reason="Never" />
-    <disable_collisions link1="torso_link" link2="wrist_roll_link" reason="Never" />
     <disable_collisions link1="vertical_link" link2="wheel1" reason="Never" />
     <disable_collisions link1="vertical_link" link2="wheel2" reason="Never" />
     <disable_collisions link1="vertical_link" link2="wheel3" reason="Never" />
