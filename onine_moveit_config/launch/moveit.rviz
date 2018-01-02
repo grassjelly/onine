@@ -10,7 +10,8 @@ Panels:
         - /MotionPlanning1/Planned Path1
         - /TF1
         - /TF1/Frames1
-        - /Camera1
+        - /PoseArray1
+        - /PoseArray1/Status1
       Splitter Ratio: 0.74256
     Tree Height: 157
   - Class: rviz/Help
@@ -489,9 +490,18 @@ Visualization Manager:
         Map: true
         MotionPlanning: true
         Path: true
+        PoseArray: true
         TF: true
         Value: true
       Zoom Factor: 1
+    - Arrow Length: 0.3
+      Class: rviz/PoseArray
+      Color: 255; 25; 0
+      Enabled: true
+      Name: PoseArray
+      Topic: onine_debugging_pose
+      Unreliable: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 43; 43; 43
@@ -511,22 +521,22 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 2.32545
+      Distance: 1.79596
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.0140502
-        Y: -0.0117823
-        Z: 0
+        X: 0.106163
+        Y: 0.0917336
+        Z: 2.98023e-08
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.0197963
+      Pitch: 0.329796
       Target Frame: base_link
       Value: XYOrbit (rviz)
-      Yaw: 0.165948
+      Yaw: 0.920975
     Saved: ~
 Window Geometry:
   Camera:

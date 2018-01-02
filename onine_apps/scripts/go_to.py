@@ -93,6 +93,9 @@ if __name__ == '__main__':
     while not rospy.is_shutdown():
         rate.sleep()
         
+        pose_pub = rospy.Publisher('onine_debugging_pose', PoseArray, queue_size=1, latch=True)
+        pose_msg = PoseArray()
+
         scene.remove_world_object("target")
 
         #left test
@@ -109,10 +112,21 @@ if __name__ == '__main__':
 
         (aim_x, aim_y, aim_z, aim_yaw) = onine_arm.get_valid_pose(item_translation[0], item_translation[1], item_translation[2], - 0.10)
 
-        onine_arm.go(aim_x, aim_y, aim_z, aim_yaw)
+        debugging_pose = PoseStamped()
+        debugging_pose.pose.position.x = aim_x
+        debugging_pose.pose.position.y = aim_y
+        debugging_pose.pose.position.z = aim_z
+        debugging_pose.pose.orientation = Quaternion(*quaternion_from_euler(0.0, 1.570796, aim_yaw))
+
+        pose_msg.poses.append(Pose(debugging_pose.pose.position, debugging_pose.pose.orientation))
+        pose_msg.header.frame_id = robot.get_planning_frame()
+        pose_msg.header.stamp = rospy.Time.now()
+        pose_pub.publish(pose_msg)
+
+        # onine_arm.go(aim_x, aim_y, aim_z, aim_yaw)
 
         p = PoseStamped()
-        p.header.frame_id = robot.get_planning_frame()
+        p.header.frame_id = "base_footprint"
         p.pose.position.x = item_translation[0]
         p.pose.position.y = item_translation[1]
         p.pose.position.z = item_translation[2]
