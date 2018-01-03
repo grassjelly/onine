@@ -285,6 +285,15 @@
         <child link="wrist_roll_link" />
     </joint>
 
+    <link name="tool_link" />
+
+    <joint name="tool_link_joint" type="fixed">
+        <axis xyz="1 0 0" />
+        <origin rpy="0 0 0" xyz="0.08 0 0" />
+        <parent link="wrist_roll_link" />
+        <child link="tool_link" />
+    </joint>
+
     <link name="left_gripper_link" >
         <visual>
             <geometry>

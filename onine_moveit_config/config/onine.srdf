@@ -16,6 +16,7 @@
         <joint name="elbow_joint" />
         <joint name="wrist_pitch_joint" />
         <joint name="wrist_roll_joint" />
+        <joint name="tool_link_joint" />
     </group>
     <group name="onine_gripper">
         <joint name="gripper_joint" />
@@ -48,7 +49,7 @@
     </group_state>
 
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
-    <end_effector name="onine_eef" parent_link="wrist_roll_link" group="onine_gripper" parent="onine_arm"/>
+    <end_effector name="onine_eef" parent_link="tool_link" group="onine_gripper" parent_group="onine_arm" />
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
     <virtual_joint name="virtual_joint" type="fixed" parent_frame="odom" child_link="base_footprint" />
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
@@ -118,7 +119,6 @@
     <disable_collisions link1="left_gripper_link" link2="wrist_pitch_link" reason="Never" />
     <disable_collisions link1="left_gripper_link" link2="wrist_roll_link" reason="Adjacent" />
     <disable_collisions link1="right_gripper_link" link2="shoulder_link" reason="Never" />
-    <disable_collisions link1="right_gripper_link" link2="torso_link" reason="Never" />
     <disable_collisions link1="right_gripper_link" link2="wheel1" reason="Never" />
     <disable_collisions link1="right_gripper_link" link2="wheel2" reason="Never" />
     <disable_collisions link1="right_gripper_link" link2="wheel3" reason="Never" />
@@ -143,6 +143,8 @@
     <disable_collisions link1="torso_link" link2="wheel2" reason="Never" />
     <disable_collisions link1="torso_link" link2="wheel3" reason="Never" />
     <disable_collisions link1="torso_link" link2="wheel4" reason="Never" />
+    <disable_collisions link1="torso_link" link2="wrist_pitch_link" reason="Never" />
+    <disable_collisions link1="torso_link" link2="wrist_roll_link" reason="Never" />
     <disable_collisions link1="vertical_link" link2="wheel1" reason="Never" />
     <disable_collisions link1="vertical_link" link2="wheel2" reason="Never" />
     <disable_collisions link1="vertical_link" link2="wheel3" reason="Never" />
