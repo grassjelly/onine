@@ -207,7 +207,7 @@
 
     <joint name="base_joint" type="revolute">
         <axis xyz="0 0 1" />
-        <limit effort="1000.0" lower="-1.570796" upper="1.4835295" velocity="1.0" />
+        <limit effort="1000.0" lower="-1.396263" upper="1.570796" velocity="1.0" />
         <origin rpy="0 0 0" xyz="0 0 0.0756" />
         <parent link="torso_link" />
         <child link="braccio_base_link" />
