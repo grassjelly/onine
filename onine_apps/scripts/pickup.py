@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 import os, sys, rospy, tf, math
 import moveit_commander
-from control_msgs.msg import (GripperCommandAction, GripperCommandGoal)
 from geometry_msgs.msg import *
 from tf.transformations import quaternion_from_euler, euler_from_quaternion
 from moveit_commander import RobotCommander, PlanningSceneInterface, MoveGroupCommander
 
+from moveit_msgs.msg import CollisionObject, AttachedCollisionObject, PlanningScene
+from shape_msgs.msg import SolidPrimitive
 
 class Onine():
 
@@ -73,18 +74,21 @@ class Onine():
     def pickup_sim(self, x, y, z):
         self.ready()
         self.open_gripper()
-        (aim_x, aim_y, aim_z, aim_yaw) = self.get_valid_pose(x, y, z, -0.20)
+        
+        (aim_x, aim_y, aim_z, aim_yaw) = self.get_valid_pose(x, y, z, -0.15)
         self.go(aim_x, aim_y, aim_z, aim_yaw)
 
-        (aim_x, aim_y, aim_z, aim_yaw) = self.get_valid_pose(x, y, z, -0.08)
+        (aim_x, aim_y, aim_z, aim_yaw) = self.get_valid_pose(x, y, z, 0)
         self.go(aim_x, aim_y, aim_z, aim_yaw)
         
-        self.close_gripper()
+        # self.close_gripper()
 
 if __name__ == '__main__':
     moveit_commander.roscpp_initialize(sys.argv)
 
     rospy.init_node('pickup', anonymous=True)
+
+    scene_pub = rospy.Publisher('/planning_scene', PlanningScene)
 
     tf_listener = tf.TransformListener() 
     scene = PlanningSceneInterface()
@@ -126,13 +130,53 @@ if __name__ == '__main__':
         p.pose.position.z = item_translation[2]
         scene.add_box("target", p, (0.045, 0.045, 0.08))
 
-        # scene.add_box("target", p, (0.02, 0.02, 0.09))
-        rospy.sleep(2)
-
         onine_arm = Onine(arm, gripper)
         onine_arm.pickup_sim(item_translation[0], item_translation[1], item_translation[2])
+
+        rospy.sleep(1)
+
+        attached_object = AttachedCollisionObject()
+        attached_object.link_name = "tool_link"
+        #The header must contain a valid TF frame*/
+        attached_object.object.header.frame_id = "tool_link"
+        #The id of the object
+        attached_object.object.id = "target"
+
+        #A default pose 
+        pose = Pose()
+        pose.orientation.w = 1.0
+
+        #Define a box to be attached 
+        primitive = SolidPrimitive()
+        primitive.type = primitive.BOX
+        primitive.dimensions = [0.045,0.045, 0.08]
+
+        attached_object.object.primitives.append(primitive)
+        attached_object.object.primitive_poses.append(pose)
+        attached_object.object.operation = attached_object.object.ADD
+
+        planning_scene = PlanningScene(is_diff = True)
+        planning_scene.world.collision_objects.append(attached_object.object)
+        scene_pub.publish(planning_scene)
+        rospy.sleep(2)
+
+        remove_object = CollisionObject()
+        remove_object.id = "target"
+        remove_object.header.frame_id = "base_footprint"
+        remove_object.operation = remove_object.REMOVE
+
+        rospy.loginfo("Attaching the object to the right wrist and removing it from the world.")
+        planning_scene.world.collision_objects.append(remove_object)
+        planning_scene.robot_state.attached_collision_objects.append(attached_object)
+        scene_pub.publish(planning_scene)
+        rospy.sleep(2)
+
+        onine_arm.close_gripper()
 
         moveit_commander.roscpp_shutdown()
         moveit_commander.os._exit(0)
 
         break 
+
+#http://docs.ros.org/indigo/api/moveit_tutorials/html/doc/pr2_tutorials/planning/scripts/doc/move_group_python_interface_tutorial.html
+#https://answers.ros.org/question/215045/obstacles-in-moveit-python/
