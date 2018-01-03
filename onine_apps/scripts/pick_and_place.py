@@ -76,10 +76,10 @@ class Onine():
     def pickup_sim(self, x, y, z):
         self.ready()
         self.open_gripper()
-        (aim_x, aim_y, aim_z, aim_yaw) = self.get_valid_pose(x, y, z, -0.20)
+        (aim_x, aim_y, aim_z, aim_yaw) = self.get_valid_pose(x, y, z, -0.12)
         self.go(aim_x, aim_y, aim_z, aim_yaw)
 
-        (aim_x, aim_y, aim_z, aim_yaw) = self.get_valid_pose(x, y, z, -0.08)
+        (aim_x, aim_y, aim_z, aim_yaw) = self.get_valid_pose(x, y, z, 0)
         self.go(aim_x, aim_y, aim_z, aim_yaw)
         self.close_gripper()
 
@@ -91,6 +91,7 @@ class Onine():
         t.joint_names = gripper_joint_names
         tp = JointTrajectoryPoint()
         tp.positions = [pose/2.0 for j in t.joint_names]
+        print tp.positions
         tp.effort = gripper_effort
         t.points.append(tp)
         return t
@@ -98,7 +99,7 @@ class Onine():
     def make_gripper_translation(self, min_dist, desired, axis=1.0):
         g = GripperTranslation()
         g.direction.vector.x = axis
-        g.direction.header.frame_id = "wrist_roll_link"
+        g.direction.header.frame_id = "tool_link"
         g.min_distance = min_dist
         g.desired_distance = desired
         return g
@@ -130,14 +131,15 @@ if __name__=='__main__':
     # item_translation = [0.3155979994864394, -0.21095350748804098, 0.8829674860024487]
     item_translation = [0.3155979994864394, -0.21095350748804098, 0.8829674860024487]
 
-    # bring the arm near the object
-    (aim_x, aim_y, aim_z, aim_yaw) = onine_arm.get_valid_pose(item_translation[0], item_translation[1], item_translation[2], -0.20)
     onine_arm.ready()
     onine_arm.open_gripper()
-    onine_arm.go(aim_x, aim_y, aim_z, aim_yaw)
+
+    # bring the arm near the object
+    (aim_x, aim_y, aim_z, aim_yaw) = onine_arm.get_valid_pose(item_translation[0], item_translation[1], item_translation[2], -0.20)
+    # onine_arm.go(aim_x, aim_y, aim_z, aim_yaw)
 
     # rospy.sleep(20)
-    # (aim_x, aim_y, aim_z, aim_yaw) = onine_arm.get_valid_pose(item_translation[0], item_translation[1], item_translation[2],0)
+    (aim_x, aim_y, aim_z, aim_yaw) = onine_arm.get_valid_pose(item_translation[0], item_translation[1], item_translation[2], 0)
 
     # publish a demo scene
     p = PoseStamped()
@@ -163,10 +165,10 @@ if __name__=='__main__':
     grasp_pose.pose.orientation = Quaternion(*quaternion_from_euler(0.0, 0, aim_yaw))
 
     g = Grasp()
-    g.pre_grasp_posture = onine_arm.make_gripper_posture(0.09)
-    g.grasp_posture = onine_arm.make_gripper_posture(0.04)
-    g.pre_grasp_approach = onine_arm.make_gripper_translation(0.05, 0.10)
-    g.post_grasp_retreat = onine_arm.make_gripper_translation(0.05, 0.10, -0.10)
+    g.pre_grasp_posture = onine_arm.make_gripper_posture(0.08)
+    g.grasp_posture = onine_arm.make_gripper_posture(0.0075)
+    g.pre_grasp_approach = onine_arm.make_gripper_translation(0.13, 0.15)
+    g.post_grasp_retreat = onine_arm.make_gripper_translation(0.13, 0.15, -0.15)
     g.grasp_pose = grasp_pose
 
     #2 degrees resolution
@@ -182,7 +184,7 @@ if __name__=='__main__':
                 pos_x = item_translation[0] - pos
                 pos_y = item_translation[1] - pos
 
-                (dx, dy, dz, dyaw) = onine_arm.get_valid_pose(pos_x, pos_y, aim_z, -0.08)
+                (dx, dy, dz, dyaw) = onine_arm.get_valid_pose(pos_x, pos_y, aim_z, 0)
 
                 g.grasp_pose.pose.position.x =  dx
                 g.grasp_pose.pose.position.y =  dy
@@ -194,8 +196,7 @@ if __name__=='__main__':
                 g.grasp_pose.pose.orientation.z = q[2]
                 g.grasp_pose.pose.orientation.w = q[3]
                 g.id = str(len(grasps))
-                print g.id
-                # g.grasp_quality = 1.0 - abs(p/2.0)
+                g.grasp_quality = 1.0
                 g.allowed_touch_objects = ["target"]
                 grasps.append(copy.deepcopy(g))
                 debugging_pose.poses.append(copy.deepcopy(Pose(g.grasp_pose.pose.position, g.grasp_pose.pose.orientation)))
@@ -205,6 +206,7 @@ if __name__=='__main__':
     debugging_pose.header.stamp = rospy.Time.now()
     debugging_pose_pub.publish(debugging_pose)
 
+    rospy.sleep(10)
     result = None
     n_attempts = 0
     max_pick_attempts = 10;
@@ -217,6 +219,8 @@ if __name__=='__main__':
 
     moveit_commander.roscpp_shutdown()
     moveit_commander.os._exit(0)
+
 #https://groups.google.com/forum/#!topic/moveit-users/7hzzICsfLOQ
 #https://groups.google.com/forum/#!msg/moveit-users/_M0mf-R7AvI/CGdh10TrAxMJ
 #https://github.com/mikeferguson/chessbox/blob/hydro-devel/chess_player/src/chess_player/chess_utilities.py
+#https://groups.google.com/forum/#!topic/moveit-users/TSCBCWbH5Ko
