@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 import os, sys, rospy, tf, math
 import moveit_commander
-from control_msgs.msg import (GripperCommandAction, GripperCommandGoal)
 from geometry_msgs.msg import *
 from tf.transformations import quaternion_from_euler, euler_from_quaternion
-from moveit_commander import RobotCommander, PlanningSceneInterface, MoveGroupCommander
+from moveit_commander import RobotCommander, PlanningSceneInterface, MoveGroupCommander, CollisionObject
 
 
 class Onine():
