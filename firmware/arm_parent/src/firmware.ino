@@ -165,24 +165,17 @@ void move_arm()
     Serial3.print(rad_to_deg(map_float((req_joint_state[1]), -1.570796, 1.570796, 3.141592, 0.00)));
     Serial3.print('e');
 
-    Serial3.print(rad_to_deg(req_joint_state[5]));
-    Serial3.print('r');
-
-    Serial3.print(rad_to_deg(map_float((req_joint_state[4]), -1.570796, 1.570796, 3.141592, 0.00)));
+    Serial3.print(rad_to_deg((req_joint_state[4])));
     Serial3.print('p');
+
+    Serial3.print(rad_to_deg(map_float((req_joint_state[5]), -1.570796, 1.570796, 3.141592, 0.00)));
+    Serial3.print('r');
 }
 
-void move_gripper()
-{
-    Serial3.print(map_float(req_joint_state[6], 0.0, 0.04, 70, 0));
-    Serial3.print('g');
-
-    nh.loginfo("Moving gripper");
-}
 
 void jointstates_callback( const sensor_msgs::JointState& joint)
 {
-    for(int i = 0; i < 5; i++)
+    for(int i = 0; i < 6; i++)
     {
         req_joint_state[i] = joint.position[i]; 
     }
@@ -193,11 +186,15 @@ void jointstates_callback( const sensor_msgs::JointState& joint)
 void gripper_callback( const std_msgs::Bool& state)
 {
     if(state.data)
-        req_joint_state[6] = 0.04;        
+    {
+        Serial3.print(10);
+        Serial3.print('g');
+    }
     else
-        req_joint_state[6] = 0.0;
-
-    move_gripper();
+    {
+        Serial3.print(70);
+        Serial3.print('g');
+    }
 }
 
 void move_z(int dir)
@@ -210,11 +207,11 @@ void move_z(int dir)
 void init_arm()
 {
     arm_height = TORSO_MIN_HEIGHT;
-    req_joint_state[0] = 1.4835295;
+    req_joint_state[0] = 1.570796;
     req_joint_state[1] = 1.570796;
     req_joint_state[2] = 0.00;
     req_joint_state[3] = TORSO_MIN_HEIGHT;
-    req_joint_state[4] = 1.4835295;
+    req_joint_state[4] = 1.570796;
     req_joint_state[5] = 0.00;
     req_joint_state[6] = 0.04;
     
