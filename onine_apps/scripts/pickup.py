@@ -60,16 +60,18 @@ class Onine():
         self.arm.go(wait=True)
 
     def open_gripper(self):
-        self.gripper.set_named_target("gripper_open")
+        # self.gripper.set_named_target("gripper_open")
+        os.system("rostopic pub /onine_gripper std_msgs/Bool 1 -1")
         os.system("rosservice call clear_octomap")
-        self.gripper.go()
-        rospy.sleep(2)
+        # self.gripper.go()
+        # rospy.sleep(2)
 
     def close_gripper(self):
-        self.gripper.set_named_target("gripper_closed")
+        # self.gripper.set_named_target("gripper_closed")
+        os.system("rostopic pub /onine_gripper std_msgs/Bool 0 -1")
         os.system("rosservice call clear_octomap")
-        self.gripper.go()
-        rospy.sleep(2)
+        # self.gripper.go()
+        # rospy.sleep(2)
 
     def pickup_sim(self, x, y, z):
         self.ready()
@@ -116,12 +118,12 @@ if __name__ == '__main__':
 
         #left test
         # yaw = -0.949421004148
-        # item_translation = [0.33292386367734217, 0.1685605027519197, 0.8339949674141176]
+        item_translation = [0.33292386367734217, 0.1685605027519197, 0.8339949674141176]
         
         #right test
         # yaw =  -2.33954420079
 
-        item_translation = [0.3155979994864394, -0.21095350748804098, 0.8829674860024487]
+        # item_translation = [0.3155979994864394, -0.21095350748804098, 0.8829674860024487]
 
         p = PoseStamped()
         p.header.frame_id = robot.get_planning_frame()

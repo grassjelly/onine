@@ -62,12 +62,18 @@ class Onine():
         os.system("rosservice call clear_octomap")
 
     def open_gripper(self):
-        self.gripper.set_named_target("gripper_open")
-        self.gripper.go()
+        # self.gripper.set_named_target("gripper_open")
+        os.system("rostopic pub /onine_gripper std_msgs/Bool 1 -1")
+        os.system("rosservice call clear_octomap")
+        # self.gripper.go()
+        # rospy.sleep(2)
 
     def close_gripper(self):
-        self.gripper.set_named_target("gripper_closed")
-        self.gripper.go()
+        # self.gripper.set_named_target("gripper_closed")
+        os.system("rostopic pub /onine_gripper std_msgs/Bool 0 -1")
+        os.system("rosservice call clear_octomap")
+        # self.gripper.go()
+        # rospy.sleep(2)
 
     def pickup_sim(self, x, y, z):
         self.ready()
