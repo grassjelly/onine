@@ -165,10 +165,10 @@ void move_arm()
     Serial3.print(rad_to_deg(map_float((req_joint_state[1]), -1.570796, 1.570796, 3.141592, 0.00)));
     Serial3.print('e');
 
-    Serial3.print(rad_to_deg((req_joint_state[4])));
+    Serial3.print(rad_to_deg(map_float((req_joint_state[4]), -1.570796, 1.570796, 3.141592, 0.00)));
     Serial3.print('p');
 
-    Serial3.print(rad_to_deg(map_float((req_joint_state[5]), -1.570796, 1.570796, 3.141592, 0.00)));
+    Serial3.print(rad_to_deg((req_joint_state[5])));
     Serial3.print('r');
 }
 
@@ -187,12 +187,12 @@ void gripper_callback( const std_msgs::Bool& state)
 {
     if(state.data)
     {
-        Serial3.print(10);
+        Serial3.print(0);
         Serial3.print('g');
     }
     else
     {
-        Serial3.print(70);
+        Serial3.print(60);
         Serial3.print('g');
     }
 }
