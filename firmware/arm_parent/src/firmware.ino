@@ -172,6 +172,20 @@ void move_arm()
     Serial3.print('r');
 }
 
+void move_gripper(bool state)
+{
+    if(state)
+    {
+        Serial3.print(0);
+        Serial3.print('g');
+    }
+    else
+    {
+        Serial3.print(60);
+        Serial3.print('g');
+    }
+}
+
 
 void jointstates_callback( const sensor_msgs::JointState& joint)
 {
@@ -185,16 +199,7 @@ void jointstates_callback( const sensor_msgs::JointState& joint)
 
 void gripper_callback( const std_msgs::Bool& state)
 {
-    if(state.data)
-    {
-        Serial3.print(0);
-        Serial3.print('g');
-    }
-    else
-    {
-        Serial3.print(60);
-        Serial3.print('g');
-    }
+    move_gripper(state.data);
 }
 
 void move_z(int dir)
@@ -216,6 +221,7 @@ void init_arm()
     req_joint_state[6] = 0.04;
     
     move_arm();
+    move_gripper(1);
 }
 
 void publish_joints()
