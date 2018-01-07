@@ -77,7 +77,7 @@ void loop()
 
     }
 
-    Braccio.ServoMovement(20, rec_base + 10, rec_shoulder + 10, rec_elbow, rec_wrist_pitch, rec_wrist_roll, rec_gripper);  
+    Braccio.ServoMovement(20, rec_base + 15, rec_shoulder + 10, rec_elbow, rec_wrist_pitch, rec_wrist_roll, rec_gripper);  
 }
 
 void init_arm()
