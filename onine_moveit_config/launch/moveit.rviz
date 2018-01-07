@@ -122,6 +122,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          tool_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           torso_link:
             Alpha: 1
             Show Axes: false
@@ -256,6 +260,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          tool_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           torso_link:
             Alpha: 1
             Show Axes: false
@@ -305,6 +313,8 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
+        ar_marker_0:
+          Value: true
         base_footprint:
           Value: false
         base_link:
@@ -313,8 +323,16 @@ Visualization Manager:
           Value: false
         braccio_base_link:
           Value: false
+        camera_depth_frame:
+          Value: true
+        camera_depth_optical_frame:
+          Value: true
         camera_link:
           Value: false
+        camera_rgb_frame:
+          Value: true
+        camera_rgb_optical_frame:
+          Value: true
         elbow_link:
           Value: false
         left_gripper_link:
@@ -325,6 +343,8 @@ Visualization Manager:
           Value: false
         shoulder_link:
           Value: false
+        tool_link:
+          Value: true
         torso_link:
           Value: false
         vertical_link:
@@ -345,7 +365,7 @@ Visualization Manager:
       Name: TF
       Show Arrows: true
       Show Axes: true
-      Show Names: false
+      Show Names: true
       Tree:
         base_footprint:
           base_link:
@@ -353,7 +373,13 @@ Visualization Manager:
               beam_link:
                 {}
               camera_link:
-                {}
+                camera_depth_frame:
+                  camera_depth_optical_frame:
+                    {}
+                camera_rgb_frame:
+                  camera_rgb_optical_frame:
+                    ar_marker_0:
+                      {}
               rod_link:
                 torso_link:
                   braccio_base_link:
@@ -364,6 +390,8 @@ Visualization Manager:
                             left_gripper_link:
                               {}
                             right_gripper_link:
+                              {}
+                            tool_link:
                               {}
           wheel1:
             {}
@@ -520,7 +548,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 1.69372
+      Distance: 1.89697
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
