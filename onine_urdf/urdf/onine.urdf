@@ -97,13 +97,13 @@
                 <box size="0.06 0.28 0.035" />
             </geometry>
             <material name="black" />
-            <origin rpy="0 0 0" xyz="0 -0.065 0" />
+            <origin rpy="0 0 0" xyz="0.00 -0.055 0" />
         </visual>
     </link>
 
     <joint name="camera_link_joint" type="fixed">
         <axis xyz="0 0 1" />
-        <origin rpy="0 0.593412 0" xyz="-0.001 0.065 0.5675" />
+        <origin rpy="0 0.593412 0" xyz="0.00 0.055 0.5675" />
         <parent link="vertical_link" />
         <child link="camera_link" />
     </joint>
@@ -207,7 +207,7 @@
 
     <joint name="base_joint" type="revolute">
         <axis xyz="0 0 1" />
-        <limit effort="1000.0" lower="-1.396263" upper="1.570796" velocity="1.0" />
+        <limit effort="1000.0" lower="-1.309" upper="1.570796" velocity="1.0" />
         <origin rpy="0 0 0" xyz="0 0 0.0756" />
         <parent link="torso_link" />
         <child link="braccio_base_link" />
@@ -278,7 +278,7 @@
     </link>
 
     <joint name="wrist_roll_joint" type="revolute">
-        <axis xyz="1 0 0" />
+        <axis xyz="-1 0 0" />
         <limit effort="1000.0" lower="0.000" upper="3.141592" velocity="1.0" />
         <origin rpy="0 -1.570796 0" xyz="0 0 0.06" />
         <parent link="wrist_pitch_link" />
