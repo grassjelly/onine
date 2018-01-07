@@ -132,7 +132,7 @@ if __name__ == '__main__':
         pose_msg.header.stamp = rospy.Time.now()
         debugging_pose_pub.publish(pose_msg)
 
-        onine_arm.go(aim_x, aim_y, aim_z, aim_yaw)
+        onine_arm.go(aim_x, aim_y, aim_z, 0.0, 0.0, aim_yaw)
 
         p = PoseStamped()
         p.header.frame_id = "base_footprint"
