@@ -156,19 +156,20 @@ void move_torso()
 
 void move_arm()
 {
-    Serial3.print(rad_to_deg(map_float((req_joint_state[0]), -1.570796, 1.570796, 3.141592, 0.00)));
+
+    Serial3.print(map(rad_to_deg(req_joint_state[0]), -90, 90, 180, 0));
     Serial3.print('b');
 
-    Serial3.print(rad_to_deg(map_float((req_joint_state[2]), -1.570796, 1.570796, 3.141592, 0.00)));
+    Serial3.print(map(rad_to_deg(req_joint_state[2]), -90, 90, 180, 0));
     Serial3.print('s');
 
-    Serial3.print(rad_to_deg(map_float((req_joint_state[1]), -1.570796, 1.570796, 3.141592, 0.00)));
+    Serial3.print(map(rad_to_deg(req_joint_state[1]), -90, 90, 180, 0));
     Serial3.print('e');
 
-    Serial3.print(rad_to_deg(map_float((req_joint_state[4]), -1.570796, 1.570796, 3.141592, 0.00)));
+    Serial3.print(map(rad_to_deg(req_joint_state[4]), -90, 90, 180, 0));
     Serial3.print('p');
 
-    Serial3.print(rad_to_deg((req_joint_state[5])));
+    Serial3.print(rad_to_deg(req_joint_state[5]));
     Serial3.print('r');
 }
 
@@ -286,7 +287,7 @@ void get_height_state()
 
 double rad_to_deg(double angle)
 {
-    return angle * 57.2958;
+    return angle * 57.2957795;
 }
 
 double map_float(double x, double in_min, double in_max, double out_min, double out_max)
