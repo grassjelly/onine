@@ -28,6 +28,7 @@
             base_joint: 1.4835295
             elbow_joint: 1.570796
             wrist_pitch_joint: 1.570796
+            gripper_joint: 0.04
     </rosparam>
   </node>
 
