@@ -66,14 +66,14 @@ unsigned int _Braccio::begin(int soft_start_level) {
 	elbow.write(0);
 	wrist_pitch.write(0);
 	wrist_roll.write(0);
-	gripper.write(10);
+	gripper.write(20);
 	//Previous step motor position
 	step_base = 5;
 	step_shoulder = 90;
 	step_elbow = 0;
 	step_wrist_pitch = 0;
 	step_wrist_roll = 0;
-	step_gripper = 10;
+	step_gripper = 20;
 
 	if(soft_start_level!=SOFT_START_DISABLED)
     		_softStart(soft_start_level);

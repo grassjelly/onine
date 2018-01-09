@@ -1,6 +1,7 @@
 #include <ros.h>
 #include <sensor_msgs/JointState.h>
-#include <std_msgs/Bool.h>
+#include <std_msgs/Float64.h>
+
 #include <StepControl.h>
 
 #define STEP_PIN 3
@@ -32,14 +33,14 @@ int lower_limit;
 int upper_limit;
 
 void jointstates_callback( const sensor_msgs::JointState& joint);
-void gripper_callback( const std_msgs::Bool& state);
+void gripper_callback( const std_msgs::Float64& state);
 
 ros::NodeHandle nh;
 
 sensor_msgs::JointState joints;
 ros::Publisher jointstates_pub("onine/joint_states", &joints);
 ros::Subscriber<sensor_msgs::JointState> joinstates_sub("move_group/fake_controller_joint_states", jointstates_callback);
-ros::Subscriber<std_msgs::Bool> gripper_sub("onine_gripper", gripper_callback);
+ros::Subscriber<std_msgs::Float64> gripper_sub("onine_gripper", gripper_callback);
 
 void setup() 
 {
@@ -156,7 +157,6 @@ void move_torso()
 
 void move_arm()
 {
-
     Serial3.print(map(rad_to_deg(req_joint_state[0]), -90, 90, 180, 0));
     Serial3.print('b');
 
@@ -173,18 +173,12 @@ void move_arm()
     Serial3.print('r');
 }
 
-void move_gripper(bool state)
+void move_gripper(float state)
 {
-    if(state)
-    {
-        Serial3.print(0);
-        Serial3.print('g');
-    }
-    else
-    {
-        Serial3.print(60);
-        Serial3.print('g');
-    }
+    int gripper_val = 0;
+    gripper_val = map_float(state, 0.008, 0.085, 90, 20);
+    Serial3.print(gripper_val);
+    Serial3.print('g');
 }
 
 
@@ -198,7 +192,7 @@ void jointstates_callback( const sensor_msgs::JointState& joint)
     prev_rec_time = millis();
 }
 
-void gripper_callback( const std_msgs::Bool& state)
+void gripper_callback( const std_msgs::Float64& state)
 {
     move_gripper(state.data);
 }
@@ -222,7 +216,7 @@ void init_arm()
     req_joint_state[6] = 0.04;
     
     move_arm();
-    move_gripper(1);
+    move_gripper(0.085);
 }
 
 void publish_joints()

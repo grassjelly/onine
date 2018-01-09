@@ -87,7 +87,7 @@ void init_arm()
     rec_elbow = 0;
     rec_wrist_pitch = 0;
     rec_wrist_roll = 0; 
-    rec_gripper = 10;
+    rec_gripper = 20;
 }
 
 int check_limit_switches()
