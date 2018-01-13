@@ -109,7 +109,7 @@ class Onine():
 
 if __name__=='__main__':
 
-    rospy.init_node('moveit_py_demo', anonymous=True)
+    rospy.init_node('test_pose', anonymous=True)
 
     debugging_pose_pub = rospy.Publisher('onine_debugging_pose', PoseArray, queue_size=1, latch=True)
     debugging_pose = PoseArray()

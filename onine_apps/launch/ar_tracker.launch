@@ -7,7 +7,7 @@
 	<arg name="cam_info_topic" default="/camera/rgb/camera_info" />
 	<arg name="output_frame" default="base_footprint" />
 
-	<node name="ar_track_alvar" pkg="ar_track_alvar" type="individualMarkers" respawn="false" output="screen">
+	<node name="ar_track_alvar" pkg="ar_track_alvar" type="individualMarkers" respawn="false">
 		<param name="marker_size"           type="double" value="$(arg marker_size)" />
 		<param name="max_new_marker_error"  type="double" value="$(arg max_new_marker_error)" />
 		<param name="max_track_error"       type="double" value="$(arg max_track_error)" />
