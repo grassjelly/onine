@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+sudo apt-get install -y ros-indigo-freenect-launch
+sudo apt-get install -y ros-indigo-ar-track-alvar
+sudo apt-get install -y ros-indigo-moveit
+sudo apt-get install -y ros-indigo-robot-state-publisher
+sudo apt-get install -y ros-indigo-joint-state-publisher
+sudo apt-get install -y ros-indigo-trac-ik-kinematics-plugin
