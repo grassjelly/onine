@@ -1,6 +1,6 @@
 moveit_setup_assistant_config:
   URDF:
-    package: onine_urdf
+    package: onine_description
     relative_path: urdf/onine.urdf
   SRDF:
     relative_path: config/onine.srdf
