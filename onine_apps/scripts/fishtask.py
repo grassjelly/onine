@@ -13,7 +13,7 @@ from shape_msgs.msg import SolidPrimitive
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 import actionlib
 from actionlib_msgs.msg import *
-# from geometry_msgs.msg import Pose, PoseWithCovarianceStamped, Point, Quaternion, Twist
+from geometry_msgs.msg import Pose, PoseWithCovarianceStamped, Point, Quaternion, Twist
 
 moveit_commander.roscpp_initialize(sys.argv)
 
@@ -34,28 +34,22 @@ while not rospy.is_shutdown():
     onine_base = Base()
     onine_arm = Arm()
 
-    reached = onine_base.go(Pose(Point(0.525607347488, 1.70954406261, 0.0), Quaternion(0.000, 0.000, 0.0, 0.0180804141297)), 80)
-    onine_base.dock()
+    # reached = onine_base.go(Pose(Point(0.525607347488, 1.70954406261, 0.0), Quaternion(0.000, 0.000, 0.0, 0.0180804141297)), 80)
+    onine_base.dock(0.10)
+    rospy.sleep(10)
 
     rospy.loginfo("Looking for food")
+    tf_listener.waitForTransform('/base_footprint', '/ar_marker_3', rospy.Time(), rospy.Duration(4.0))
 
     try:
-        t = tf_listener.getLatestCommonTime('/base_footprint', '/ar_marker_3') # <7>
-        if (rospy.Time.now() - t).to_sec() > 1.2:
-            continue
+        now = rospy.Time.now()
+        tf_listener.waitForTransform('/base_footprint', '/ar_marker_3', now, rospy.Duration(60.0))
 
-        (item_translation, item_orientation) = tf_listener.lookupTransform('/base_footprint', "ar_marker_3", t) 
+        (item_translation, item_orientation) = tf_listener.lookupTransform('/base_footprint', "ar_marker_3", now) 
+
     except(tf.Exception, tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-            continue
-
-    #left test
-    # yaw = -0.949421004148
-    # item_translation = [0.33292386367734217, 0.1685605027519197, 0.799949674141176]
-    
-    #right test
-    # yaw =  -2.33954420079
-
-    # item_translation = [0.3155979994864394, -0.21095350748804098, 0.8829674860024487]
+        print "cannot find marker"
+        break
 
     p = PoseStamped()
     p.header.frame_id = robot.get_planning_frame()
@@ -105,6 +99,7 @@ while not rospy.is_shutdown():
     rospy.sleep(2)
 
     onine_arm.close_gripper()
+    onine_base.undock()
 
     moveit_commander.roscpp_shutdown()
     moveit_commander.os._exit(0)

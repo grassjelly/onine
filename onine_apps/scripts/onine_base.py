@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import rospy
+import rospy, os
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
 
@@ -22,31 +22,58 @@ class Base:
         self.wall_distance = laser_data[abs(len(laser_data)/2)]
         # rospy.loginfo("DISTANCE: %f", self.wall_distance)
 
-    def dock(self):
+    def dock(self, distance):
         twist_msg = Twist()
         rospy.loginfo("Docking mobile base")
+        t0 = rospy.Time.now().to_sec()
 
+        current_distance = 0
+        rospy.loginfo("LASER DISTANCE: %f", self.wall_distance)
+
+        dock_distance = self.wall_distance - (distance + 0.05)
+        
         try:
-            while(self.wall_distance != float("inf")):
-                twist_msg.linear.x = 0.25
+            while(current_distance < dock_distance):
+                twist_msg.linear.x = 0.15
                 self.vel_pub.publish(twist_msg)
+                t1 = rospy.Time.now().to_sec()
+                current_distance = 0.15 * (t1 - t0)
+                rospy.loginfo("MOVING")
                 rospy.sleep(0.1)
+
+            rospy.loginfo("DISTANCE: %f", current_distance)
+            twist_msg.linear.x = 0.0
+            self.vel_pub.publish(twist_msg)
             return 1
+
         except:
             return 0
-
+ 
     def undock(self):
         twist_msg = Twist()
         rospy.loginfo("Undocking mobile base")
 
-        try:
-            while(self.wall_distance <= 0.41 or self.wall_distance == float("inf")):
-                twist_msg.linear.x = -0.25
+        t0 = rospy.Time.now().to_sec()
+
+        current_distance = 0
+
+        try: 
+            while(current_distance < 0.3):
+                twist_msg.linear.x = - 0.15
                 self.vel_pub.publish(twist_msg)
+                t1 = rospy.Time.now().to_sec()
+                current_distance = 0.15 * (t1 - t0)
+                rospy.loginfo("MOVING")
                 rospy.sleep(0.1)
+
+            rospy.loginfo("DISTANCE: %f", current_distance)
+            twist_msg.linear.x = 0.0
+            self.vel_pub.publish(twist_msg)
+            os.system("rosservice call move_base/clear_costmaps")
             return 1
+
         except:
-            return 0  
+            return 0
     
     def go(self, pose, timeout):
 
