@@ -157,16 +157,16 @@ void move_torso()
 
 void move_arm()
 {
-    Serial3.print(map(rad_to_deg(req_joint_state[0]), -90, 90, 180, 0));
+    Serial3.print(map(rad_to_deg(req_joint_state[0]), -65, 95, 180, 0));
     Serial3.print('b');
 
-    Serial3.print(map(rad_to_deg(req_joint_state[2]), -90, 90, 180, 0));
+    Serial3.print(map(rad_to_deg(req_joint_state[2]), -75, 75, 165, 20) + 10);
     Serial3.print('s');
 
-    Serial3.print(map(rad_to_deg(req_joint_state[1]), -90, 90, 180, 0));
+    Serial3.print(map(rad_to_deg(req_joint_state[1]), -70, 95, 180, 0));
     Serial3.print('e');
 
-    Serial3.print(map(rad_to_deg(req_joint_state[4]), -90, 90, 180, 0));
+    Serial3.print(map(rad_to_deg(req_joint_state[4]), -92, 88, 180, 0));
     Serial3.print('p');
 
     Serial3.print(rad_to_deg(req_joint_state[5]));
@@ -206,12 +206,14 @@ void move_z(int dir)
 
 void init_arm()
 {
+    //1.570796
     arm_height = TORSO_MIN_HEIGHT;
+
     req_joint_state[0] = 1.570796;
     req_joint_state[1] = 1.570796;
-    req_joint_state[2] = 0.00;
+    req_joint_state[2] = 0;
     req_joint_state[3] = TORSO_MIN_HEIGHT;
-    req_joint_state[4] = 1.570796;
+    req_joint_state[4] = 1.53589;
     req_joint_state[5] = 0.00;
     req_joint_state[6] = 0.04;
     

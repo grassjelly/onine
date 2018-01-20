@@ -97,13 +97,13 @@
                 <box size="0.06 0.28 0.035" />
             </geometry>
             <material name="black" />
-            <origin rpy="0 0 0" xyz="0.00 -0.055 0" />
+            <origin rpy="0 0 0" xyz="0.00 -0.03 0" />
         </visual>
     </link>
 
     <joint name="camera_link_joint" type="fixed">
         <axis xyz="0 0 1" />
-        <origin rpy="0 0.593412 0" xyz="0.00 0.055 0.5675" />
+        <origin rpy="0 0.593412 0" xyz="0.00 0.03 0.5675" />
         <parent link="vertical_link" />
         <child link="camera_link" />
     </joint>
@@ -207,7 +207,7 @@
 
     <joint name="base_joint" type="revolute">
         <axis xyz="0 0 1" />
-        <limit effort="1000.0" lower="-1.309" upper="1.570796" velocity="1.0" />
+        <limit effort="1000.0" lower="-1.13446" upper="1.65806" velocity="1.0" />
         <origin rpy="0 0 0" xyz="0 0 0.0756" />
         <parent link="torso_link" />
         <child link="braccio_base_link" />
@@ -225,7 +225,7 @@
 
     <joint name="shoulder_joint" type="revolute">
         <axis xyz="0 1 0" />
-        <limit effort="1000.0" lower="-1.308997" upper="1.308997" velocity="1.0" />
+        <limit effort="1000.0" lower="-1.309" upper="1.309" velocity="1.0" />
         <origin rpy="0 0 0" xyz="0 0 0" />
         <parent link="braccio_base_link" />
         <child link="shoulder_link" />
@@ -243,7 +243,7 @@
 
     <joint name="elbow_joint" type="revolute">
         <axis xyz="0 1 0" />
-        <limit effort="1000.0" lower="-1.570796" upper="1.570796" velocity="1.0" />
+        <limit effort="1000.0" lower="-1.22173" upper="1.65806" velocity="1.0" />
         <origin rpy="0 0 0" xyz="0 0 0.125" />
         <parent link="shoulder_link" />
         <child link="elbow_link" />
@@ -261,7 +261,7 @@
 
     <joint name="wrist_pitch_joint" type="revolute">
         <axis xyz="0 1 0" />
-        <limit effort="1000.0" lower="-1.570796" upper="1.570796" velocity="1.0" />
+        <limit effort="1000.0" lower="-1.6507" upper="1.53589" velocity="1.0" />
         <origin rpy="0 0 0" xyz="0 0 0.125" />
         <parent link="elbow_link" />
         <child link="wrist_pitch_link" />
