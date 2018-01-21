@@ -36,7 +36,7 @@ while not rospy.is_shutdown():
 
     # reached = onine_base.go(Pose(Point(0.525607347488, 1.70954406261, 0.0), Quaternion(0.000, 0.000, 0.0, 0.0180804141297)), 80)
     onine_base.dock(0.10)
-    rospy.sleep(10)
+    rospy.sleep(5)
 
     rospy.loginfo("Looking for food")
     tf_listener.waitForTransform('/base_footprint', '/ar_marker_3', rospy.Time(), rospy.Duration(4.0))
@@ -58,7 +58,7 @@ while not rospy.is_shutdown():
     p.pose.position.z = item_translation[2]
     scene.add_box("target", p, (0.045, 0.045, 0.08))
 
-    onine_arm.pickup_sim(item_translation[0], item_translation[1] + 0.025, item_translation[2])
+    onine_arm.pickup_sim(item_translation[0] + 0.025, item_translation[1], item_translation[2])
 
     rospy.sleep(1)
 
@@ -99,7 +99,21 @@ while not rospy.is_shutdown():
     rospy.sleep(2)
 
     onine_arm.close_gripper()
-    onine_base.undock()
+    
+    #move away from table
+    onine_base.move(1, 0, -0.15, 0.3)
+
+    #move arm to feeding positing
+    onine_arm.go(0.37021134644431714, 0.0, 1.3550814211865056, 0.0, 0.0, 0.0)
+
+    #give some time for the arm to finish moving
+    rospy.sleep(20)
+
+    #strife the robot sideways
+    onine_base.move(0, 1, -0.25, 0.35)
+
+    #dock the robot 10 cm away from the table
+    onine_base.dock(0.10)
 
     moveit_commander.roscpp_shutdown()
     moveit_commander.os._exit(0)
