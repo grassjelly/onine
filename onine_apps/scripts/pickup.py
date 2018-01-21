@@ -27,7 +27,7 @@ while not rospy.is_shutdown():
     try:
       t = tf_listener.getLatestCommonTime('/base_footprint', '/ar_marker_3') # <7>
       print ((rospy.Time.now() - t).to_sec())
-      if (rospy.Time.now() - t).to_sec() > 1:
+      if (rospy.Time.now() - t).to_sec() > 2.0:
         continue
 
       (item_translation, item_orientation) = tf_listener.lookupTransform('/base_footprint', "ar_marker_3", t) 
