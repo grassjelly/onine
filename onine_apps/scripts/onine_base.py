@@ -32,13 +32,15 @@ class Base:
 
         dock_distance = self.wall_distance - (distance + 0.05)
         
+        #TODO: call move() function here for modularity
+
         try:
             while(current_distance < dock_distance):
                 twist_msg.linear.x = 0.15
                 self.vel_pub.publish(twist_msg)
                 t1 = rospy.Time.now().to_sec()
                 current_distance = 0.15 * (t1 - t0)
-                rospy.loginfo("MOVING")
+                # rospy.loginfo("MOVING")
                 rospy.sleep(0.1)
 
             rospy.loginfo("DISTANCE: %f", current_distance)
@@ -49,7 +51,7 @@ class Base:
         except:
             return 0
  
-    def undock(self):
+    def move(self, x, y, speed, distance):
         twist_msg = Twist()
         rospy.loginfo("Undocking mobile base")
 
@@ -58,16 +60,18 @@ class Base:
         current_distance = 0
 
         try: 
-            while(current_distance < 0.3):
-                twist_msg.linear.x = - 0.15
+            while(current_distance < distance):
+                twist_msg.linear.x = speed * x
+                twist_msg.linear.y = speed * y
                 self.vel_pub.publish(twist_msg)
                 t1 = rospy.Time.now().to_sec()
-                current_distance = 0.15 * (t1 - t0)
-                rospy.loginfo("MOVING")
+                current_distance = abs(speed) * (t1 - t0)
+                # rospy.loginfo("MOVING")
                 rospy.sleep(0.1)
 
             rospy.loginfo("DISTANCE: %f", current_distance)
             twist_msg.linear.x = 0.0
+            twist_msg.linear.y = 0.0
             self.vel_pub.publish(twist_msg)
             os.system("rosservice call move_base/clear_costmaps")
             return 1
