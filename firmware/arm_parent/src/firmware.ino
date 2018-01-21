@@ -17,7 +17,7 @@
 #define STEP_PER_SEC 4800
 #define STEPS_PER_REV 1600
 // #define DIST_PER_REV 0.00812 //m
-#define DIST_PER_REV 0.008 //m
+#define DIST_PER_REV 0.008008 //m
 
 
 Stepper motor(STEP_PIN, DIR_PIN);         
@@ -44,7 +44,7 @@ ros::Subscriber<std_msgs::Float64> gripper_sub("onine_gripper", gripper_callback
 
 void setup() 
 {
-    motor.setAcceleration(abs(STEP_PER_SEC * 10));
+    motor.setAcceleration(abs(STEP_PER_SEC * 20));
 
     pinMode(MOTOR_IN_A, OUTPUT);
     pinMode(MOTOR_IN_B, OUTPUT);
