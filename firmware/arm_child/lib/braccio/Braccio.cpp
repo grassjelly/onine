@@ -56,8 +56,8 @@ unsigned int _Braccio::begin(int soft_start_level) {
 	base.attach(11);
 	shoulder.attach(10);
 	elbow.attach(9);
-	wrist_roll.attach(6);
-	wrist_pitch.attach(5);
+	wrist_pitch.attach(6);
+	wrist_roll.attach(5);
 	gripper.attach(3);
         
 	//For each step motor this set up the initial degree
@@ -185,30 +185,30 @@ int _Braccio::ServoMovement(int stepDelay, int vBase, int vShoulder, int vElbow,
 
 		}
 
-		if (vwrist_pitch != step_wrist_roll) 
+		if (vwrist_pitch != step_wrist_pitch) 
 		{
-			wrist_roll.write(step_wrist_roll);
+			wrist_pitch.write(step_wrist_pitch);
 			//One step ahead
-			if (vwrist_pitch > step_wrist_roll) {
-				step_wrist_roll++;				
+			if (vwrist_pitch > step_wrist_pitch) {
+				step_wrist_pitch++;				
 			}
 			//One step beyond
-			if (vwrist_pitch < step_wrist_roll) {
-				step_wrist_roll--;
+			if (vwrist_pitch < step_wrist_pitch) {
+				step_wrist_pitch--;
 			}
 
 		}
 
-		if (vwrist_roll != step_wrist_pitch)
+		if (vwrist_roll != step_wrist_roll)
 		{
-			wrist_pitch.write(step_wrist_pitch);
+			wrist_roll.write(step_wrist_roll);
 			//One step ahead
-			if (vwrist_roll > step_wrist_pitch) {
-				step_wrist_pitch++;
+			if (vwrist_roll > step_wrist_roll) {
+				step_wrist_roll++;
 			}
 			//One step beyond
-			if (vwrist_roll < step_wrist_pitch) {
-				step_wrist_pitch--;
+			if (vwrist_roll < step_wrist_roll) {
+				step_wrist_roll--;
 			}
 		}
 
@@ -229,13 +229,13 @@ int _Braccio::ServoMovement(int stepDelay, int vBase, int vShoulder, int vElbow,
 		
 		//It checks if all the servo motors are in the desired position 
 		if ((vBase == step_base) && (vShoulder == step_shoulder)
-				&& (vElbow == step_elbow) && (vwrist_pitch == step_wrist_roll)
-				&& (vwrist_roll == step_wrist_pitch) && (vgripper == step_gripper)) {
+				&& (vElbow == step_elbow) && (vwrist_roll == step_wrist_roll)
+				&& (vwrist_pitch == step_wrist_pitch) && (vgripper == step_gripper)) {
 			step_base = vBase;
 			step_shoulder = vShoulder;
 			step_elbow = vElbow;
-			step_wrist_roll = vwrist_pitch;
-			step_wrist_pitch = vwrist_roll;
+			step_wrist_roll = vwrist_roll;
+			step_wrist_pitch = vwrist_pitch;
 			step_gripper = vgripper;
 			exit = 0;
 		} else {
