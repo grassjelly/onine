@@ -1,6 +1,7 @@
 #include <ros.h>
 #include <sensor_msgs/JointState.h>
-#include <std_msgs/Bool.h>
+#include <std_msgs/Float64.h>
+
 #include <StepControl.h>
 
 #define STEP_PIN 3
@@ -16,7 +17,7 @@
 #define STEP_PER_SEC 4800
 #define STEPS_PER_REV 1600
 // #define DIST_PER_REV 0.00812 //m
-#define DIST_PER_REV 0.008 //m
+#define DIST_PER_REV 0.008008 //m
 
 
 Stepper motor(STEP_PIN, DIR_PIN);         
@@ -32,18 +33,18 @@ int lower_limit;
 int upper_limit;
 
 void jointstates_callback( const sensor_msgs::JointState& joint);
-void gripper_callback( const std_msgs::Bool& state);
+void gripper_callback( const std_msgs::Float64& state);
 
 ros::NodeHandle nh;
 
 sensor_msgs::JointState joints;
 ros::Publisher jointstates_pub("onine/joint_states", &joints);
 ros::Subscriber<sensor_msgs::JointState> joinstates_sub("move_group/fake_controller_joint_states", jointstates_callback);
-ros::Subscriber<std_msgs::Bool> gripper_sub("onine_gripper", gripper_callback);
+ros::Subscriber<std_msgs::Float64> gripper_sub("onine_gripper", gripper_callback);
 
 void setup() 
 {
-    motor.setAcceleration(abs(STEP_PER_SEC * 10));
+    motor.setAcceleration(abs(STEP_PER_SEC * 20));
 
     pinMode(MOTOR_IN_A, OUTPUT);
     pinMode(MOTOR_IN_B, OUTPUT);
@@ -53,7 +54,7 @@ void setup()
     joints.position_length = 8; 
     joints.effort_length = 8; 
 
-    Serial3.begin(4800);
+    Serial3.begin(2400);
     init_arm();
 
     nh.getHardware()->setBaud(115200);
@@ -156,35 +157,28 @@ void move_torso()
 
 void move_arm()
 {
-
-    Serial3.print(map(rad_to_deg(req_joint_state[0]), -90, 90, 180, 0));
+    Serial3.print(map(rad_to_deg(req_joint_state[0]), -65, 95, 180, 0));
     Serial3.print('b');
 
-    Serial3.print(map(rad_to_deg(req_joint_state[2]), -90, 90, 180, 0));
+    Serial3.print(map(rad_to_deg(req_joint_state[2]), -75, 75, 165, 20) + 10);
     Serial3.print('s');
 
-    Serial3.print(map(rad_to_deg(req_joint_state[1]), -90, 90, 180, 0));
+    Serial3.print(map(rad_to_deg(req_joint_state[1]), -70, 95, 180, 0));
     Serial3.print('e');
 
-    Serial3.print(map(rad_to_deg(req_joint_state[4]), -90, 90, 180, 0));
+    Serial3.print(map(rad_to_deg(req_joint_state[4]), -92, 88, 180, 0));
     Serial3.print('p');
 
     Serial3.print(rad_to_deg(req_joint_state[5]));
     Serial3.print('r');
 }
 
-void move_gripper(bool state)
+void move_gripper(float state)
 {
-    if(state)
-    {
-        Serial3.print(0);
-        Serial3.print('g');
-    }
-    else
-    {
-        Serial3.print(60);
-        Serial3.print('g');
-    }
+    int gripper_val = 0;
+    gripper_val = map_float(state, 0.008, 0.085, 90, 20);
+    Serial3.print(gripper_val);
+    Serial3.print('g');
 }
 
 
@@ -198,7 +192,7 @@ void jointstates_callback( const sensor_msgs::JointState& joint)
     prev_rec_time = millis();
 }
 
-void gripper_callback( const std_msgs::Bool& state)
+void gripper_callback( const std_msgs::Float64& state)
 {
     move_gripper(state.data);
 }
@@ -212,17 +206,19 @@ void move_z(int dir)
 
 void init_arm()
 {
+    //1.570796
     arm_height = TORSO_MIN_HEIGHT;
+
     req_joint_state[0] = 1.570796;
     req_joint_state[1] = 1.570796;
-    req_joint_state[2] = 0.00;
+    req_joint_state[2] = 0;
     req_joint_state[3] = TORSO_MIN_HEIGHT;
-    req_joint_state[4] = 1.570796;
+    req_joint_state[4] = 1.53589;
     req_joint_state[5] = 0.00;
     req_joint_state[6] = 0.04;
     
     move_arm();
-    move_gripper(1);
+    move_gripper(0.085);
 }
 
 void publish_joints()

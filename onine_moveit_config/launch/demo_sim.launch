@@ -25,15 +25,16 @@
     <rosparam>
         zeros:
             torso_joint: 0.21
-            base_joint: 1.4835295
+            base_joint: 1.570796
             elbow_joint: 1.570796
-            wrist_pitch_joint: 1.570796
+            wrist_pitch_joint: 1.53589
             gripper_joint: 0.04
     </rosparam>
   </node>
 
   <!-- Given the published joint states, publish tf for the robot links -->
-  <!--<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />-->
+  <param name="robot_description" textfile="$(find onine_description)/urdf/onine.urdf"/>
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
 
   <!-- Run the main MoveIt executable without trajectory execution (we do not have controllers configured by default) -->
   <include file="$(find onine_moveit_config)/launch/move_group.launch">

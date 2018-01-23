@@ -1,7 +1,7 @@
 <launch>
-    <arg name="model" default="$(find onine_urdf)/urdf/onine.urdf"/>
+    <arg name="model" default="$(find onine_description)/urdf/onine.urdf"/>
     <arg name="gui" default="true"/>
-    <arg name="rvizconfig" default="$(find onine_urdf)/rviz/urdf.rviz" />
+    <arg name="rvizconfig" default="$(find onine_description)/rviz/urdf.rviz" />
 
     <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)"/>
     <param name="use_gui" value="gui"/>

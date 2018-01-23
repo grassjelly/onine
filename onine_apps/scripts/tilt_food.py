@@ -7,7 +7,7 @@ from moveit_commander import RobotCommander, PlanningSceneInterface
 import moveit_commander
 
 moveit_commander.roscpp_initialize(sys.argv)
-rospy.init_node('open_gripper', anonymous=True)
+rospy.init_node('tilt_eef', anonymous=True)
 
 scene = PlanningSceneInterface()
 rospy.sleep(2)
@@ -15,7 +15,7 @@ rospy.sleep(2)
 scene.remove_world_object("target")
 
 onine_arm = Arm()
-onine_arm.open_gripper()
+onine_arm.tilt_food()
 
 moveit_commander.roscpp_shutdown()
 moveit_commander.os._exit(0)

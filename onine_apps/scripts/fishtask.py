@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-import rospy, sys, tf
+import rospy, sys, tf, os
 from onine_arm import Arm
+from onine_base import Base
 from geometry_msgs.msg import *
 from tf.transformations import quaternion_from_euler, euler_from_quaternion
 from moveit_commander import RobotCommander, PlanningSceneInterface
@@ -9,40 +10,49 @@ import moveit_commander
 from moveit_msgs.msg import CollisionObject, AttachedCollisionObject, PlanningScene
 from shape_msgs.msg import SolidPrimitive
 
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+import actionlib
+from actionlib_msgs.msg import *
+from geometry_msgs.msg import Pose, PoseWithCovarianceStamped, Point, Quaternion, Twist
+
 moveit_commander.roscpp_initialize(sys.argv)
 
-rospy.init_node('pickup', anonymous=True)
+rospy.init_node('fishtask', anonymous=True)
 
 scene_pub = rospy.Publisher('/planning_scene', PlanningScene, queue_size = 10)
 
 tf_listener = tf.TransformListener() 
 scene = PlanningSceneInterface()
 robot = RobotCommander()
-rospy.sleep(2)
+
+rospy.sleep(1)
 
 while not rospy.is_shutdown():
 
     scene.remove_world_object("target")
 
-    try:
-      t = tf_listener.getLatestCommonTime('/base_footprint', '/ar_marker_3') # <7>
-      print ((rospy.Time.now() - t).to_sec())
-      if (rospy.Time.now() - t).to_sec() > 2.0:
-        continue
+    onine_base = Base()
+    onine_arm = Arm()
 
-      (item_translation, item_orientation) = tf_listener.lookupTransform('/base_footprint', "ar_marker_3", t) 
-    except(tf.Exception, tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-        continue
-
-    #left test
-    # yaw = -0.949421004148
-    # item_translation = [0.33292386367734217, 0.1685605027519197, 0.799949674141176]
+    # reached = onine_base.go(Pose(Point(0.525607347488, 1.70954406261, 0.0), Quaternion(0.000, 0.000, 0.0, 0.0180804141297)), 80)
+    onine_arm.ready()
     
-    #right test
-    # yaw =  -2.33954420079
+    onine_base.dock(0.10)
+    
+    rospy.sleep(5)
 
-    # item_translation = [0.3155979994864394, -0.21095350748804098, 0.8829674860024487]
-    # item_translation = [0.3155979994864394, 0, 0.8829674860024487]
+    rospy.loginfo("Looking for food")
+    tf_listener.waitForTransform('/base_footprint', '/ar_marker_3', rospy.Time(), rospy.Duration(4.0))
+
+    try:
+        now = rospy.Time.now()
+        tf_listener.waitForTransform('/base_footprint', '/ar_marker_3', now, rospy.Duration(60.0))
+
+        (item_translation, item_orientation) = tf_listener.lookupTransform('/base_footprint', "ar_marker_3", now) 
+
+    except(tf.Exception, tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+        print "cannot find marker"
+        break
 
     p = PoseStamped()
     p.header.frame_id = robot.get_planning_frame()
@@ -51,8 +61,7 @@ while not rospy.is_shutdown():
     p.pose.position.z = item_translation[2]
     scene.add_box("target", p, (0.045, 0.045, 0.08))
 
-    onine_arm = Arm()
-    onine_arm.pickup_sim(item_translation[0]+ 0.025, item_translation[1] , item_translation[2])
+    onine_arm.pickup_sim(item_translation[0] + 0.025, item_translation[1], item_translation[2])
 
     rospy.sleep(1)
 
@@ -91,6 +100,32 @@ while not rospy.is_shutdown():
     planning_scene.robot_state.attached_collision_objects.append(attached_object)
     scene_pub.publish(planning_scene)
     rospy.sleep(2)
+
+    onine_arm.close_gripper()
+    
+    #move away from table
+    onine_base.move(1, 1, -0.25, 0.3)
+
+    os.system("rosservice call clear_octomap")
+
+    #move arm to feeding positing
+    onine_arm.feed_pos()
+
+    # onine_arm.go(0.37021134644431714, 0.0, 1.3550814211865056, 0.0, 0.0, 0.0)
+
+    #give some time for the arm to finish moving
+    rospy.sleep(5)
+
+    #strife the robot sideways
+    # onine_base.move(0, 1, -0.25, 0.20)
+
+    #dock the robot 10 cm away from the table
+    onine_base.dock(0.10)
+
+    rospy.sleep(5)
+
+    onine_arm.tilt_food()
+    onine_arm.feed_pos()
 
     moveit_commander.roscpp_shutdown()
     moveit_commander.os._exit(0)

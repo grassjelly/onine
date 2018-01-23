@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>onine_urdf</name>
+  <name>onine_description</name>
   <version>0.0.0</version>
-  <description>The onine_urdf package</description>
+  <description>The onine_description package</description>
 
   <maintainer email="jimenojmm@gmail.com">Juan Jimeno</maintainer>
   <license>BSD</license>

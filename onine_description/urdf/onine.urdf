@@ -198,7 +198,7 @@
     <link name="braccio_base_link">
         <visual>
             <geometry>
-                <mesh filename="package://onine_urdf/stl/braccio_base.stl" scale="0.001 0.001 0.001" />
+                <mesh filename="package://onine_description/stl/braccio_base.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="orange" />
             <origin rpy="0 0 1.570796" xyz="0.003 0 -0.075" />
@@ -207,7 +207,7 @@
 
     <joint name="base_joint" type="revolute">
         <axis xyz="0 0 1" />
-        <limit effort="1000.0" lower="-1.309" upper="1.570796" velocity="1.0" />
+        <limit effort="1000.0" lower="-1.13446" upper="1.65806" velocity="1.0" />
         <origin rpy="0 0 0" xyz="0 0 0.0756" />
         <parent link="torso_link" />
         <child link="braccio_base_link" />
@@ -216,7 +216,7 @@
     <link name="shoulder_link">
         <visual>
             <geometry>
-                <mesh filename="package://onine_urdf/stl/braccio_shoulder.stl" scale="0.001 0.001 0.001" />
+                <mesh filename="package://onine_description/stl/braccio_shoulder.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="orange" />
             <origin rpy="0 0 1.570796" xyz="-0.0055 -0.004 -0.026" />
@@ -225,7 +225,7 @@
 
     <joint name="shoulder_joint" type="revolute">
         <axis xyz="0 1 0" />
-        <limit effort="1000.0" lower="-1.308997" upper="1.308997" velocity="1.0" />
+        <limit effort="1000.0" lower="-1.309" upper="1.309" velocity="1.0" />
         <origin rpy="0 0 0" xyz="0 0 0" />
         <parent link="braccio_base_link" />
         <child link="shoulder_link" />
@@ -234,7 +234,7 @@
     <link name="elbow_link">
         <visual>
             <geometry>
-                <mesh filename="package://onine_urdf/stl/braccio_elbow.stl" scale="0.001 0.001 0.001" />
+                <mesh filename="package://onine_description/stl/braccio_elbow.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="orange" />
             <origin rpy="0 0 1.570796" xyz="-0.0055 -0.004 -0.026" />
@@ -243,7 +243,7 @@
 
     <joint name="elbow_joint" type="revolute">
         <axis xyz="0 1 0" />
-        <limit effort="1000.0" lower="-1.570796" upper="1.570796" velocity="1.0" />
+        <limit effort="1000.0" lower="-1.22173" upper="1.65806" velocity="1.0" />
         <origin rpy="0 0 0" xyz="0 0 0.125" />
         <parent link="shoulder_link" />
         <child link="elbow_link" />
@@ -252,7 +252,7 @@
     <link name="wrist_pitch_link">
         <visual>
             <geometry>
-                <mesh filename="package://onine_urdf/stl/braccio_wrist_pitch.stl" scale="0.001 0.001 0.001" />
+                <mesh filename="package://onine_description/stl/braccio_wrist_pitch.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="orange" />
             <origin rpy="0 0 -1.570796" xyz="0 -0.004 -0.024" />
@@ -261,7 +261,7 @@
 
     <joint name="wrist_pitch_joint" type="revolute">
         <axis xyz="0 1 0" />
-        <limit effort="1000.0" lower="-1.570796" upper="1.570796" velocity="1.0" />
+        <limit effort="1000.0" lower="-1.6507" upper="1.53589" velocity="1.0" />
         <origin rpy="0 0 0" xyz="0 0 0.125" />
         <parent link="elbow_link" />
         <child link="wrist_pitch_link" />
@@ -270,7 +270,7 @@
     <link name="wrist_roll_link">
         <visual>
             <geometry>
-                <mesh filename="package://onine_urdf/stl/braccio_wrist_roll.stl" scale="0.001 0.001 0.001" />
+                <mesh filename="package://onine_description/stl/braccio_wrist_roll.stl" scale="0.001 0.001 0.001" />
             </geometry>
             <material name="white" />
             <origin rpy="-1.570796 0 -1.570796" xyz="0 -0.0063 0.001" />

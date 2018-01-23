@@ -16,4 +16,7 @@
 		<remap from="camera_image"  to="$(arg cam_image_topic)" />
 		<remap from="camera_info"   to="$(arg cam_info_topic)" />
 	</node>
+
+    <node name="pickup" pkg="onine_apps" type="pickup.py" respawn="false" output="screen"/>
+
 </launch>

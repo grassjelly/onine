@@ -67,14 +67,14 @@ class Onine():
 
     def open_gripper(self):
         # self.gripper.set_named_target("gripper_open")
-        os.system("rostopic pub /onine_gripper std_msgs/Bool 1 -1")
+        os.system("rostopic pub /onine_gripper std_msgs/Float64 0.085 -1")
         os.system("rosservice call clear_octomap")
         # self.gripper.go()
         # rospy.sleep(2)
 
     def close_gripper(self):
         # self.gripper.set_named_target("gripper_closed")
-        os.system("rostopic pub /onine_gripper std_msgs/Bool 0 -1")
+        os.system("rostopic pub /onine_gripper std_msgs/Float64 0.045 -1")
         os.system("rosservice call clear_octomap")
         # self.gripper.go()
         # rospy.sleep(2)
@@ -109,7 +109,7 @@ class Onine():
 
 if __name__=='__main__':
 
-    rospy.init_node('moveit_py_demo', anonymous=True)
+    rospy.init_node('test_pose', anonymous=True)
 
     debugging_pose_pub = rospy.Publisher('onine_debugging_pose', PoseArray, queue_size=1, latch=True)
     debugging_pose = PoseArray()

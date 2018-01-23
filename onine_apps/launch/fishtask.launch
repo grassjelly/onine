@@ -16,4 +16,7 @@
 		<remap from="camera_image"  to="$(arg cam_image_topic)" />
 		<remap from="camera_info"   to="$(arg cam_info_topic)" />
 	</node>
+
+    <node name="fishtask" pkg="onine_apps" type="fishtask.py" respawn="false" output="screen"/>
+
 </launch>
