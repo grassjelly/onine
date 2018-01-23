@@ -54,7 +54,7 @@ void setup()
     joints.position_length = 8; 
     joints.effort_length = 8; 
 
-    Serial3.begin(4800);
+    Serial3.begin(2400);
     init_arm();
 
     nh.getHardware()->setBaud(115200);
