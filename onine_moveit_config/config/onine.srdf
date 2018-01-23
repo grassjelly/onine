@@ -41,6 +41,24 @@
         <joint name="wrist_roll_joint" value="0" />
     </group_state>
 
+    <group_state name="feed_pos" group="onine_arm">
+        <joint name="base_joint" value="0" />
+        <joint name="elbow_joint" value="0" />
+        <joint name="shoulder_joint" value="0.585" />
+        <joint name="torso_joint" value="0.8666560053825378" />
+        <joint name="wrist_pitch_joint" value="0.785" />
+        <joint name="wrist_roll_joint" value="0" />
+    </group_state>
+
+    <group_state name="tilt_food" group="onine_arm">
+        <joint name="base_joint" value="0" />
+        <joint name="elbow_joint" value="0" />
+        <joint name="shoulder_joint" value="0.585" />
+        <joint name="torso_joint" value="0.8666560053825378" />
+        <joint name="wrist_pitch_joint" value="0.785" />
+        <joint name="wrist_roll_joint" value="2.2" />
+    </group_state>
+
     <group_state name="gripper_open" group="onine_gripper">
         <joint name="gripper_joint" value="0.04" />
     </group_state>

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import rospy, sys, tf
+import rospy, sys, tf, os
 from onine_arm import Arm
 from onine_base import Base
 from geometry_msgs.msg import *
@@ -35,7 +35,10 @@ while not rospy.is_shutdown():
     onine_arm = Arm()
 
     # reached = onine_base.go(Pose(Point(0.525607347488, 1.70954406261, 0.0), Quaternion(0.000, 0.000, 0.0, 0.0180804141297)), 80)
+    onine_arm.ready()
+    
     onine_base.dock(0.10)
+    
     rospy.sleep(5)
 
     rospy.loginfo("Looking for food")
@@ -101,19 +104,28 @@ while not rospy.is_shutdown():
     onine_arm.close_gripper()
     
     #move away from table
-    onine_base.move(1, 0, -0.15, 0.3)
+    onine_base.move(1, 1, -0.25, 0.3)
+
+    os.system("rosservice call clear_octomap")
 
     #move arm to feeding positing
-    onine_arm.go(0.37021134644431714, 0.0, 1.3550814211865056, 0.0, 0.0, 0.0)
+    onine_arm.feed_pos()
+
+    # onine_arm.go(0.37021134644431714, 0.0, 1.3550814211865056, 0.0, 0.0, 0.0)
 
     #give some time for the arm to finish moving
-    rospy.sleep(20)
+    rospy.sleep(5)
 
     #strife the robot sideways
-    onine_base.move(0, 1, -0.25, 0.35)
+    # onine_base.move(0, 1, -0.25, 0.20)
 
     #dock the robot 10 cm away from the table
     onine_base.dock(0.10)
+
+    rospy.sleep(5)
+
+    onine_arm.tilt_food()
+    onine_arm.feed_pos()
 
     moveit_commander.roscpp_shutdown()
     moveit_commander.os._exit(0)

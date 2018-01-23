@@ -54,20 +54,25 @@ class Arm():
         self.arm.set_named_target("onine_home")
         self.arm.go(wait=True)
 
+    def feed_pos(self):
+        self.arm.set_named_target("feed_pos")
+        self.arm.go(wait=True)
+
+    def tilt_food(self):
+        self.arm.set_named_target("tilt_food")
+        self.arm.go(wait=True)
+
     def open_gripper(self):
         os.system("rostopic pub /onine_gripper std_msgs/Float64 0.085 -1")
         os.system("rosservice call clear_octomap")
  
-
     def close_gripper(self):
-        os.system("rostopic pub /onine_gripper std_msgs/Float64 0.045 -1")
+        os.system("rostopic pub /onine_gripper std_msgs/Float64 0.035 -1")
         os.system("rosservice call clear_octomap")
 
-
     def pickup_sim(self, x, y, z):
-        self.ready()
+        # self.ready()
         self.open_gripper()
-        
         (aim_x, aim_y, aim_z, aim_yaw) = self.get_valid_pose(x, y, z + 0.15, 0.00)
         self.go(aim_x, aim_y, aim_z, 0.0, 0.0, aim_yaw)
 
