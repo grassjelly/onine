@@ -29,12 +29,10 @@ rospy.sleep(1)
 
 while not rospy.is_shutdown():
 
-    scene.remove_world_object("target")
-
     onine_base = Base()
     onine_arm = Arm()
 
-    # reached = onine_base.go(Pose(Point(0.525607347488, 1.70954406261, 0.0), Quaternion(0.000, 0.000, 0.0, 0.0180804141297)), 80)
+    reached = onine_base.go(Pose(Point(0.525607347488, 1.70954406261, 0.0), Quaternion(0.000, 0.000, 0.0, 0.0180804141297)), 80)
     onine_arm.ready()
     
     onine_base.dock(0.10)
@@ -111,13 +109,8 @@ while not rospy.is_shutdown():
     #move arm to feeding positing
     onine_arm.feed_pos()
 
-    # onine_arm.go(0.37021134644431714, 0.0, 1.3550814211865056, 0.0, 0.0, 0.0)
-
     #give some time for the arm to finish moving
     rospy.sleep(5)
-
-    #strife the robot sideways
-    # onine_base.move(0, 1, -0.25, 0.20)
 
     #dock the robot 10 cm away from the table
     onine_base.dock(0.10)
