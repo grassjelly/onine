@@ -29,17 +29,24 @@ rospy.sleep(1)
 
 while not rospy.is_shutdown():
 
+    #create robot base object
     onine_base = Base()
+
+    #create robot arm object
     onine_arm = Arm()
 
+    #move the robot to a location ~1m away from the target object
     reached = onine_base.go(Pose(Point(0.525607347488, 1.70954406261, 0.0), Quaternion(0.000, 0.000, 0.0, 0.0180804141297)), 80)
     onine_arm.ready()
     
+    #move the robot close to the target object - 0.10 m away from the table (fish food)
     onine_base.dock(0.10)
     
     rospy.sleep(5)
 
     rospy.loginfo("Looking for food")
+
+    #get the transform of the detected ar_marker_3 relativ to base_footprint
     tf_listener.waitForTransform('/base_footprint', '/ar_marker_3', rospy.Time(), rospy.Duration(4.0))
 
     try:
@@ -52,6 +59,7 @@ while not rospy.is_shutdown():
         print "cannot find marker"
         break
 
+    #add the detected object in O'nine's world
     p = PoseStamped()
     p.header.frame_id = robot.get_planning_frame()
     p.pose.position.x = item_translation[0] + 0.025
@@ -59,18 +67,16 @@ while not rospy.is_shutdown():
     p.pose.position.z = item_translation[2]
     scene.add_box("target", p, (0.045, 0.045, 0.08))
 
+    #ask the robotic arm to pickup the object
     onine_arm.pickup_sim(item_translation[0] + 0.025, item_translation[1], item_translation[2])
 
     rospy.sleep(1)
 
     attached_object = AttachedCollisionObject()
     attached_object.link_name = "tool_link"
-    #The header must contain a valid TF frame*/
     attached_object.object.header.frame_id = "tool_link"
-    #The id of the object
     attached_object.object.id = "target"
 
-    #A default pose 
     pose = Pose()
     pose.orientation.w = 1.0
 
@@ -99,11 +105,13 @@ while not rospy.is_shutdown():
     scene_pub.publish(planning_scene)
     rospy.sleep(2)
 
+    #ask the robot arm to grasp the target object
     onine_arm.close_gripper()
     
     #move away from table
     onine_base.move(1, 1, -0.25, 0.3)
 
+    #clean the map
     os.system("rosservice call clear_octomap")
 
     #move arm to feeding positing
@@ -112,12 +120,15 @@ while not rospy.is_shutdown():
     #give some time for the arm to finish moving
     rospy.sleep(5)
 
-    #dock the robot 10 cm away from the table
+    #move the robot close to the target object - 0.10 m away from the table (fish tank)
     onine_base.dock(0.10)
 
     rospy.sleep(5)
 
+    #tilt O'nine's wrist to drop the food
     onine_arm.tilt_food()
+
+    #move O'nine's wrist back to previous position (parallel to the ground)
     onine_arm.feed_pos()
 
     moveit_commander.roscpp_shutdown()

@@ -71,7 +71,7 @@ class Arm():
         os.system("rosservice call clear_octomap")
 
     def pickup_sim(self, x, y, z):
-        self.ready()
+        # self.ready()
         self.open_gripper()
         (aim_x, aim_y, aim_z, aim_yaw) = self.get_valid_pose(x, y, z + 0.15, 0.00)
         self.go(aim_x, aim_y, aim_z, 0.0, 0.0, aim_yaw)
