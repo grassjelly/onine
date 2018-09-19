@@ -1,5 +1,5 @@
 # onine
-WIP Service Robot based on [Linorobot](https://github.com/linorobot/linorobot) and [Braccio Arm](https://github.com/grassjelly/ros_braccio_moveit) 
+Service Robot based on [Linorobot](https://github.com/linorobot/linorobot) and [Braccio Arm](https://github.com/grassjelly/ros_braccio_moveit) 
 
 ![fish_task](https://github.com/grassjelly/onine/blob/master/media/fishtask.gif?raw=true)
 
